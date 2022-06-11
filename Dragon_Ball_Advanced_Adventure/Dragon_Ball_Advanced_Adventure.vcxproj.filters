@@ -13,6 +13,105 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="00. Main">
+      <UniqueIdentifier>{1f418d30-b899-434f-a37b-1f512f99f8e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. Header">
+      <UniqueIdentifier>{f18e18ef-2ad0-4292-bc21-50ef09cf1b33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Manager">
+      <UniqueIdentifier>{6911d920-7eef-4d75-aadc-36b9897a0774}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97. AbstractFactory">
+      <UniqueIdentifier>{379f6ea8-0ee0-4b3f-be9e-a9f9748c8173}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj">
+      <UniqueIdentifier>{822dc79b-c1a0-4268-a9f9-60cc3bb9041a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Scene">
+      <UniqueIdentifier>{31df2682-0c37-4088-ba8f-22de04e96db3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Scene\020. Logo">
+      <UniqueIdentifier>{6133f3d2-0268-4ca1-920a-e536e47c8b50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Scene\021. Menu">
+      <UniqueIdentifier>{3543fc81-1142-48dd-9a5b-1b7af2e7cabf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\010. Character">
+      <UniqueIdentifier>{8a4bcad6-637e-4015-a99e-7db344fb9116}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\011. Item">
+      <UniqueIdentifier>{bc3e15ca-fb73-4538-b69c-6060332657be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\012. Projectile">
+      <UniqueIdentifier>{e7cf7de9-f868-4a35-ab0e-bce592d760cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\013. Tile">
+      <UniqueIdentifier>{1934eb77-d050-41e1-819d-02cf479df30a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\014. UI">
+      <UniqueIdentifier>{faf86673-6279-4a3f-9de4-db626d5adf39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\010. Character\0100. Player">
+      <UniqueIdentifier>{1c08886b-a584-43ab-91ba-0486dd62ceae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\010. Character\0101. Enemy">
+      <UniqueIdentifier>{569cd973-37f8-4157-90e2-54a0e2c60a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\010. Character\0101. Enemy\01010. Mob">
+      <UniqueIdentifier>{531d99e8-6c54-4f16-8df3-809ec21a4503}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\010. Character\0101. Enemy\01011. Boss">
+      <UniqueIdentifier>{54f4d4d8-dc12-48d2-a3ca-9fbf70a943e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\010. Character\0101. Enemy\01010. Mob\010100. Pig Warrior">
+      <UniqueIdentifier>{927d5142-2f25-4cad-b399-1ef30c933249}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\010. Character\0101. Enemy\01010. Mob\010101. Pig Gunner">
+      <UniqueIdentifier>{38919a90-cc27-4e39-bcbc-7f73202cca86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\010. Character\0101. Enemy\01010. Mob\010102. Pterodactyl">
+      <UniqueIdentifier>{370de038-18fe-423a-a196-8e70ab2ef8ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\010. Character\0101. Enemy\01010. Mob\010103. Wolf">
+      <UniqueIdentifier>{0b8d00bc-74f7-4405-8033-478775551868}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\010. Character\0101. Enemy\01011. Boss\010110. Bear Thief">
+      <UniqueIdentifier>{4f43131d-7b21-44bd-8a79-b4b0085c46b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Manager\980. KeyManager">
+      <UniqueIdentifier>{ad52df5b-2b9c-4d5e-bfd8-4be4b9a822fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Manager\981. BmpManager">
+      <UniqueIdentifier>{0c992b3f-4645-464f-bdbd-0debd3fe2e5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Manager\982. SceneManager">
+      <UniqueIdentifier>{b7d9e704-720b-4263-851b-2a0a10bd8ab3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Manager\983. ObjManager">
+      <UniqueIdentifier>{a9d6d8a1-7776-4c96-bda5-3fce76051bc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Manager\984. ScrollManager">
+      <UniqueIdentifier>{df1c6aa5-92ac-44aa-8e0d-3cfcfe245e44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Manager\985. CollisionManager">
+      <UniqueIdentifier>{d8f3a462-54c0-4f4c-8ea8-45596de8f574}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Manager\986. TileManager">
+      <UniqueIdentifier>{61d3253f-45e7-411b-8f12-0da184158f5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Manager\987. UIManager">
+      <UniqueIdentifier>{3d997b5b-2fd5-4274-a04b-d18a2f4a1d71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Manager\981. BmpManager\9810. Bmp">
+      <UniqueIdentifier>{b1998b7f-c7ee-496f-abb4-d4567ab0c80c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Scene\022. Game">
+      <UniqueIdentifier>{8f6fdc05-672a-4ff3-9766-2f162742ea73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Scene\023. Editor">
+      <UniqueIdentifier>{47c7a9db-9e80-4b42-9867-e71cf97c249b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -30,6 +129,102 @@
     <ClInclude Include="Dragon_Ball_Advanced_Adventure.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>99. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum.h">
+      <Filter>99. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct.h">
+      <Filter>99. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Function.h">
+      <Filter>99. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>00. Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj.h">
+      <Filter>01. Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>01. Obj\010. Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>01. Obj\010. Character\0100. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>01. Obj\010. Character\0101. Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="PigWarrior.h">
+      <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010100. Pig Warrior</Filter>
+    </ClInclude>
+    <ClInclude Include="PigGunner.h">
+      <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010101. Pig Gunner</Filter>
+    </ClInclude>
+    <ClInclude Include="Pterodactyl.h">
+      <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010102. Pterodactyl</Filter>
+    </ClInclude>
+    <ClInclude Include="Wolf.h">
+      <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010103. Wolf</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>01. Obj\010. Character\0101. Enemy\01011. Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BearThief.h">
+      <Filter>01. Obj\010. Character\0101. Enemy\01011. Boss\010110. Bear Thief</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractFactory.h">
+      <Filter>97. AbstractFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyManager.h">
+      <Filter>98. Manager\980. KeyManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Bmp.h">
+      <Filter>98. Manager\981. BmpManager\9810. Bmp</Filter>
+    </ClInclude>
+    <ClInclude Include="BmpManager.h">
+      <Filter>98. Manager\981. BmpManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ScrollManager.h">
+      <Filter>98. Manager\984. ScrollManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>98. Manager\985. CollisionManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjManager.h">
+      <Filter>98. Manager\983. ObjManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>98. Manager\982. SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TileManager.h">
+      <Filter>98. Manager\986. TileManager</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>98. Manager\987. UIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>01. Obj\011. Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>01. Obj\013. Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>02. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Logo.h">
+      <Filter>02. Scene\020. Logo</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>02. Scene\021. Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>02. Scene\022. Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor.h">
+      <Filter>02. Scene\023. Editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -37,6 +232,81 @@
     </ClCompile>
     <ClCompile Include="Dragon_Ball_Advanced_Adventure.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>00. Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj.cpp">
+      <Filter>01. Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>01. Obj\010. Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>01. Obj\010. Character\0100. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>01. Obj\010. Character\0101. Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="PigWarrior.cpp">
+      <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010100. Pig Warrior</Filter>
+    </ClCompile>
+    <ClCompile Include="PigGunner.cpp">
+      <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010101. Pig Gunner</Filter>
+    </ClCompile>
+    <ClCompile Include="Pterodactyl.cpp">
+      <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010102. Pterodactyl</Filter>
+    </ClCompile>
+    <ClCompile Include="Wolf.cpp">
+      <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010103. Wolf</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>01. Obj\010. Character\0101. Enemy\01011. Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BearThief.cpp">
+      <Filter>01. Obj\010. Character\0101. Enemy\01011. Boss\010110. Bear Thief</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyManager.cpp">
+      <Filter>98. Manager\980. KeyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Bmp.cpp">
+      <Filter>98. Manager\981. BmpManager\9810. Bmp</Filter>
+    </ClCompile>
+    <ClCompile Include="BmpManager.cpp">
+      <Filter>98. Manager\981. BmpManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ScrollManager.cpp">
+      <Filter>98. Manager\984. ScrollManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>98. Manager\985. CollisionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjManager.cpp">
+      <Filter>98. Manager\983. ObjManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>98. Manager\982. SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TileManager.cpp">
+      <Filter>98. Manager\986. TileManager</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>98. Manager\987. UIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>01. Obj\013. Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="Logo.cpp">
+      <Filter>02. Scene\020. Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>02. Scene\021. Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>02. Scene\022. Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor.cpp">
+      <Filter>02. Scene\023. Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
