@@ -3,6 +3,9 @@
 
 #include "stdafx.h"
 #include "Dragon_Ball_Advanced_Adventure.h"
+#include "Main.h"
+#include "Define.h"
+#include "Function.h"
 
 #define MAX_LOADSTRING 100
 
@@ -38,16 +41,42 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DRAGON_BALL_ADVANCED_ADVENTURE));
 
     MSG msg;
+	msg.message = WM_NULL;
+
+	Main* pMain = new Main();
+	pMain->Initialize();
+
+	DWORD dwTime = GetTickCount();
 
     // Main message loop:
-    while (GetMessage(&msg, nullptr, 0, 0))
-    {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
+	while (true)
+	{
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+			if (msg.message == WM_QUIT)
+				break;
+
+			if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}
+		else
+		{
+			if (GetTickCount() > dwTime + 10)
+			{
+				pMain->Update();
+				pMain->Late_Update();
+				pMain->Render();
+
+				dwTime = GetTickCount();
+			}
+		}
+	}
+
+	if (pMain)
+		Safe_Delete(pMain);
 
     return (int) msg.wParam;
 }
@@ -84,8 +113,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
 
+   RECT Rect{ 0, 0, WINCX, WINCY };
+
+   AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, FALSE);
+
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      0, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+      200, 100, Rect.right - Rect.left, Rect.bottom - Rect.top, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
@@ -124,14 +157,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
-    case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code that uses hdc here...
-            EndPaint(hWnd, &ps);
-        }
-        break;
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_ESCAPE:
+			PostQuitMessage(0);
+			break;
+		}
+		break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
