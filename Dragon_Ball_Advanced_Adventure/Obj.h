@@ -27,15 +27,17 @@ public:
 	void Set_Position(float fX, float fY) { m_tInfo.fX = fX; m_tInfo.fY = fY; }
 	void Set_PositionX(float fX) { m_tInfo.fX += fX; }
 	void Set_PositionY(float fY) { m_tInfo.fY += fY; }
-	void Set_Dir(DIRID eDir) { m_eDir = eDir; }
+	void Set_Direction(DIRID eDir) { m_eDir = eDir; }
 	void Set_Dead() { m_bDead = true; }
 	void Set_Angle(float fAngle) { m_fAngle = fAngle; }
 	void Set_Target(Obj* pTarget) { m_pTarget = pTarget; }
 	void Set_FrameKey(TCHAR* pFrameKey) { m_pFrameKey = pFrameKey; }	
 
 protected:
+	virtual void Change_Motion();
+	virtual void Change_Frame();
+
 	void Update_Rect();
-	void Move_Frame();
 
 	INFO m_tInfo;
 	RECT m_tRect;

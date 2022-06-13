@@ -6,5 +6,7 @@ class Character :
 public:
 	Character();
 	virtual ~Character();
+
+	// TODO: Implement Health and Damage
 };
 

@@ -49,9 +49,6 @@
     <Filter Include="01. Obj\013. Tile">
       <UniqueIdentifier>{1934eb77-d050-41e1-819d-02cf479df30a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Obj\014. UI">
-      <UniqueIdentifier>{faf86673-6279-4a3f-9de4-db626d5adf39}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Obj\010. Character\0100. Player">
       <UniqueIdentifier>{1c08886b-a584-43ab-91ba-0486dd62ceae}</UniqueIdentifier>
     </Filter>
@@ -103,14 +100,17 @@
     <Filter Include="98. Manager\987. UIManager">
       <UniqueIdentifier>{3d997b5b-2fd5-4274-a04b-d18a2f4a1d71}</UniqueIdentifier>
     </Filter>
-    <Filter Include="98. Manager\981. BmpManager\9810. Bmp">
-      <UniqueIdentifier>{b1998b7f-c7ee-496f-abb4-d4567ab0c80c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. Scene\022. Game">
       <UniqueIdentifier>{8f6fdc05-672a-4ff3-9766-2f162742ea73}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. Scene\023. Editor">
       <UniqueIdentifier>{47c7a9db-9e80-4b42-9867-e71cf97c249b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Bmp">
+      <UniqueIdentifier>{b1998b7f-c7ee-496f-abb4-d4567ab0c80c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\014. UI">
+      <UniqueIdentifier>{e8f40f9c-099d-4547-a8ed-e49d323b0011}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -181,7 +181,7 @@
       <Filter>98. Manager\980. KeyManager</Filter>
     </ClInclude>
     <ClInclude Include="Bmp.h">
-      <Filter>98. Manager\981. BmpManager\9810. Bmp</Filter>
+      <Filter>03. Bmp</Filter>
     </ClInclude>
     <ClInclude Include="BmpManager.h">
       <Filter>98. Manager\981. BmpManager</Filter>
@@ -224,6 +224,9 @@
     </ClInclude>
     <ClInclude Include="Editor.h">
       <Filter>02. Scene\023. Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>01. Obj\014. UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -270,7 +273,7 @@
       <Filter>98. Manager\980. KeyManager</Filter>
     </ClCompile>
     <ClCompile Include="Bmp.cpp">
-      <Filter>98. Manager\981. BmpManager\9810. Bmp</Filter>
+      <Filter>03. Bmp</Filter>
     </ClCompile>
     <ClCompile Include="BmpManager.cpp">
       <Filter>98. Manager\981. BmpManager</Filter>
@@ -307,6 +310,9 @@
     </ClCompile>
     <ClCompile Include="Editor.cpp">
       <Filter>02. Scene\023. Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>01. Obj\014. UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

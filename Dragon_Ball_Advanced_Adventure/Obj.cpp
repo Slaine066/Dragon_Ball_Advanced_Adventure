@@ -20,7 +20,11 @@ void Obj::Update_Rect()
 	m_tRect.bottom = int(m_tInfo.fY + (m_tInfo.fCY * 0.5f));
 }
 
-void Obj::Move_Frame()
+void Obj::Change_Motion()
+{
+}
+
+void Obj::Change_Frame()
 {
 	if (GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
 	{

@@ -7,7 +7,7 @@
 #include "ScrollManager.h"
 #include "ObjManager.h"
 
-Main::Main() : m_dwTime{ GetTickCount() }, m_iFPS{ 0 }
+Main::Main() : m_dwTime(GetTickCount()), m_iFPS(0)
 {
 	ZeroMemory(m_szFPS, sizeof(m_szFPS));
 }
@@ -49,7 +49,7 @@ void Main::Late_Update()
 void Main::Render()
 {
 	Render_FPS();
-
+	
 	SceneManager::Get_Instance()->Render(m_hDC);
 }
 

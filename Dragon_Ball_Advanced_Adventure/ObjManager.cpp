@@ -74,7 +74,12 @@ void ObjManager::Late_Update()
 	for (size_t i = 0; i < OBJ_END; ++i)
 	{
 		for (auto& iter : m_ObjList[i])
+		{
 			iter->Late_Update();
+
+			if (m_ObjList[i].empty())
+				break;
+		}
 	}
 
 	// TODO: Add Collision Methods here.
