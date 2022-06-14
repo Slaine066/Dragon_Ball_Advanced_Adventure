@@ -190,7 +190,6 @@
     <ClCompile Include="BmpManager.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Character.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Dragon_Ball_Advanced_Adventure.cpp" />
     <ClCompile Include="Editor.cpp" />

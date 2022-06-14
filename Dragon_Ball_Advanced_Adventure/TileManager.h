@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "Obj.h"
+#include "Player.h"
 
 class TileManager
 {

@@ -26,7 +26,7 @@ void Game::Initialize()
 	ObjManager::Get_Instance()->Add_Object(OBJ_PLAYER, AbstractFactory<Player>::Create(200, 200));
 
 	// Test Enemy
-	//ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigWarrior>::Create(400, 200));
+	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigWarrior>::Create(300, 200));
 }
 
 void Game::Release()

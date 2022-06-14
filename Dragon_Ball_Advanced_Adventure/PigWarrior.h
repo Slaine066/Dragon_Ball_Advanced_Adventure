@@ -28,6 +28,7 @@ public:
 private:
 	void Change_Motion() override;
 	void Change_Frame() override;
+	int Get_ColSize() override;
 
 	void Gravity();
 

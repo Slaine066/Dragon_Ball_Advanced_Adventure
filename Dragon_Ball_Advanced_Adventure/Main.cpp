@@ -21,7 +21,7 @@ void Main::Initialize()
 {
 	m_hDC = GetDC(g_hWnd);
 
-	SceneManager::Get_Instance()->Change_Scene(SCENE_LOGO);
+	SceneManager::Get_Instance()->Change_Scene(SCENE_GAME);
 }
 
 void Main::Release()

@@ -36,9 +36,12 @@ public:
 	void Late_Update() override;
 	void Render(HDC hDC) override;
 
+	STATE Get_CurState() { return m_eCurState; }
+
 private:
 	void Change_Motion() override;
 	void Change_Frame() override;
+	int Get_ColSize() override;
 	void Check_Combo();
 
 	void Key_Input();
@@ -51,8 +54,8 @@ private:
 	STATE m_eCurState;
 
 	float m_fSprintSpeed;
-	bool m_bJump;
-	bool m_bIsInAir;
+	float m_fFallSpeed;
+	bool m_bIsJumping;
 
 	float m_fJumpPower;
 	float m_fJumpTime;

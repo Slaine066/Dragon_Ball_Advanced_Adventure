@@ -248,9 +248,6 @@
     <ClCompile Include="Obj.cpp">
       <Filter>01. Obj</Filter>
     </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>01. Obj\010. Character</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>01. Obj\010. Character\0100. Player</Filter>
     </ClCompile>

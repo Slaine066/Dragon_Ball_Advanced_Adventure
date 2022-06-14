@@ -23,3 +23,12 @@ typedef struct tagFrame
 	DWORD dwFrameSpeed;
 	DWORD dwFrameTime;
 } FRAME;
+
+typedef struct tagStats
+{
+	int iHealth;
+	int iHealthMax;
+	int iEnergy;
+	int iEnergyMax;
+	int iDamage;
+} STATS;

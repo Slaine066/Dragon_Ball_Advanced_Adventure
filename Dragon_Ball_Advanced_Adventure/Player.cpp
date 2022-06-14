@@ -7,7 +7,8 @@
 #include "TileManager.h"
 
 Player::Player() 
-	: m_ePreState(END), m_eCurState(IDLE), m_fSprintSpeed(0.f), m_bJump(false), m_bIsInAir(false), m_fJumpPower(0.f), m_fJumpTime(0.f), m_fAccel(9.8f), 
+	: m_ePreState(END), m_eCurState(IDLE), m_fSprintSpeed(0.f), m_fFallSpeed(6.f), 
+	m_bIsJumping(false), m_fJumpPower(0.f), m_fJumpTime(0.f), m_fAccel(9.8f),
 	m_bIsAttacking(false), m_bIsComboActive(false)
 {
 }
@@ -18,17 +19,25 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	m_tInfo.fCX = 50.f;
-	m_tInfo.fCY = 50.f;
+	// Player Rect
+	m_tInfo.fCX = 40.f;
+	m_tInfo.fCY = 40.f;
 
-	// Sprite Real Size
+	// Sprite Frame Size
 	m_tFrameInfo.fCX = 100.f;
 	m_tFrameInfo.fCY = 50.f;
 
+	m_tStats.iHealthMax = 100.f;
+	m_tStats.iHealth = m_tStats.iHealthMax;
+	m_tStats.iEnergyMax = 100.f;
+	m_tStats.iEnergy = m_tStats.iEnergyMax;
+	m_tStats.iDamage = 10.f;
+
 	m_fSpeed = 3.f;
 	m_fSprintSpeed = 5.f;
-	m_fJumpPower = 15.f;
+	m_fJumpPower = 14.f;
 
+	m_eDir = DIR_RIGHT;
 	m_pFrameKey = L"Player_RIGHT";
 
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Goku_LEFT.bmp", L"Player_LEFT");
@@ -53,6 +62,7 @@ int Player::Update()
 	Gravity();
 
 	Update_Rect();
+	Update_Collision_Rect(10, Get_ColSize());
 
 	return OBJ_NOEVENT;
 }
@@ -71,8 +81,11 @@ void Player::Render(HDC hDC)
 
 	HDC	hMemDC = BmpManager::Get_Instance()->Find_Bmp(m_pFrameKey);
 
-	// Test Rectangle
+	// Test Player Rectangle
 	//Rectangle(hDC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, m_tRect.right + iScrollX, m_tRect.bottom + iScrollY);
+
+	// Test Collision Rectangle
+	Rectangle(hDC, m_tCollisionRect.left + iScrollX, m_tCollisionRect.top + iScrollY, m_tCollisionRect.right + iScrollX, m_tCollisionRect.bottom + iScrollY);
 
 	float fRectFrameDiffX = (m_tFrameInfo.fCX - m_tInfo.fCX) / 2;
 	float fRectFrameDiffY = (m_tFrameInfo.fCY - m_tInfo.fCY) / 2;
@@ -84,31 +97,38 @@ void Player::Render(HDC hDC)
 
 void Player::Key_Input()
 {
-	// Left Arrow
+	// Left Arrow - Move Left
 	if (KeyManager::Get_Instance()->Key_Pressing(VK_LEFT) && !m_bIsAttacking)
 		Move(false);
 
-	// Right Arrow
+	// Right Arrow - Move Right
 	else if (KeyManager::Get_Instance()->Key_Pressing(VK_RIGHT) && !m_bIsAttacking)
 		Move(true);
 
-	else if (!m_bJump && !m_bIsAttacking)
+	else if (!m_bIsJumping && !m_bIsAttacking)
 		m_eCurState = IDLE;
 
-	// Space Bar
-	if (KeyManager::Get_Instance()->Key_Down(VK_SPACE) && !m_bIsInAir && !m_bIsAttacking)
+	// Space Bar - Jump
+	if (KeyManager::Get_Instance()->Key_Down(VK_SPACE) && !m_bIsAttacking)
 	{
-		m_bJump = true;
+		m_bIsJumping = true;
 		m_eCurState = JUMP;
 	}
 
-	// Left Mouse
+	// Keyboard 'A' - Attack
 	if (KeyManager::Get_Instance()->Key_Down('A'))
 	{
-		if (m_bJump)
+		if (m_bIsJumping)
 			m_eCurState = ATTACK_JUMP;
 		else
 			Attack();
+	}
+
+	// Keyboard 'S' - Special Attack
+	if (KeyManager::Get_Instance()->Key_Pressing('S') && !m_bIsJumping && !m_bIsAttacking)
+	{
+		// TODO: Check Charging Time
+		// Spawn Projectile based on Charging Time
 	}
 }
 
@@ -138,41 +158,46 @@ void Player::Offset()
 
 void Player::Gravity()
 {
-	float fY = 0.f;
-	
-	// If TRUE there is a Collision Tile below
-	// If FALSE there is NO Collision Tile below
-	bool bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfo.fCY / 2) - 6, &fY); // 6: Distance from end of to the end of the Frame
+	bool bFloor = false;
+	float fTargetY = 0.f;
 
-	// Jump
-	if (m_bJump)
-	{
-		float fPos = m_fJumpPower * m_fJumpTime - (m_fAccel * pow(m_fJumpTime, 2) * 0.5f);
-
-		// Highest point reached: 
-		// Start FALL Animation
-		/*if ((m_tInfo.fY - fPos) > m_tInfo.fY && m_eCurState != FALL)
-			m_eCurState = FALL;*/
-
-		m_tInfo.fY -= fPos;
+	if (m_eCurState != JUMP)
+		// If TRUE there is a Collision Tile below
+		// If FALSE there is NO Collision Tile below
+		bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfo.fCY / 2) - 6, &fTargetY); // 6: Distance from end of Sprite to end of the Frame (in Pixels)
+		
+	// JUMPING
+	if (m_bIsJumping)
+	{	
+		float fJumpPos = m_fJumpPower * m_fJumpTime - (m_fAccel * pow(m_fJumpTime, 2) * 0.5f);
+		
+		m_tInfo.fY -= fJumpPos;
 		m_fJumpTime += 0.15f;
 
-		if (bFloor && fY < m_tInfo.fY)
+		// Highest point reached: Start FALL Animation
+		if ((m_tInfo.fY - fJumpPos) > m_tInfo.fY)
 		{
-			m_bJump = false;
+			m_bIsJumping = false;
 			m_fJumpTime = 0.f;
-			m_tInfo.fY = fY;
 		}
 	}
 
-	// Floor Collision
+	// NOT JUMPING
+		// There is Floor and Player is above Target Tile
+	else if (bFloor && m_tInfo.fY < fTargetY)
+	{
+		m_tInfo.fY += m_fFallSpeed;
+		m_eCurState = FALL;
+	}
+		// There is Floor but Player is NOT above Target Tile
 	else if (bFloor)
 	{
-		m_tInfo.fY = fY;
+		m_tInfo.fY = fTargetY;
 	}
+		// There is NO Floor
 	else
 	{
-		m_tInfo.fY += m_fSpeed;
+		m_tInfo.fY += m_fFallSpeed;
 		m_eCurState = FALL;
 	}
 }
@@ -183,9 +208,10 @@ void Player::Move(bool bIsRight)
 	float fSpeed = bIsSprinting ? m_fSprintSpeed : m_fSpeed;
 	STATE eNewState = bIsSprinting ? SPRINT : RUN;
 
+	m_eDir = bIsRight ? DIR_RIGHT : DIR_LEFT;
 	m_tInfo.fX += bIsRight ? fSpeed : -fSpeed;
 	m_pFrameKey = bIsRight ? L"Player_RIGHT" : L"Player_LEFT";
-	m_eCurState = m_bJump ? m_eCurState : eNewState;
+	m_eCurState = m_bIsJumping ? m_eCurState : eNewState;
 }
 
 void Player::Attack()
@@ -265,7 +291,7 @@ void Player::Change_Motion()
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 8;
 			m_tFrame.iMotion = 7;
-			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.dwFrameSpeed = 70;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case ATTACK_5:
@@ -347,6 +373,21 @@ void Player::Change_Frame()
 
 			m_tFrame.dwFrameTime = GetTickCount();
 		}
+	}
+}
+
+int Player::Get_ColSize()
+{
+	switch (m_eCurState)
+	{
+	case ATTACK_3:
+		return 25;
+	case ATTACK_4:
+		return 40;
+	case ATTACK_5:
+		return 45;
+	default:
+		return 20;
 	}
 }
 

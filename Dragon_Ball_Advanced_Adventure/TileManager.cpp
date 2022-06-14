@@ -71,7 +71,7 @@ void TileManager::Render(HDC hDC)
 	}
 }
 
-bool TileManager::Tile_Collision(float fX, float fY, float fFrameOffset, float* pY)
+bool TileManager::Tile_Collision(float fX, float fY, float fFrameOffset, float* pTargetY)
 {
 	if (m_vecTile.empty())
 		return false;
@@ -81,13 +81,21 @@ bool TileManager::Tile_Collision(float fX, float fY, float fFrameOffset, float* 
 	for (auto& iter : m_vecTile)
 	{
 		// Obj is in between a Tile (X Axis oriented) and has a Tile below (Y Axis oriented)
-		if (fX >= iter->Get_Rect().left && fX < iter->Get_Rect().right && fY <= iter->Get_Rect().bottom)
+		if (fX >= iter->Get_Rect().left && fX <= iter->Get_Rect().right && fY < iter->Get_Rect().bottom)
 		{
 			Tile* pTile = static_cast<Tile*>(iter);
 
 			// If Collision Tile
 			if (pTile->Get_Option() == 1)
-				pTarget = pTile;
+			{
+				if (pTarget)
+				{
+					if (pTile->Get_Rect().bottom < pTarget->Get_Rect().bottom)
+						pTarget = pTile;
+				}
+				else
+					pTarget = pTile;
+			}
 		}
 	}
 
@@ -96,10 +104,11 @@ bool TileManager::Tile_Collision(float fX, float fY, float fFrameOffset, float* 
 
 	float x1 = pTarget->Get_Rect().left;
 	float x2 = pTarget->Get_Rect().right;
-	float y1 = pTarget->Get_Rect().bottom - (pTarget->Get_Info().fCY / 2) - fFrameOffset;
-	float y2 = pTarget->Get_Rect().bottom - (pTarget->Get_Info().fCY / 2) - fFrameOffset;
+	float y1 = pTarget->Get_Rect().bottom;
+	float y2 = pTarget->Get_Rect().bottom;
 
-	*pY = ((y2 - y1) / (x2 - x1)) * (fX - x1) + y1;
+	float fTargetY = ((y2 - y1) / (x2 - x1)) * (fX - x1) + y1;
+	*pTargetY = fTargetY - (pTarget->Get_Info().fCY / 2) - fFrameOffset;
 
 	return true;
 }
