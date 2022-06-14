@@ -4,6 +4,7 @@
 #include "ScrollManager.h"
 #include "BmpManager.h"
 #include "KeyManager.h"
+#include "TileManager.h"
 
 Player::Player() 
 	: m_ePreState(END), m_eCurState(IDLE), m_fSprintSpeed(0.f), m_bJump(false), m_bIsInAir(false), m_fJumpPower(0.f), m_fJumpTime(0.f), m_fAccel(9.8f), 
@@ -17,8 +18,15 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	m_fSpeed = 5.f;
-	m_fSprintSpeed = 10.f;
+	m_tInfo.fCX = 50.f;
+	m_tInfo.fCY = 50.f;
+
+	// Sprite Real Size
+	m_tFrameInfo.fCX = 100.f;
+	m_tFrameInfo.fCY = 50.f;
+
+	m_fSpeed = 3.f;
+	m_fSprintSpeed = 5.f;
 	m_fJumpPower = 15.f;
 
 	m_pFrameKey = L"Player_RIGHT";
@@ -64,11 +72,14 @@ void Player::Render(HDC hDC)
 	HDC	hMemDC = BmpManager::Get_Instance()->Find_Bmp(m_pFrameKey);
 
 	// Test Rectangle
-	// Rectangle(hDC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, m_tRect.right + iScrollX, m_tRect.bottom + iScrollY);
+	//Rectangle(hDC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, m_tRect.right + iScrollX, m_tRect.bottom + iScrollY);
+
+	float fRectFrameDiffX = (m_tFrameInfo.fCX - m_tInfo.fCX) / 2;
+	float fRectFrameDiffY = (m_tFrameInfo.fCY - m_tInfo.fCY) / 2;
 
 	GdiTransparentBlt(
-		hDC, int(m_tRect.left + iScrollX), int(m_tRect.top + iScrollY), 200, 100, 
-		hMemDC, m_tFrame.iFrameStart * 100, m_tFrame.iMotion * 50, 100, 50, RGB(132, 0, 132));
+		hDC, m_tRect.left - fRectFrameDiffX + iScrollX, m_tRect.top - fRectFrameDiffY + iScrollY, m_tFrameInfo.fCX, m_tFrameInfo.fCY,
+		hMemDC, m_tFrame.iFrameStart * m_tFrameInfo.fCX, m_tFrame.iMotion * m_tFrameInfo.fCY, m_tFrameInfo.fCX, m_tFrameInfo.fCY, RGB(132, 0, 132));
 }
 
 void Player::Key_Input()
@@ -127,8 +138,12 @@ void Player::Offset()
 
 void Player::Gravity()
 {
-	float fY = 200.f;
+	float fY = 0.f;
 	
+	// If TRUE there is a Collision Tile below
+	// If FALSE there is NO Collision Tile below
+	bool bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfo.fCY / 2) - 6, &fY); // 6: Distance from end of to the end of the Frame
+
 	// Jump
 	if (m_bJump)
 	{
@@ -142,7 +157,7 @@ void Player::Gravity()
 		m_tInfo.fY -= fPos;
 		m_fJumpTime += 0.15f;
 
-		if (fY < m_tInfo.fY)
+		if (bFloor && fY < m_tInfo.fY)
 		{
 			m_bJump = false;
 			m_fJumpTime = 0.f;
@@ -151,9 +166,14 @@ void Player::Gravity()
 	}
 
 	// Floor Collision
-	else if (true)
+	else if (bFloor)
 	{
-		m_tInfo.fY = 200.f;
+		m_tInfo.fY = fY;
+	}
+	else
+	{
+		m_tInfo.fY += m_fSpeed;
+		m_eCurState = FALL;
 	}
 }
 
@@ -215,7 +235,7 @@ void Player::Change_Motion()
 			break;
 		case FALL:
 			m_tFrame.iFrameStart = 4;
-			m_tFrame.iFrameEnd = 8;
+			m_tFrame.iFrameEnd = 4;
 			m_tFrame.iMotion = 3;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();

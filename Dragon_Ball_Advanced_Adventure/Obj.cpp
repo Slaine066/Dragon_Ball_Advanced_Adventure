@@ -5,6 +5,7 @@ Obj::Obj() : m_fSpeed(0.f), m_eDir(DIR_END), m_bDead(false), m_fAngle(0.f), m_fD
 {
 	ZeroMemory(&m_tInfo, sizeof(INFO));
 	ZeroMemory(&m_tRect, sizeof(RECT));
+	ZeroMemory(&m_tFrameInfo, sizeof(FRAMEINFO));
 	ZeroMemory(&m_tFrame, sizeof(FRAME));
 }
 

@@ -8,6 +8,12 @@ typedef struct tagInfo
 	float fCY; // Heigth Size
 } INFO;
 
+typedef struct tagFrameInfo
+{
+	float fCX; // Width Size
+	float fCY; // Height Size
+} FRAMEINFO;
+
 typedef struct tagFrame
 {
 	int iFrameStart;

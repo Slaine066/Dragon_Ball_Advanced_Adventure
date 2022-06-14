@@ -112,6 +112,9 @@
     <Filter Include="01. Obj\014. UI">
       <UniqueIdentifier>{e8f40f9c-099d-4547-a8ed-e49d323b0011}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98. Manager\988. SoundManager">
+      <UniqueIdentifier>{6999fee7-235a-4567-89c0-19fc2d7bc4d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -228,6 +231,9 @@
     <ClInclude Include="Button.h">
       <Filter>01. Obj\014. UI</Filter>
     </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>98. Manager\988. SoundManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -313,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>01. Obj\014. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>98. Manager\988. SoundManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

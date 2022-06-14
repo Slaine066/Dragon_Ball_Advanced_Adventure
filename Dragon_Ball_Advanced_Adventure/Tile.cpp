@@ -3,7 +3,7 @@
 #include "BmpManager.h"
 #include "ScrollManager.h"
 
-Tile::Tile() : m_iDrawID{ 0 }, m_iOption{ 0 }
+Tile::Tile() : m_iDrawID(-1), m_iOption(0)
 {
 }
 
@@ -37,9 +37,14 @@ void Tile::Late_Update()
 
 void Tile::Render(HDC hDC)
 {
-	int iScrollX = (int)ScrollManager::Get_Instance()->Get_ScrollX();
-	int iScrollY = (int)ScrollManager::Get_Instance()->Get_ScrollY();
+	if (m_iDrawID != -1)
+	{
+		int iScrollX = (int)ScrollManager::Get_Instance()->Get_ScrollX();
+		int iScrollY = (int)ScrollManager::Get_Instance()->Get_ScrollY();
 
-	HDC	hMemDC = BmpManager::Get_Instance()->Find_Bmp(L"Tile");
-	BitBlt(hDC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, (int)m_tInfo.fCX, (int)m_tInfo.fCY, hMemDC, TILECX * m_iDrawID, 0, SRCCOPY);
+		HDC	hMemDC = BmpManager::Get_Instance()->Find_Bmp(L"Tile");
+
+		GdiTransparentBlt(hDC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, m_tInfo.fCX, m_tInfo.fCY, 
+			hMemDC, TILECX * m_iDrawID, 0, m_tInfo.fCX, m_tInfo.fCY, RGB(24, 176, 248));
+	}
 }

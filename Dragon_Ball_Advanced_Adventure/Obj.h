@@ -42,6 +42,7 @@ protected:
 	INFO m_tInfo;
 	RECT m_tRect;
 	DIRID m_eDir;
+	FRAMEINFO m_tFrameInfo;
 	FRAME m_tFrame;
 
 	bool m_bDead;

@@ -20,7 +20,13 @@
 
 // TODO: reference additional headers your program requires here
 #include <list>
+#include <vector>
 #include <map>
 #include <algorithm>
+
+#include <io.h>
+//#include "fmod.h"
+//#include "fmod.hpp"
+//#pragma comment(lib, "fmodex_vc.lib")
 
 using namespace std;

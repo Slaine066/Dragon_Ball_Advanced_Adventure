@@ -13,6 +13,9 @@ PigWarrior::~PigWarrior()
 
 void PigWarrior::Initialize()
 {
+	/*m_tInfo.fCX = 100;
+	m_tInfo.fCY = 60;*/
+
 	m_fSpeed = 5.f;
 
 	m_pFrameKey = L"Pig_Warrior_RIGHT";
@@ -34,6 +37,12 @@ int PigWarrior::Update()
 
 	Gravity();
 
+	// TODO: Check for Target
+	// If Target:
+		// If in Attack Range: Attack
+		// If NOT in Attack Range: Follow Target
+	// If !Target: Partol
+
 	Update_Rect();
 
 	return OBJ_NOEVENT;
@@ -53,10 +62,10 @@ void PigWarrior::Render(HDC hDC)
 	HDC	hMemDC = BmpManager::Get_Instance()->Find_Bmp(m_pFrameKey);
 
 	// Test Rectangle
-	// Rectangle(hDC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, m_tRect.right + iScrollX, m_tRect.bottom + iScrollY);
+	Rectangle(hDC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, m_tRect.right + iScrollX, m_tRect.bottom + iScrollY);
 
 	GdiTransparentBlt(
-		hDC, int(m_tRect.left + iScrollX), int(m_tRect.top + iScrollY), 200, 120,
+		hDC, int(m_tRect.left + iScrollX), int(m_tRect.top + iScrollY), 100, 60,
 		hMemDC, m_tFrame.iFrameStart * 100, m_tFrame.iMotion * 60, 100, 60, RGB(132, 0, 132));
 }
 
