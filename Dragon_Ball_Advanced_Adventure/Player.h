@@ -39,10 +39,15 @@ public:
 	STATE Get_CurState() { return m_eCurState; }
 
 private:
+	// Obj overrides
 	void Change_Motion() override;
 	void Change_Frame() override;
+
+	// Character overrides
+	bool Die() override;
 	int Get_ColSize() override;
-	void Check_Combo();
+	void Can_Damage() override;
+	void Reset_Animation() override;
 
 	void Key_Input();
 	void Offset();
@@ -61,6 +66,5 @@ private:
 	float m_fJumpTime;
 	float m_fAccel;
 	
-	bool m_bIsAttacking;
 	bool m_bIsComboActive;
 };

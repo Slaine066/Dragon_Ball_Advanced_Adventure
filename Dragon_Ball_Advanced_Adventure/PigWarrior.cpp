@@ -29,7 +29,7 @@ void PigWarrior::Initialize()
 	m_fSpeed = 5.f;
 
 	m_eDir = DIR_RIGHT;
-	m_pFrameKey = L"Pig_Warrior_RIGHT";
+	m_pFrameKey = L"Pig_Warrior_LEFT";
 
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Enemy/Pig_Warrior_LEFT.bmp", L"Pig_Warrior_LEFT");
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Enemy/Pig_Warrior_RIGHT.bmp", L"Pig_Warrior_RIGHT");
@@ -44,16 +44,11 @@ void PigWarrior::Release()
 
 int PigWarrior::Update()
 {
-	if (m_bDead)
+	if (Die())
 		return OBJ_DEAD;
 
+	AI_Behavior();
 	Gravity();
-
-	// TODO: Check for Target
-	// If Target:
-		// If in Attack Range: Attack
-		// If NOT in Attack Range: Follow Target
-	// If !Target: Partol
 
 	Update_Rect();
 	Update_Collision_Rect(10, Get_ColSize());
@@ -65,6 +60,7 @@ void PigWarrior::Late_Update()
 {
 	Change_Motion();
 	Change_Frame();
+	Reset_Animation();
 }
 
 void PigWarrior::Render(HDC hDC)
@@ -78,7 +74,7 @@ void PigWarrior::Render(HDC hDC)
 	//Rectangle(hDC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, m_tRect.right + iScrollX, m_tRect.bottom + iScrollY);
 
 	// Test Collision Rectangle
-	Rectangle(hDC, m_tCollisionRect.left + iScrollX, m_tCollisionRect.top + iScrollY, m_tCollisionRect.right + iScrollX, m_tCollisionRect.bottom + iScrollY);
+	//Rectangle(hDC, m_tCollisionRect.left + iScrollX, m_tCollisionRect.top + iScrollY, m_tCollisionRect.right + iScrollX, m_tCollisionRect.bottom + iScrollY);
 
 	float fRectFrameDiffX = (m_tFrameInfo.fCX - m_tInfo.fCX) / 2;
 	float fRectFrameDiffY = (m_tFrameInfo.fCY - m_tInfo.fCY) / 2;
@@ -166,9 +162,46 @@ void PigWarrior::Change_Frame()
 	}
 }
 
+bool PigWarrior::Die()
+{
+	if (m_eCurState == DEAD && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed + 1000)
+		return true;
+	else if (m_bDead && m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+		m_eCurState = DEAD;
+	else if (m_bDead)
+		m_bIsHit = true;
+
+	return false;
+}
+
 int PigWarrior::Get_ColSize()
 {
 	return 20;
+}
+
+void PigWarrior::Can_Damage()
+{
+}
+
+void PigWarrior::Reset_Animation()
+{
+	// Reset HIT
+	if (m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+		m_bIsHit = false;
+}
+
+void PigWarrior::AI_Behavior()
+{
+	// TODO: Check for Target
+		// If Target:
+			// If in Attack Range: Attack
+			// If NOT in Attack Range: Follow Target
+		// If !Target: Partol
+
+	if (m_bIsHit && m_eCurState != DEAD)
+		m_eCurState = HIT;
+	else if (!m_bIsAttacking && !m_bIsHit && !m_bDead)
+		m_eCurState = IDLE;
 }
 
 void PigWarrior::Gravity()

@@ -2,6 +2,7 @@
 #include "ObjManager.h"
 #include "Function.h"
 #include "Define.h"
+#include "CollisionManager.h"
 
 ObjManager* ObjManager::m_pInstance = nullptr;
 
@@ -82,7 +83,9 @@ void ObjManager::Late_Update()
 		}
 	}
 
-	// TODO: Add Collision Methods here.
+	// Collision Handling Methods
+	CollisionManager::Collision_Rect(Get_Player(), Get_Enemies()); // Player damages Enemies
+	// CollisionManager::Collision_Rect(Get_Enemies(), Get_Player()); // Enemies damage Player
 }
 
 void ObjManager::Render(HDC hDC)

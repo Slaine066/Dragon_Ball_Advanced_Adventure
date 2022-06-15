@@ -9,7 +9,7 @@
 Player::Player() 
 	: m_ePreState(END), m_eCurState(IDLE), m_fSprintSpeed(0.f), m_fFallSpeed(6.f), 
 	m_bIsJumping(false), m_fJumpPower(0.f), m_fJumpTime(0.f), m_fAccel(9.8f),
-	m_bIsAttacking(false), m_bIsComboActive(false)
+	m_bIsComboActive(false)
 {
 }
 
@@ -60,6 +60,7 @@ int Player::Update()
 	Key_Input();
 	Offset();
 	Gravity();
+	Can_Damage();
 
 	Update_Rect();
 	Update_Collision_Rect(10, Get_ColSize());
@@ -71,7 +72,7 @@ void Player::Late_Update()
 {
 	Change_Motion();
 	Change_Frame();
-	Check_Combo();
+	Reset_Animation();
 }
 
 void Player::Render(HDC hDC)
@@ -85,7 +86,7 @@ void Player::Render(HDC hDC)
 	//Rectangle(hDC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, m_tRect.right + iScrollX, m_tRect.bottom + iScrollY);
 
 	// Test Collision Rectangle
-	Rectangle(hDC, m_tCollisionRect.left + iScrollX, m_tCollisionRect.top + iScrollY, m_tCollisionRect.right + iScrollX, m_tCollisionRect.bottom + iScrollY);
+	//Rectangle(hDC, m_tCollisionRect.left + iScrollX, m_tCollisionRect.top + iScrollY, m_tCollisionRect.right + iScrollX, m_tCollisionRect.bottom + iScrollY);
 
 	float fRectFrameDiffX = (m_tFrameInfo.fCX - m_tInfo.fCX) / 2;
 	float fRectFrameDiffY = (m_tFrameInfo.fCY - m_tInfo.fCY) / 2;
@@ -105,7 +106,7 @@ void Player::Key_Input()
 	else if (KeyManager::Get_Instance()->Key_Pressing(VK_RIGHT) && !m_bIsAttacking)
 		Move(true);
 
-	else if (!m_bIsJumping && !m_bIsAttacking)
+	else if (!m_bIsJumping && !m_bIsAttacking && !m_bIsHit)
 		m_eCurState = IDLE;
 
 	// Space Bar - Jump
@@ -269,36 +270,46 @@ void Player::Change_Motion()
 		case ATTACK_1:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 2;
+			m_tFrame.iDamageNotifyStart = 1;
+			m_tFrame.iDamageNotifyEnd = 1;
 			m_tFrame.iMotion = 4;
-			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.dwFrameSpeed = 70;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case ATTACK_2:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 2;
+			m_tFrame.iDamageNotifyStart = 1;
+			m_tFrame.iDamageNotifyEnd = 1;
 			m_tFrame.iMotion = 5;
-			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.dwFrameSpeed = 70;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case ATTACK_3:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 4;
+			m_tFrame.iDamageNotifyStart = 4;
+			m_tFrame.iDamageNotifyEnd = 4;
 			m_tFrame.iMotion = 6;
-			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.dwFrameSpeed = 70;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case ATTACK_4:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 8;
+			m_tFrame.iDamageNotifyStart = 4;
+			m_tFrame.iDamageNotifyEnd = 5;
 			m_tFrame.iMotion = 7;
-			m_tFrame.dwFrameSpeed = 70;
+			m_tFrame.dwFrameSpeed = 50;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case ATTACK_5:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 5;
+			m_tFrame.iDamageNotifyStart = 2;
+			m_tFrame.iDamageNotifyEnd = 3;
 			m_tFrame.iMotion = 8;
-			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.dwFrameSpeed = 70;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case ATTACK_JUMP:
@@ -376,6 +387,11 @@ void Player::Change_Frame()
 	}
 }
 
+bool Player::Die()
+{
+	return false;
+}
+
 int Player::Get_ColSize()
 {
 	switch (m_eCurState)
@@ -391,8 +407,24 @@ int Player::Get_ColSize()
 	}
 }
 
-void Player::Check_Combo()
+void Player::Can_Damage()
 {
+	if (m_bIsAttacking)
+	{
+		if (m_tFrame.iFrameStart >= m_tFrame.iDamageNotifyStart && m_tFrame.iFrameStart <= m_tFrame.iDamageNotifyEnd)
+			if (!m_bMotionAlreadyDamaged)
+			{
+				m_bCanDamage = true;
+				return;
+			}
+
+		m_bCanDamage = false;
+	}
+}
+
+void Player::Reset_Animation()
+{
+	// If ATTACKING
 	if (m_bIsAttacking && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
 	{
 		if (m_bIsComboActive)
@@ -403,31 +435,37 @@ void Player::Check_Combo()
 				m_eCurState = ATTACK_2;
 				m_bIsAttacking = true;
 				m_bIsComboActive = false;
+				m_bMotionAlreadyDamaged = false;
 				break;
 			case ATTACK_2:
 				m_eCurState = ATTACK_3;
 				m_bIsAttacking = true;
 				m_bIsComboActive = false;
+				m_bMotionAlreadyDamaged = false;
 				break;
 			case ATTACK_3:
 				m_eCurState = ATTACK_4;
 				m_bIsAttacking = true;
 				m_bIsComboActive = false;
+				m_bMotionAlreadyDamaged = false;
 				break;
 			case ATTACK_4:
 				m_eCurState = ATTACK_5;
 				m_bIsAttacking = true;
 				m_bIsComboActive = false;
+				m_bMotionAlreadyDamaged = false;
 				break;
 			case ATTACK_5:
 				m_bIsAttacking = true;
 				m_bIsComboActive = false;
+				m_bMotionAlreadyDamaged = false;
 			}
 		}
 		else
 		{
 			m_bIsAttacking = false;
 			m_bIsComboActive = false;
+			m_bMotionAlreadyDamaged = false;
 		}
 	}
 }

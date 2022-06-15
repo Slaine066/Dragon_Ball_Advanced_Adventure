@@ -10,14 +10,15 @@ private:
 	ObjManager();
 	~ObjManager();
 
-	static ObjManager*	m_pInstance;
-	list<Obj*>	m_ObjList[OBJ_END];
+	static ObjManager* m_pInstance;
+	list<Obj*> m_ObjList[OBJ_END];
 
 public:
 	void Add_Object(OBJID eID, Obj* pObj);
 	void Delete_Objects(OBJID eID);
 
-	Obj* Get_Player() { return m_ObjList[OBJ_PLAYER].front(); }
+	list<Obj*> Get_Player() { return m_ObjList[OBJ_PLAYER]; }
+	list<Obj*> Get_Enemies() { return m_ObjList[OBJ_ENEMY]; }
 	Obj* Get_Target(OBJID eID, Obj* pObj);
 
 	void Release();

@@ -18,6 +18,10 @@ typedef struct tagFrame
 {
 	int iFrameStart;
 	int	iFrameEnd;
+
+	int iDamageNotifyStart;
+	int iDamageNotifyEnd;
+
 	int	iMotion;
 
 	DWORD dwFrameSpeed;
