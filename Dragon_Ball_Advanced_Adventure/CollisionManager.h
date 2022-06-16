@@ -9,6 +9,7 @@ private:
 	~CollisionManager();
 
 public:
-	static void	Collision_Rect(list<Obj*> _Collider, list<Obj*> _Collided);
+	static void	Collision_Rect(list<Obj*> _Colliders, list<Obj*> _Collided);
+	static void Collision_Bullet(list<Obj*> _Colliders, list<Obj*> _Collided);
 };
 

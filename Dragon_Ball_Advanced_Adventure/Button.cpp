@@ -54,7 +54,3 @@ void Button::Render(HDC hDC)
 		GdiTransparentBlt(hDC, int(m_tRect.left), int(m_tRect.top), int(m_tInfo.fCX), int(m_tInfo.fCY), hMemDC, 0, 0, (int)m_tInfo.fCX, (int)m_tInfo.fCY, RGB(132, 0, 132));
 	}
 }
-
-void Button::Change_Motion()
-{
-}

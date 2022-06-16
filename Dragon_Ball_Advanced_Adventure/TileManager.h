@@ -23,6 +23,7 @@ public:
 	void Render(HDC hDC);
 
 	bool Tile_Collision(float fX, float fY, float fFrameOffset, float* pY);
+	bool Wall_Collision(Obj* pObj);
 
 	void Pick_Tile(POINT& _pt);
 	void Reset_Tile(POINT& _pt);

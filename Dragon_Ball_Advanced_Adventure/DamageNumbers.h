@@ -2,11 +2,11 @@
 
 #include "Obj.h"
 
-class Button : public Obj
+class DamageNumbers : public Obj
 {
 public:
-	Button();
-	~Button();
+	DamageNumbers();
+	~DamageNumbers();
 
 	void Initialize() override;
 	void Release() override;
@@ -16,10 +16,9 @@ public:
 	void Late_Update() override;
 	void Render(HDC hDC) override;
 
-	void Set_Blink(bool bShouldBlink) { m_bShouldBlink = bShouldBlink; }
+	void Set_Number(int iNumber) { m_iNumber = iNumber; }
 
 private:
-	bool m_bShouldBlink;
+	int m_iNumber;
 	DWORD m_dwTime;
-	bool m_bIsVisible;
 };

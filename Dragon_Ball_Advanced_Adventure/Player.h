@@ -54,6 +54,7 @@ private:
 	void Gravity();
 	void Move(bool bIsRight);
 	void Attack();
+	void Attack_Special();
 
 	STATE m_ePreState;
 	STATE m_eCurState;
@@ -67,4 +68,6 @@ private:
 	float m_fAccel;
 	
 	bool m_bIsComboActive;
+
+	DWORD m_dwChargingTime;
 };

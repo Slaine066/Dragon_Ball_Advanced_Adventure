@@ -18,19 +18,8 @@ public:
 		return pInstance;
 	}
 
-	// Instance with Position and Angle
-	static Obj* Create(float fX, float fY, float fAngle)
-	{
-		Obj* pInstance = new T;
-		pInstance->Initialize();
-		pInstance->Set_Position(fX, fY);
-		pInstance->Set_Angle(fAngle);
-
-		return pInstance;
-	}
-
-	// Instance with Position and Direction
-	static Obj*	Create(float fX, float fY, DIRID eDir = DIR_END)
+	// Instance with Position, Direction and Owner
+	static Obj*	Create(float fX, float fY, DIRID eDir = DIR_END, Obj* pObj = nullptr)
 	{
 		Obj* pInstance = new T;
 		pInstance->Initialize();
@@ -38,6 +27,9 @@ public:
 
 		if (eDir != DIR_END)
 			pInstance->Set_Direction(eDir);
+
+		if (pObj)
+			pInstance->Set_Owner(pObj);
 
 		return pInstance;
 	}

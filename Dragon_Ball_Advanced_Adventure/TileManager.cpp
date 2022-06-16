@@ -113,6 +113,30 @@ bool TileManager::Tile_Collision(float fX, float fY, float fFrameOffset, float* 
 	return true;
 }
 
+bool TileManager::Wall_Collision(Obj* pObj)
+{
+	if (m_vecTile.empty())
+		return false;
+
+	RECT Rect{};
+
+	for (auto& iter : m_vecTile)
+	{
+		Tile* pTile = static_cast<Tile*>(iter);
+
+		if (pTile->Get_Option() != 1)
+		{
+			if (pObj->Get_Rect().bottom > iter->Get_Rect().top && pObj->Get_Rect().bottom < iter->Get_Rect().bottom)
+			{
+				if (IntersectRect(&Rect, &pObj->Get_Rect(), &iter->Get_Rect()))
+					return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 void TileManager::Pick_Tile(POINT & _pt)
 {
 	int	iX = _pt.x / TILECX;
@@ -125,14 +149,14 @@ void TileManager::Pick_Tile(POINT & _pt)
 
 	Tile* pTile = static_cast<Tile*>(m_vecTile[iIndex]);
 	
-	if (pTile->Get_DrawID() < 3)
+	if (pTile->Get_DrawID() < 5)
 		pTile->Set_DrawID(pTile->Get_DrawID() + 1);
 	else 
 		pTile->Set_DrawID(0);
 		
-	// DrawID 1 and 2 are Collision Tiles
-	// DrawID 3 and 4 are Normal Tiles
-	if (pTile->Get_DrawID() == 0 || pTile->Get_DrawID() == 1)
+	// DrawID 0, 1, 2 and 3 are Collision Tiles
+	// DrawID 4 and 5 are Normal Tiles
+	if (pTile->Get_DrawID() == 0 || pTile->Get_DrawID() == 1 || pTile->Get_DrawID() == 2 || pTile->Get_DrawID() == 3)
 		pTile->Set_Option(1);
 	else
 		pTile->Set_Option(0);

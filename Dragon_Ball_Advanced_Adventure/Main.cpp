@@ -21,6 +21,8 @@ void Main::Initialize()
 {
 	m_hDC = GetDC(g_hWnd);
 
+	// To open Map Builder uncomment line 25 and comment line 26
+	//SceneManager::Get_Instance()->Change_Scene(SCENE_EDITOR);
 	SceneManager::Get_Instance()->Change_Scene(SCENE_LOGO);
 }
 

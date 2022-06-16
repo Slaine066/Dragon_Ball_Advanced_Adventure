@@ -9,7 +9,7 @@
 Player::Player() 
 	: m_ePreState(END), m_eCurState(IDLE), m_fSprintSpeed(0.f), m_fFallSpeed(6.f), 
 	m_bIsJumping(false), m_fJumpPower(0.f), m_fJumpTime(0.f), m_fAccel(9.8f),
-	m_bIsComboActive(false)
+	m_bIsComboActive(false), m_dwChargingTime(0)
 {
 }
 
@@ -19,20 +19,26 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	// Player Rect
-	m_tInfo.fCX = 40.f;
-	m_tInfo.fCY = 40.f;
+	// Player Rect Size
+	m_tInfo.fCX = 80.f;
+	m_tInfo.fCY = 80.f;
 
-	// Sprite Frame Size
+	// Sprite REAL Size
 	m_tFrameInfo.fCX = 100.f;
 	m_tFrameInfo.fCY = 50.f;
 
+	// Sprite RENDER Size
+	m_tFrameInfoRender.fCX = 200.f;
+	m_tFrameInfoRender.fCY = 100.f;
+
+	// Stats
 	m_tStats.iHealthMax = 100.f;
 	m_tStats.iHealth = m_tStats.iHealthMax;
 	m_tStats.iEnergyMax = 100.f;
 	m_tStats.iEnergy = m_tStats.iEnergyMax;
 	m_tStats.iDamage = 10.f;
 
+	// Speeds
 	m_fSpeed = 3.f;
 	m_fSprintSpeed = 5.f;
 	m_fJumpPower = 14.f;
@@ -42,7 +48,7 @@ void Player::Initialize()
 
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Goku_LEFT.bmp", L"Player_LEFT");
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Goku_RIGHT.bmp", L"Player_RIGHT");
-	// TODO: Load Projectile *.bmp
+	// TODO: Load "Kamehameha.bmp"
 	
 	// Start First Animation
 	Change_Motion(); 
@@ -54,16 +60,17 @@ void Player::Release()
 
 int Player::Update()
 {
-	if (m_bDead)
+	if (Die())
 		return OBJ_DEAD;
 
+	Can_Damage();
 	Key_Input();
 	Offset();
-	Gravity();
-	Can_Damage();
 
 	Update_Rect();
 	Update_Collision_Rect(10, Get_ColSize());
+
+	Gravity();
 
 	return OBJ_NOEVENT;
 }
@@ -88,49 +95,58 @@ void Player::Render(HDC hDC)
 	// Test Collision Rectangle
 	//Rectangle(hDC, m_tCollisionRect.left + iScrollX, m_tCollisionRect.top + iScrollY, m_tCollisionRect.right + iScrollX, m_tCollisionRect.bottom + iScrollY);
 
-	float fRectFrameDiffX = (m_tFrameInfo.fCX - m_tInfo.fCX) / 2;
-	float fRectFrameDiffY = (m_tFrameInfo.fCY - m_tInfo.fCY) / 2;
+	float fRectFrameDiffX = (m_tFrameInfoRender.fCX - m_tInfo.fCX) / 2;
+	float fRectFrameDiffY = (m_tFrameInfoRender.fCY - m_tInfo.fCY) / 2;
 
 	GdiTransparentBlt(
-		hDC, m_tRect.left - fRectFrameDiffX + iScrollX, m_tRect.top - fRectFrameDiffY + iScrollY, m_tFrameInfo.fCX, m_tFrameInfo.fCY,
+		hDC, m_tRect.left - fRectFrameDiffX + iScrollX, m_tRect.top - fRectFrameDiffY + iScrollY, m_tFrameInfoRender.fCX, m_tFrameInfoRender.fCY,
 		hMemDC, m_tFrame.iFrameStart * m_tFrameInfo.fCX, m_tFrame.iMotion * m_tFrameInfo.fCY, m_tFrameInfo.fCX, m_tFrameInfo.fCY, RGB(132, 0, 132));
 }
 
 void Player::Key_Input()
 {
 	// Left Arrow - Move Left
-	if (KeyManager::Get_Instance()->Key_Pressing(VK_LEFT) && !m_bIsAttacking)
+	if (KeyManager::Get_Instance()->Key_Pressing(VK_LEFT) && !m_bIsAttacking && !m_bIsHit && m_eCurState != CHARGING && m_eCurState != ATTACK_SPECIAL)
 		Move(false);
 
 	// Right Arrow - Move Right
-	else if (KeyManager::Get_Instance()->Key_Pressing(VK_RIGHT) && !m_bIsAttacking)
+	else if (KeyManager::Get_Instance()->Key_Pressing(VK_RIGHT) && !m_bIsAttacking && !m_bIsHit  && m_eCurState != CHARGING && m_eCurState != ATTACK_SPECIAL)
 		Move(true);
 
-	else if (!m_bIsJumping && !m_bIsAttacking && !m_bIsHit)
+	else if (!m_bIsJumping && !m_bIsAttacking && !m_bIsHit && m_eCurState != CHARGING && m_eCurState != ATTACK_SPECIAL)
 		m_eCurState = IDLE;
 
 	// Space Bar - Jump
-	if (KeyManager::Get_Instance()->Key_Down(VK_SPACE) && !m_bIsAttacking)
+	if (KeyManager::Get_Instance()->Key_Down(VK_SPACE) && !m_bIsAttacking && !m_bIsHit)
 	{
 		m_bIsJumping = true;
 		m_eCurState = JUMP;
 	}
 
 	// Keyboard 'A' - Attack
-	if (KeyManager::Get_Instance()->Key_Down('A'))
-	{
-		if (m_bIsJumping)
-			m_eCurState = ATTACK_JUMP;
-		else
-			Attack();
-	}
+	if (KeyManager::Get_Instance()->Key_Down('A') && !m_bIsHit)
+		Attack();
 
-	// Keyboard 'S' - Special Attack
+	// Keyboard 'S' Pressing - Charging
 	if (KeyManager::Get_Instance()->Key_Pressing('S') && !m_bIsJumping && !m_bIsAttacking)
 	{
-		// TODO: Check Charging Time
-		// Spawn Projectile based on Charging Time
+		if (m_eCurState != CHARGING)
+		{
+			m_eCurState = CHARGING;
+			m_dwChargingTime = GetTickCount();
+		}
 	}
+		
+	// Keyboard 'S' Up - Special Attack
+	if (KeyManager::Get_Instance()->Key_Up('S') && !m_bIsJumping && !m_bIsAttacking)
+	{
+		m_eCurState = ATTACK_SPECIAL;
+		Attack_Special();
+	}
+
+	// NO INPUT
+	if (m_bIsHit && m_eCurState != DEAD)
+		m_eCurState = HIT;
 }
 
 void Player::Offset()
@@ -165,7 +181,7 @@ void Player::Gravity()
 	if (m_eCurState != JUMP)
 		// If TRUE there is a Collision Tile below
 		// If FALSE there is NO Collision Tile below
-		bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfo.fCY / 2) - 6, &fTargetY); // 6: Distance from end of Sprite to end of the Frame (in Pixels)
+		bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfoRender.fCY / 2) - 12, &fTargetY); // 6: Distance from end of Sprite to end of the Frame (in Pixels)
 		
 	// JUMPING
 	if (m_bIsJumping)
@@ -224,6 +240,13 @@ void Player::Attack()
 	}
 	else if (m_eCurState != ATTACK_5)
 		m_bIsComboActive = true;
+}
+
+void Player::Attack_Special()
+{
+	m_dwChargingTime = GetTickCount() - m_dwChargingTime;
+
+	// TODO: Implement Attack_Special
 }
 
 void Player::Change_Motion()
@@ -321,14 +344,14 @@ void Player::Change_Motion()
 			break;
 		case CHARGING:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 5;
+			m_tFrame.iFrameEnd = 3;
 			m_tFrame.iMotion = 12;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case ATTACK_SPECIAL:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 5;
+			m_tFrame.iFrameEnd = 2;
 			m_tFrame.iMotion = 13;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
@@ -355,10 +378,9 @@ void Player::Change_Motion()
 void Player::Change_Frame()
 {
 	// NO LOOP Animations:
-	// JUMP, FALL, ATTACK_1, ATTACK_2, ATTACK_3, ATTACK_4, ATTACK_5, ATTACK_JUMP, CHARGING, ATTACK_SPECIAL, HIT, DEAD
+	// JUMP, FALL, ATTACK_1, ATTACK_2, ATTACK_3, ATTACK_4, ATTACK_5, ATTACK_JUMP, HIT, DEAD
 	if (m_eCurState == JUMP || m_eCurState == FALL || m_eCurState == ATTACK_JUMP ||
 		m_eCurState == ATTACK_1 || m_eCurState == ATTACK_2 || m_eCurState == ATTACK_3 || m_eCurState == ATTACK_4 || m_eCurState == ATTACK_5 ||
-		m_eCurState == CHARGING || m_eCurState == ATTACK_SPECIAL ||
 		m_eCurState == HIT || m_eCurState == DEAD)
 	{
 		if (GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
@@ -372,7 +394,7 @@ void Player::Change_Frame()
 	}
 
 	// LOOP Animations:
-	// IDLE, RUN, SPRINT
+	// IDLE, RUN, SPRINT, CHARGING, ATTACK_SPECIAL
 	else
 	{
 		if (GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
@@ -380,8 +402,13 @@ void Player::Change_Frame()
 			m_tFrame.iFrameStart++;
 
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-				m_tFrame.iFrameStart = 0;
-
+			{
+				if (m_eCurState == CHARGING)
+					m_tFrame.iFrameStart = 2;
+				else 
+					m_tFrame.iFrameStart = 0;
+			}
+				
 			m_tFrame.dwFrameTime = GetTickCount();
 		}
 	}
@@ -389,6 +416,13 @@ void Player::Change_Frame()
 
 bool Player::Die()
 {
+	if (m_eCurState == DEAD && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed + 1000)
+		return true;
+	else if (m_bDead && m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+		m_eCurState = DEAD;
+	else if (m_bDead)
+		m_bIsHit = true;
+
 	return false;
 }
 
@@ -397,13 +431,13 @@ int Player::Get_ColSize()
 	switch (m_eCurState)
 	{
 	case ATTACK_3:
-		return 25;
+		return 50;
 	case ATTACK_4:
-		return 40;
+		return 80;
 	case ATTACK_5:
-		return 45;
+		return 90;
 	default:
-		return 20;
+		return 35;
 	}
 }
 
@@ -424,7 +458,7 @@ void Player::Can_Damage()
 
 void Player::Reset_Animation()
 {
-	// If ATTACKING
+	// Reset ATTACK
 	if (m_bIsAttacking && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
 	{
 		if (m_bIsComboActive)
@@ -468,4 +502,8 @@ void Player::Reset_Animation()
 			m_bMotionAlreadyDamaged = false;
 		}
 	}
+
+	// Reset HIT
+	if (m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+		m_bIsHit = false;
 }

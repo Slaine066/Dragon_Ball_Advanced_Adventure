@@ -37,7 +37,10 @@ private:
 	void Reset_Animation() override;
 
 	// Enemy Overrides
+	void Find_Target() override;
 	void AI_Behavior() override;
+	void Move_ToTarget() override;
+	void Patrol() override;
 
 	void Gravity();
 

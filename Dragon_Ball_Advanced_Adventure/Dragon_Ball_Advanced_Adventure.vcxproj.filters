@@ -115,6 +115,18 @@
     <Filter Include="98. Manager\988. SoundManager">
       <UniqueIdentifier>{6999fee7-235a-4567-89c0-19fc2d7bc4d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Obj\014. UI\0140. Button">
+      <UniqueIdentifier>{bb6d0d38-17f3-4723-b0f5-3d448c26f5f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\014. UI\0141. Damage Number">
+      <UniqueIdentifier>{b3aa3085-6415-4833-80da-2065424ab69c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\012. Projectile\0120. Kamehameha">
+      <UniqueIdentifier>{57e6c03a-35bd-4b8f-93c5-7f5856c0d478}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\012. Projectile\0121. Bullet">
+      <UniqueIdentifier>{5803d05a-a12e-46e0-b0be-1f2641f5b05f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -228,11 +240,20 @@
     <ClInclude Include="Editor.h">
       <Filter>02. Scene\023. Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>01. Obj\014. UI</Filter>
-    </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>98. Manager\988. SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>01. Obj\014. UI\0140. Button</Filter>
+    </ClInclude>
+    <ClInclude Include="DamageNumbers.h">
+      <Filter>01. Obj\014. UI\0141. Damage Number</Filter>
+    </ClInclude>
+    <ClInclude Include="Kamehameha.h">
+      <Filter>01. Obj\012. Projectile\0120. Kamehameha</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>01. Obj\012. Projectile\0121. Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -250,9 +271,6 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>01. Obj\010. Character\0100. Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>01. Obj\010. Character\0101. Enemy</Filter>
     </ClCompile>
     <ClCompile Include="PigWarrior.cpp">
       <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010100. Pig Warrior</Filter>
@@ -314,11 +332,20 @@
     <ClCompile Include="Editor.cpp">
       <Filter>02. Scene\023. Editor</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>01. Obj\014. UI</Filter>
-    </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>98. Manager\988. SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>01. Obj\014. UI\0140. Button</Filter>
+    </ClCompile>
+    <ClCompile Include="DamageNumbers.cpp">
+      <Filter>01. Obj\014. UI\0141. Damage Number</Filter>
+    </ClCompile>
+    <ClCompile Include="Kamehameha.cpp">
+      <Filter>01. Obj\012. Projectile\0120. Kamehameha</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>01. Obj\012. Projectile\0121. Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,8 +6,8 @@
 #include "Obj.h"
 #include "AbstractFactory.h"
 #include "Button.h"
-#include "ObjManager.h"
 #include "Define.h"
+#include "UIManager.h"
 
 Logo::Logo()
 {
@@ -31,24 +31,24 @@ void Logo::Initialize()
 	Obj* pObj = AbstractFactory<Button>::Create(400.f, 400.f);
 	pObj->Set_FrameKey(L"Press Start");
 	static_cast<Button*>(pObj)->Set_Blink(true);
-	ObjManager::Get_Instance()->Add_Object(OBJ_UI, pObj);
+	UIManager::Get_Instance()->Add_Object(UI_BUTTON, pObj);
 }
 
 void Logo::Release()
 {
-	ObjManager::Get_Instance()->Delete_Objects(OBJ_UI);
+	UIManager::Get_Instance()->Delete_Objects(UI_BUTTON);
 }
 
 int Logo::Update()
 {
-	ObjManager::Get_Instance()->Update();
+	UIManager::Get_Instance()->Update();
 
 	return 0;
 }
 
 void Logo::Late_Update()
 {
-	ObjManager::Get_Instance()->Late_Update();
+	UIManager::Get_Instance()->Late_Update();
 }
 
 void Logo::Render(HDC hDC)
@@ -56,5 +56,5 @@ void Logo::Render(HDC hDC)
 	HDC	hBackDC = BmpManager::Get_Instance()->Find_Bmp(L"Background");
 	BitBlt(hDC, 0, 0, WINCX, WINCY, hBackDC, 0, 0, SRCCOPY);
 
-	ObjManager::Get_Instance()->Render(hDC);
+	UIManager::Get_Instance()->Render(hDC);
 }

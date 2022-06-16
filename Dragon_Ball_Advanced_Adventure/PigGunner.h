@@ -26,8 +26,21 @@ public:
 	void Render(HDC hDC) override;
 
 private:
+	// Obj Overrides
 	void Change_Motion() override;
 	void Change_Frame() override;
+
+	// Character Overrides
+	bool Die() override;
+	int Get_ColSize() override;
+	void Can_Damage() override;
+	void Reset_Animation() override;
+
+	// Enemy Overrides
+	void Find_Target() override;
+	void AI_Behavior() override;
+	void Move_ToTarget() override;
+	void Patrol() override;
 
 	void Gravity();
 
@@ -36,4 +49,3 @@ private:
 
 	bool m_bIsAttacking;
 };
-

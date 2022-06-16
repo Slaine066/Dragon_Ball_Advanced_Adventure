@@ -19,6 +19,7 @@ public:
 
 	list<Obj*> Get_Player() { return m_ObjList[OBJ_PLAYER]; }
 	list<Obj*> Get_Enemies() { return m_ObjList[OBJ_ENEMY]; }
+	list<Obj*> Get_Projectiles() { return m_ObjList[OBJ_PROJECTILE]; };
 	Obj* Get_Target(OBJID eID, Obj* pObj);
 
 	void Release();
