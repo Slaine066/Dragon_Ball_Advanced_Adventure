@@ -2,6 +2,7 @@
 #include "ObjManager.h"
 #include "Function.h"
 #include "Define.h"
+#include "CollisionManager.h"
 
 ObjManager* ObjManager::m_pInstance = nullptr;
 
@@ -74,10 +75,18 @@ void ObjManager::Late_Update()
 	for (size_t i = 0; i < OBJ_END; ++i)
 	{
 		for (auto& iter : m_ObjList[i])
+		{
 			iter->Late_Update();
+
+			if (m_ObjList[i].empty())
+				break;
+		}
 	}
 
-	// TODO: Add Collision Methods here.
+	// Collision Handling Methods
+	CollisionManager::Collision_Rect(Get_Player(), Get_Enemies()); // Player damages Enemies
+	CollisionManager::Collision_Rect(Get_Enemies(), Get_Player()); // Enemies damage Player
+	CollisionManager::Collision_Bullet(Get_Projectiles(), Get_Player()); // Bullets damage Player
 }
 
 void ObjManager::Render(HDC hDC)

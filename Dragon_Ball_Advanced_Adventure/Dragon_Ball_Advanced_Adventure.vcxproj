@@ -150,8 +150,11 @@
     <ClInclude Include="Bmp.h" />
     <ClInclude Include="BmpManager.h" />
     <ClInclude Include="Boss.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="DamageNumbers.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Dragon_Ball_Advanced_Adventure.h" />
     <ClInclude Include="Editor.h" />
@@ -160,6 +163,7 @@
     <ClInclude Include="Function.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="Kamehameha.h" />
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="Logo.h" />
     <ClInclude Include="Main.h" />
@@ -174,6 +178,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ScrollManager.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Struct.h" />
     <ClInclude Include="targetver.h" />
@@ -187,12 +192,14 @@
     <ClCompile Include="Bmp.cpp" />
     <ClCompile Include="BmpManager.cpp" />
     <ClCompile Include="Boss.cpp" />
-    <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="DamageNumbers.cpp" />
     <ClCompile Include="Dragon_Ball_Advanced_Adventure.cpp" />
     <ClCompile Include="Editor.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Kamehameha.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="Logo.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -205,6 +212,7 @@
     <ClCompile Include="Pterodactyl.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScrollManager.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

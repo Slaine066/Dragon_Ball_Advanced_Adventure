@@ -1,5 +1,7 @@
 #pragma once
+
 #include "Scene.h"
+
 class Editor :
 	public Scene
 {
@@ -14,5 +16,7 @@ public:
 	int Update() override;
 	void Late_Update() override;
 	void Render(HDC hDC) override;
-};
 
+private:
+	void Key_Input();
+};

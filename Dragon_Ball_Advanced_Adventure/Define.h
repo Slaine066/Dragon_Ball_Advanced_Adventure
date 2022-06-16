@@ -14,9 +14,9 @@
 
 #define	VK_MAX 0xff
 
-#define		TILECX	64	
-#define		TILECY	64
-#define		TILEX	30
+#define		TILECX	128	
+#define		TILECY	128
+#define		TILEX	100
 #define		TILEY	20
 
 extern HWND g_hWnd;

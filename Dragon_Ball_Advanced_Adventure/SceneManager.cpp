@@ -7,7 +7,7 @@
 
 SceneManager* SceneManager::m_pInstance = nullptr;
 
-SceneManager::SceneManager() : m_pScene{ nullptr }, m_ePreScene{ SCENE_END }, m_eCurScene{ SCENE_LOGO }
+SceneManager::SceneManager() : m_pScene(nullptr), m_ePreScene(SCENE_END), m_eCurScene(SCENE_LOGO)
 {
 }
 

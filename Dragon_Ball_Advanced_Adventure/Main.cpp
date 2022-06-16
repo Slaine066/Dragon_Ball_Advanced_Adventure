@@ -7,7 +7,7 @@
 #include "ScrollManager.h"
 #include "ObjManager.h"
 
-Main::Main() : m_dwTime{ GetTickCount() }, m_iFPS{ 0 }
+Main::Main() : m_dwTime(GetTickCount()), m_iFPS(0)
 {
 	ZeroMemory(m_szFPS, sizeof(m_szFPS));
 }
@@ -21,6 +21,8 @@ void Main::Initialize()
 {
 	m_hDC = GetDC(g_hWnd);
 
+	// To open Map Builder uncomment line 25 and comment line 26
+	//SceneManager::Get_Instance()->Change_Scene(SCENE_EDITOR);
 	SceneManager::Get_Instance()->Change_Scene(SCENE_LOGO);
 }
 
@@ -49,7 +51,7 @@ void Main::Late_Update()
 void Main::Render()
 {
 	Render_FPS();
-
+	
 	SceneManager::Get_Instance()->Render(m_hDC);
 }
 
