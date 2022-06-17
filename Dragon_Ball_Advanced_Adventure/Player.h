@@ -44,6 +44,7 @@ private:
 	void Change_Frame() override;
 
 	// Character overrides
+	void Gravity() override;
 	bool Die() override;
 	int Get_ColSize() override;
 	void Can_Damage() override;
@@ -51,7 +52,6 @@ private:
 
 	void Key_Input();
 	void Offset();
-	void Gravity();
 	void Move(bool bIsRight);
 	void Attack();
 	void Attack_Special();

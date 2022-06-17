@@ -5,7 +5,7 @@
 #include "TileManager.h"
 #include "ObjManager.h"
 
-PigWarrior::PigWarrior() : m_ePreState(END), m_eCurState(IDLE), m_bIsAttacking(false)
+PigWarrior::PigWarrior()
 {
 }
 
@@ -27,7 +27,7 @@ void PigWarrior::Initialize()
 	m_tFrameInfoRender.fCX = 200.f;
 	m_tFrameInfoRender.fCY = 120.f;
 
-	m_tStats.iHealthMax = 50.f;
+	m_tStats.iHealthMax = 70.f;
 	m_tStats.iHealth = m_tStats.iHealthMax;
 	m_tStats.iDamage = 5.f;
 
@@ -70,9 +70,10 @@ int PigWarrior::Update()
 
 void PigWarrior::Late_Update()
 {
+	Reset_Animation();
+	
 	Change_Motion();
 	Change_Frame();
-	Reset_Animation();
 }
 
 void PigWarrior::Render(HDC hDC)
@@ -91,9 +92,23 @@ void PigWarrior::Render(HDC hDC)
 	float fRectFrameDiffX = (m_tFrameInfoRender.fCX - m_tInfo.fCX) / 2;
 	float fRectFrameDiffY = (m_tFrameInfoRender.fCY - m_tInfo.fCY) / 2;
 
-	GdiTransparentBlt(
-		hDC, m_tRect.left - fRectFrameDiffX + iScrollX, m_tRect.top - fRectFrameDiffY + iScrollY, m_tFrameInfoRender.fCX, m_tFrameInfoRender.fCY,
-		hMemDC, m_tFrame.iFrameStart * m_tFrameInfo.fCX, m_tFrame.iMotion * m_tFrameInfo.fCY, m_tFrameInfo.fCX, m_tFrameInfo.fCY, RGB(132, 0, 132));
+	if (m_eCurState != DEAD)
+	{
+		GdiTransparentBlt(
+			hDC, m_tRect.left - fRectFrameDiffX + iScrollX, m_tRect.top - fRectFrameDiffY + iScrollY, m_tFrameInfoRender.fCX, m_tFrameInfoRender.fCY,
+			hMemDC, m_tFrame.iFrameStart * m_tFrameInfo.fCX, m_tFrame.iMotion * m_tFrameInfo.fCY, m_tFrameInfo.fCX, m_tFrameInfo.fCY, RGB(132, 0, 132));
+	}
+	else
+	{
+		if (GetTickCount() > m_dwDeadTime + 100)
+			m_dwDeadTime = GetTickCount();
+		else
+		{
+			GdiTransparentBlt(
+				hDC, m_tRect.left - fRectFrameDiffX + iScrollX, m_tRect.top - fRectFrameDiffY + iScrollY, m_tFrameInfoRender.fCX, m_tFrameInfoRender.fCY,
+				hMemDC, m_tFrame.iFrameStart * m_tFrameInfo.fCX, m_tFrame.iMotion * m_tFrameInfo.fCY, m_tFrameInfo.fCX, m_tFrameInfo.fCY, RGB(132, 0, 132));
+		}
+	}	
 }
 
 void PigWarrior::Change_Motion()
@@ -178,7 +193,7 @@ void PigWarrior::Change_Frame()
 
 bool PigWarrior::Die()
 {
-	if (m_eCurState == DEAD && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed + 1000)
+	if (m_eCurState == DEAD && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed + 500)
 		return true;
 	else if (m_bDead && m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
 		m_eCurState = DEAD;
@@ -210,12 +225,20 @@ void PigWarrior::Can_Damage()
 
 void PigWarrior::Reset_Animation()
 {
-	// Reset ATTACK
-	if (m_bIsAttacking && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+	// Reset ATTACK (When Target turns FALSE)
+	if (m_bIsAttacking && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed && !m_pTarget)
 	{
 		m_bIsAttacking = false;
 		m_dwAttackTime = GetTickCount();
-	}	
+		m_eCurState = IDLE;
+	}
+	// Reset ATTACK (When Attack Animation ends)
+	else if (m_bIsAttacking && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+	{
+		m_bIsAttacking = false;
+		m_dwAttackTime = GetTickCount();
+		
+	}
 	
 	// Reset HIT
 	if (m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
@@ -224,6 +247,9 @@ void PigWarrior::Reset_Animation()
 
 void PigWarrior::Find_Target()
 {
+	if (m_bDead)
+		return;
+
 	Obj* pPlayer = ObjManager::Get_Instance()->Get_Player().front();
 	
 	if (pPlayer)
@@ -289,7 +315,7 @@ void PigWarrior::AI_Behavior()
 		// If !Target: Patrol
 		else
 			Patrol();
-	}
+	}	
 
 	if (m_bIsHit && m_eCurState != DEAD)
 		m_eCurState = HIT;

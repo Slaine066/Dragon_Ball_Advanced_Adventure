@@ -1,24 +1,27 @@
 #include "stdafx.h"
-#include "Game.h"
+#include "Stage.h"
 #include "ObjManager.h"
 #include "AbstractFactory.h"
 #include "Player.h"
 #include "BmpManager.h"
 #include "ScrollManager.h"
-#include "PigWarrior.h"
-#include "PigGunner.h"
 #include "TileManager.h"
 #include "UIManager.h"
 
-Game::Game()
+// Test Includes
+#include "PigWarrior.h"
+#include "PigGunner.h"
+#include "BearThief.h"
+
+Stage::Stage()
 {
 }
 
-Game::~Game()
+Stage::~Stage()
 {
 }
 
-void Game::Initialize()
+void Stage::Initialize()
 {
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Background.bmp", L"Background");
 
@@ -29,20 +32,22 @@ void Game::Initialize()
 	ObjManager::Get_Instance()->Add_Object(OBJ_PLAYER, AbstractFactory<Player>::Create(100, 0));
 
 	// Test Enemy Warrior
-	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigWarrior>::Create(400, 0));
-	//ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigWarrior>::Create(600, 0));
+	//ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigWarrior>::Create(400, 0));
 
 	// Test Enemy Gunner
-	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigGunner>::Create(600, 200));
+	//ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigGunner>::Create(600, 0));
+
+	// Test Enemy Bear Thief (Boss)
+	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<BearThief>::Create(600, 0));
 }
 
-void Game::Release()
+void Stage::Release()
 {
 	TileManager::Get_Instance()->Destroy_Instance();
 	UIManager::Get_Instance()->Destroy_Instance();
 }
 
-int Game::Update()
+int Stage::Update()
 {
 	TileManager::Get_Instance()->Update();
 	ObjManager::Get_Instance()->Update();
@@ -51,14 +56,14 @@ int Game::Update()
 	return 0;
 }
 
-void Game::Late_Update()
+void Stage::Late_Update()
 {
 	TileManager::Get_Instance()->Late_Update();
 	ObjManager::Get_Instance()->Late_Update();
 	UIManager::Get_Instance()->Late_Update();
 }
 
-void Game::Render(HDC hDC)
+void Stage::Render(HDC hDC)
 {
 	// TODO: Fix Image Resolution
 	HDC	hGroundDC = BmpManager::Get_Instance()->Find_Bmp(L"Background");

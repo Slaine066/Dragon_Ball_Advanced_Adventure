@@ -23,7 +23,7 @@ void Main::Initialize()
 
 	// To open Map Builder uncomment line 25 and comment line 26
 	//SceneManager::Get_Instance()->Change_Scene(SCENE_EDITOR);
-	SceneManager::Get_Instance()->Change_Scene(SCENE_LOGO);
+	SceneManager::Get_Instance()->Change_Scene(SCENE_STAGE);
 }
 
 void Main::Release()

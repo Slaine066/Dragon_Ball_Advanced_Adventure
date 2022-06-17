@@ -62,24 +62,25 @@ int Player::Update()
 {
 	if (Die())
 		return OBJ_DEAD;
-
+	
 	Can_Damage();
 	Key_Input();
 	Offset();
+	Gravity();
 
 	Update_Rect();
 	Update_Collision_Rect(10, Get_ColSize());
-
-	Gravity();
 
 	return OBJ_NOEVENT;
 }
 
 void Player::Late_Update()
 {
+	Reset_Animation();
+
 	Change_Motion();
 	Change_Frame();
-	Reset_Animation();
+	
 }
 
 void Player::Render(HDC hDC)
@@ -208,9 +209,7 @@ void Player::Gravity()
 	}
 		// There is Floor but Player is NOT above Target Tile
 	else if (bFloor)
-	{
 		m_tInfo.fY = fTargetY;
-	}
 		// There is NO Floor
 	else
 	{
@@ -296,7 +295,7 @@ void Player::Change_Motion()
 			m_tFrame.iDamageNotifyStart = 1;
 			m_tFrame.iDamageNotifyEnd = 1;
 			m_tFrame.iMotion = 4;
-			m_tFrame.dwFrameSpeed = 70;
+			m_tFrame.dwFrameSpeed = 50;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case ATTACK_2:
@@ -305,7 +304,7 @@ void Player::Change_Motion()
 			m_tFrame.iDamageNotifyStart = 1;
 			m_tFrame.iDamageNotifyEnd = 1;
 			m_tFrame.iMotion = 5;
-			m_tFrame.dwFrameSpeed = 70;
+			m_tFrame.dwFrameSpeed = 50;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case ATTACK_3:
@@ -314,7 +313,7 @@ void Player::Change_Motion()
 			m_tFrame.iDamageNotifyStart = 4;
 			m_tFrame.iDamageNotifyEnd = 4;
 			m_tFrame.iMotion = 6;
-			m_tFrame.dwFrameSpeed = 70;
+			m_tFrame.dwFrameSpeed = 50;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case ATTACK_4:
@@ -332,7 +331,7 @@ void Player::Change_Motion()
 			m_tFrame.iDamageNotifyStart = 2;
 			m_tFrame.iDamageNotifyEnd = 3;
 			m_tFrame.iMotion = 8;
-			m_tFrame.dwFrameSpeed = 70;
+			m_tFrame.dwFrameSpeed = 50;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case ATTACK_JUMP:
@@ -493,6 +492,7 @@ void Player::Reset_Animation()
 				m_bIsAttacking = true;
 				m_bIsComboActive = false;
 				m_bMotionAlreadyDamaged = false;
+				break;
 			}
 		}
 		else

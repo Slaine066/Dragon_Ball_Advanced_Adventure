@@ -2,7 +2,8 @@
 #include "SceneManager.h"
 #include "Logo.h"
 #include "Menu.h"
-#include "Game.h"
+#include "Stage.h"
+#include "BossStage.h"
 #include "Editor.h"
 
 SceneManager* SceneManager::m_pInstance = nullptr;
@@ -34,15 +35,14 @@ void SceneManager::Change_Scene(SCENEID eScene)
 		case SCENE_LOGO:
 			m_pScene = new Logo();
 			break;
-
 		case SCENE_MENU:
 			m_pScene = new Menu();
 			break;
-
-		case SCENE_GAME:
-			m_pScene = new Game();
+		case SCENE_STAGE:
+			m_pScene = new Stage();
 			break;
-
+		case SCENE_BOSS_STAGE:
+			m_pScene = new BossStage();
 		case SCENE_EDITOR:
 			m_pScene = new Editor();
 			break;

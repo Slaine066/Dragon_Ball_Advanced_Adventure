@@ -100,9 +100,6 @@
     <Filter Include="98. Manager\987. UIManager">
       <UniqueIdentifier>{3d997b5b-2fd5-4274-a04b-d18a2f4a1d71}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. Scene\022. Game">
-      <UniqueIdentifier>{8f6fdc05-672a-4ff3-9766-2f162742ea73}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. Scene\023. Editor">
       <UniqueIdentifier>{47c7a9db-9e80-4b42-9867-e71cf97c249b}</UniqueIdentifier>
     </Filter>
@@ -126,6 +123,12 @@
     </Filter>
     <Filter Include="01. Obj\012. Projectile\0121. Bullet">
       <UniqueIdentifier>{5803d05a-a12e-46e0-b0be-1f2641f5b05f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Scene\022. Stage">
+      <UniqueIdentifier>{8f6fdc05-672a-4ff3-9766-2f162742ea73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Scene\022. Stage\0220. Boss Stage">
+      <UniqueIdentifier>{571f999c-c956-4b2e-ab1e-68d7c993f84b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -234,9 +237,6 @@
     <ClInclude Include="Menu.h">
       <Filter>02. Scene\021. Menu</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>02. Scene\022. Game</Filter>
-    </ClInclude>
     <ClInclude Include="Editor.h">
       <Filter>02. Scene\023. Editor</Filter>
     </ClInclude>
@@ -254,6 +254,12 @@
     </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>01. Obj\012. Projectile\0121. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>02. Scene\022. Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="BossStage.h">
+      <Filter>02. Scene\022. Stage\0220. Boss Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -326,9 +332,6 @@
     <ClCompile Include="Menu.cpp">
       <Filter>02. Scene\021. Menu</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>02. Scene\022. Game</Filter>
-    </ClCompile>
     <ClCompile Include="Editor.cpp">
       <Filter>02. Scene\023. Editor</Filter>
     </ClCompile>
@@ -346,6 +349,12 @@
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>01. Obj\012. Projectile\0121. Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>02. Scene\022. Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="BossStage.cpp">
+      <Filter>02. Scene\022. Stage\0220. Boss Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

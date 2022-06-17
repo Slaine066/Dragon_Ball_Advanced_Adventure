@@ -2,12 +2,12 @@
 
 #include "Scene.h"
 
-class Game :
+class BossStage :
 	public Scene
 {
 public:
-	Game();
-	~Game();
+	BossStage();
+	~BossStage();
 
 	void Initialize() override;
 	void Release() override;
@@ -17,3 +17,4 @@ public:
 	void Late_Update() override;
 	void Render(HDC hDC) override;
 };
+

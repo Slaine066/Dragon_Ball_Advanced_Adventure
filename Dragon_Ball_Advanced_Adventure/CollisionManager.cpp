@@ -35,7 +35,6 @@ void CollisionManager::Collision_Rect(list<Obj*> _Colliders, list<Obj*> _Collide
 				{
 					if (IntersectRect(&Rect, &(pCharacter->Get_CollisionRect()), &(Collided->Get_Rect())))
 					{
-						pCharacter->Set_MotionAlreadyDamaged(true);
 						Character* pCollidedCharacter = dynamic_cast<Character*>(Collided);
 
 						if (!pCollidedCharacter)
@@ -43,7 +42,8 @@ void CollisionManager::Collision_Rect(list<Obj*> _Colliders, list<Obj*> _Collide
 
 						// Subtract Health
 						pCollidedCharacter->Set_Health(pCharacter->Get_Stats().iDamage); 
-																
+						pCharacter->Set_MotionAlreadyDamaged(true);
+															
 						// Spawn DamageNumber UI
 						DamageNumbers* pDamageNumber = new DamageNumbers();
 						pDamageNumber->Initialize();

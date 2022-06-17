@@ -9,7 +9,7 @@
 #include "AbstractFactory.h"
 #include "Bullet.h"
 
-PigGunner::PigGunner() : m_ePreState(END), m_eCurState(IDLE), m_bIsAttacking(false)
+PigGunner::PigGunner()
 {
 }
 
@@ -76,9 +76,10 @@ int PigGunner::Update()
 
 void PigGunner::Late_Update()
 {
+	Reset_Animation();
+
 	Change_Motion();
 	Change_Frame();
-	Reset_Animation();
 }
 
 void PigGunner::Render(HDC hDC)
@@ -97,9 +98,23 @@ void PigGunner::Render(HDC hDC)
 	float fRectFrameDiffX = (m_tFrameInfoRender.fCX - m_tInfo.fCX) / 2;
 	float fRectFrameDiffY = (m_tFrameInfoRender.fCY - m_tInfo.fCY) / 2;
 
-	GdiTransparentBlt(
-		hDC, m_tRect.left - fRectFrameDiffX + iScrollX, m_tRect.top - fRectFrameDiffY + iScrollY, m_tFrameInfoRender.fCX, m_tFrameInfoRender.fCY,
-		hMemDC, m_tFrame.iFrameStart * m_tFrameInfo.fCX, m_tFrame.iMotion * m_tFrameInfo.fCY, m_tFrameInfo.fCX, m_tFrameInfo.fCY, RGB(89, 5, 167));
+	if (m_eCurState != DEAD)
+	{
+		GdiTransparentBlt(
+			hDC, m_tRect.left - fRectFrameDiffX + iScrollX, m_tRect.top - fRectFrameDiffY + iScrollY, m_tFrameInfoRender.fCX, m_tFrameInfoRender.fCY,
+			hMemDC, m_tFrame.iFrameStart * m_tFrameInfo.fCX, m_tFrame.iMotion * m_tFrameInfo.fCY, m_tFrameInfo.fCX, m_tFrameInfo.fCY, RGB(89, 5, 167));
+	}
+	else
+	{
+		if (GetTickCount() > m_dwDeadTime + 100)
+			m_dwDeadTime = GetTickCount();
+		else
+		{
+			GdiTransparentBlt(
+				hDC, m_tRect.left - fRectFrameDiffX + iScrollX, m_tRect.top - fRectFrameDiffY + iScrollY, m_tFrameInfoRender.fCX, m_tFrameInfoRender.fCY,
+				hMemDC, m_tFrame.iFrameStart * m_tFrameInfo.fCX, m_tFrame.iMotion * m_tFrameInfo.fCY, m_tFrameInfo.fCX, m_tFrameInfo.fCY, RGB(89, 5, 167));
+		}
+	}
 }
 
 void PigGunner::Change_Motion()
@@ -184,7 +199,7 @@ void PigGunner::Change_Frame()
 
 bool PigGunner::Die()
 {
-	if (m_eCurState == DEAD && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed + 1000)
+	if (m_eCurState == DEAD && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed + 500)
 		return true;
 	else if (m_bDead && m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
 		m_eCurState = DEAD;
@@ -205,11 +220,19 @@ void PigGunner::Can_Damage()
 
 void PigGunner::Reset_Animation()
 {
-	// Reset ATTACK
-	if (m_bIsAttacking && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+	// Reset ATTACK (When Target turns FALSE)
+	if (m_bIsAttacking && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed && !m_pTarget)
 	{
 		m_bIsAttacking = false;
 		m_dwAttackTime = GetTickCount();
+		m_eCurState = IDLE;
+	}
+	// Reset ATTACK (When Attack Animation ends)
+	else if (m_bIsAttacking && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+	{
+		m_bIsAttacking = false;
+		m_dwAttackTime = GetTickCount();
+
 	}
 
 	// Reset HIT
@@ -219,6 +242,9 @@ void PigGunner::Reset_Animation()
 
 void PigGunner::Find_Target()
 {
+	if (m_bDead)
+		return;
+
 	Obj* pPlayer = ObjManager::Get_Instance()->Get_Player().front();
 
 	if (pPlayer)
@@ -265,7 +291,7 @@ void PigGunner::AI_Behavior()
 		// If NOT in Attack Range: Move to Target
 	// If !Target:
 		// Patrol
-	if (!m_bIsAttacking && !m_bIsHit)
+	if (!m_bIsAttacking && !m_bIsHit && !m_bDead)
 	{
 		if (m_pTarget)
 		{
@@ -295,7 +321,7 @@ void PigGunner::AI_Behavior()
 	// Spawn Bullet
 	if (m_bIsAttacking && m_tFrame.iFrameStart >= m_tFrame.iDamageNotifyStart && m_tFrame.iFrameStart <= m_tFrame.iDamageNotifyEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
 	{
-		float fBulletOffset = m_eDir == DIR_RIGHT ? 100.f : -100.f;
+		float fBulletOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX : -m_tInfo.fCX;
 		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<Bullet>::Create(m_tInfo.fX + fBulletOffset, m_tInfo.fY, m_eDir, this));
 	}
 

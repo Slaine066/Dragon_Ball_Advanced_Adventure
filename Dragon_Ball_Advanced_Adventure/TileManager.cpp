@@ -149,14 +149,16 @@ void TileManager::Pick_Tile(POINT & _pt)
 
 	Tile* pTile = static_cast<Tile*>(m_vecTile[iIndex]);
 	
-	if (pTile->Get_DrawID() < 5)
+	//if (pTile->Get_DrawID() < 5)	// Tile
+	if (pTile->Get_DrawID() < 17)	// Boss Tile
 		pTile->Set_DrawID(pTile->Get_DrawID() + 1);
 	else 
 		pTile->Set_DrawID(0);
 		
 	// DrawID 0, 1, 2 and 3 are Collision Tiles
 	// DrawID 4 and 5 are Normal Tiles
-	if (pTile->Get_DrawID() == 0 || pTile->Get_DrawID() == 1 || pTile->Get_DrawID() == 2 || pTile->Get_DrawID() == 3)
+	//if (pTile->Get_DrawID() == 0 || pTile->Get_DrawID() == 1 || pTile->Get_DrawID() == 2 || pTile->Get_DrawID() == 3) // Tile
+	if (pTile->Get_DrawID() == 0 || pTile->Get_DrawID() == 1 || pTile->Get_DrawID() == 2 || pTile->Get_DrawID() == 3 || pTile->Get_DrawID() == 4) // Boss Tile
 		pTile->Set_Option(1);
 	else
 		pTile->Set_Option(0);
@@ -179,7 +181,8 @@ void TileManager::Reset_Tile(POINT & _pt)
 
 void TileManager::Save_Tile()
 {
-	HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	//HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE hFile = CreateFile(L"../Data/Boss_Tile.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
 		return;
@@ -202,7 +205,8 @@ void TileManager::Save_Tile()
 
 void TileManager::Load_Tile()
 {
-	HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	//HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE hFile = CreateFile(L"../Data/Boss_Tile.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
 		return;

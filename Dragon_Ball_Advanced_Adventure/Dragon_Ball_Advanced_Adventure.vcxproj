@@ -150,6 +150,7 @@
     <ClInclude Include="Bmp.h" />
     <ClInclude Include="BmpManager.h" />
     <ClInclude Include="Boss.h" />
+    <ClInclude Include="BossStage.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Character.h" />
@@ -161,7 +162,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Function.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="Stage.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Kamehameha.h" />
     <ClInclude Include="KeyManager.h" />
@@ -192,13 +193,14 @@
     <ClCompile Include="Bmp.cpp" />
     <ClCompile Include="BmpManager.cpp" />
     <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BossStage.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DamageNumbers.cpp" />
     <ClCompile Include="Dragon_Ball_Advanced_Adventure.cpp" />
     <ClCompile Include="Editor.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Kamehameha.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="Logo.cpp" />

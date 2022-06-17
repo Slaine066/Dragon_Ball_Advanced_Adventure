@@ -31,6 +31,7 @@ public:
 	}
 
 protected:
+	virtual void Gravity() PURE;
 	virtual bool Die() PURE;
 	virtual int Get_ColSize() PURE;
 	virtual void Can_Damage() PURE;
