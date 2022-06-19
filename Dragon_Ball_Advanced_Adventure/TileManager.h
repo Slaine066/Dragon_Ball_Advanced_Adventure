@@ -12,6 +12,7 @@ private:
 
 	static TileManager* m_pInstance;
 	vector<Obj*> m_vecTile;
+	bool m_bIsBossTile;
 
 public:
 	void Initialize();
@@ -21,6 +22,8 @@ public:
 	void Update();
 	void Late_Update();
 	void Render(HDC hDC);
+
+	void Set_BossStage() { m_bIsBossTile = true; }
 
 	bool Tile_Collision(float fX, float fY, float fFrameOffset, float* pY);
 	bool Wall_Collision(Obj* pObj);

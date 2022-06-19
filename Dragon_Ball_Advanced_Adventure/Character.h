@@ -19,6 +19,7 @@ public:
 	
 	// Setters
 	void Set_Health(int iDamage) { m_tStats.iHealth -= iDamage; };
+	void Set_IsAttacking(bool bIsAttacking) { m_bIsAttacking = bIsAttacking; }
 	void Set_MotionAlreadyDamaged(bool bAlreadyDamaged) { m_bMotionAlreadyDamaged = bAlreadyDamaged; }
 	void Set_IsHit() { m_bIsHit = true; }
 

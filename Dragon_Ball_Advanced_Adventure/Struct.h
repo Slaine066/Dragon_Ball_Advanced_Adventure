@@ -35,4 +35,5 @@ typedef struct tagStats
 	int iEnergy;
 	int iEnergyMax;
 	int iDamage;
+	int iSpecialDamage;
 } STATS;

@@ -7,7 +7,7 @@
 
 TileManager* TileManager::m_pInstance = nullptr;
 
-TileManager::TileManager()
+TileManager::TileManager() : m_bIsBossTile(false)
 {
 }
 
@@ -25,8 +25,8 @@ void TileManager::Initialize()
 			float fX = (float)(TILECX * j) + (TILECX >> 1);
 			float fY = (float)(TILECY * i) + (TILECY >> 1);
 
-			Obj* pTile = AbstractFactory<Tile>::Create(fX, fY);
-			m_vecTile.push_back(pTile);
+			Obj* pObj = AbstractFactory<Tile>::Create(fX, fY);
+			m_vecTile.push_back(pObj);
 		}
 	}
 }
@@ -149,19 +149,37 @@ void TileManager::Pick_Tile(POINT & _pt)
 
 	Tile* pTile = static_cast<Tile*>(m_vecTile[iIndex]);
 	
-	//if (pTile->Get_DrawID() < 5)	// Tile
-	if (pTile->Get_DrawID() < 17)	// Boss Tile
-		pTile->Set_DrawID(pTile->Get_DrawID() + 1);
-	else 
-		pTile->Set_DrawID(0);
-		
-	// DrawID 0, 1, 2 and 3 are Collision Tiles
-	// DrawID 4 and 5 are Normal Tiles
-	//if (pTile->Get_DrawID() == 0 || pTile->Get_DrawID() == 1 || pTile->Get_DrawID() == 2 || pTile->Get_DrawID() == 3) // Tile
-	if (pTile->Get_DrawID() == 0 || pTile->Get_DrawID() == 1 || pTile->Get_DrawID() == 2 || pTile->Get_DrawID() == 3 || pTile->Get_DrawID() == 4) // Boss Tile
-		pTile->Set_Option(1);
+	if (m_bIsBossTile)
+	{
+		if (pTile->Get_DrawID() < 17)	
+			pTile->Set_DrawID(pTile->Get_DrawID() + 1);
+		else
+			pTile->Set_DrawID(0);
+
+		// DrawID 0, 1, 2, 3 and 4 are Collision Tiles
+		// Other are Normal Tiles
+		if (pTile->Get_DrawID() == 0 || pTile->Get_DrawID() == 1 || pTile->Get_DrawID() == 2 || pTile->Get_DrawID() == 3 || pTile->Get_DrawID() == 4)
+			pTile->Set_Option(1);
+		else
+			pTile->Set_Option(0);
+
+		pTile->Set_IsBossTile();
+	}
 	else
-		pTile->Set_Option(0);
+	{
+		if (pTile->Get_DrawID() < 5)
+			pTile->Set_DrawID(pTile->Get_DrawID() + 1);
+		else
+			pTile->Set_DrawID(0);
+
+		// DrawID 0, 1, 2 and 3 are Collision Tiles
+		// DrawID 4 and 5 are Normal Tiles
+		if (pTile->Get_DrawID() == 0 || pTile->Get_DrawID() == 1 || pTile->Get_DrawID() == 2 || pTile->Get_DrawID() == 3)
+			pTile->Set_Option(1);
+		else
+			pTile->Set_Option(0);
+	}
+	
 }
 
 void TileManager::Reset_Tile(POINT & _pt)
@@ -181,23 +199,25 @@ void TileManager::Reset_Tile(POINT & _pt)
 
 void TileManager::Save_Tile()
 {
-	//HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	HANDLE hFile = CreateFile(L"../Data/Boss_Tile.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE hFile = CreateFile(m_bIsBossTile ? L"../Data/Boss_Tile.dat" : L"../Data/Tile.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
 		return;
 
 	int iDrawID, iOption = 0;
+	bool bIsBossTile = false;
 	DWORD dwByte = 0;
 
 	for (auto& iter : m_vecTile)
 	{
 		iDrawID = static_cast<Tile*>(iter)->Get_DrawID();
 		iOption = static_cast<Tile*>(iter)->Get_Option();
+		bIsBossTile = static_cast<Tile*>(iter)->Get_IsBossTile();
 
 		WriteFile(hFile, &(iter->Get_Info()), sizeof(INFO), &dwByte, nullptr);
 		WriteFile(hFile, &iDrawID, sizeof(int), &dwByte, nullptr);
 		WriteFile(hFile, &iOption, sizeof(int), &dwByte, nullptr);
+		WriteFile(hFile, &bIsBossTile, sizeof(bool), &dwByte, nullptr);
 	}
 
 	CloseHandle(hFile);
@@ -205,14 +225,14 @@ void TileManager::Save_Tile()
 
 void TileManager::Load_Tile()
 {
-	//HANDLE hFile = CreateFile(L"../Data/Tile.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	HANDLE hFile = CreateFile(L"../Data/Boss_Tile.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE hFile = CreateFile(m_bIsBossTile ? L"../Data/Boss_Tile.dat" : L"../Data/Tile.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
 		return;
 
 	INFO tInfo{};
 	int	iDrawID, iOption = 0;
+	bool bIsBossTile = false;
 	DWORD dwByte = 0;
 
 	Release();
@@ -222,6 +242,7 @@ void TileManager::Load_Tile()
 		ReadFile(hFile, &tInfo, sizeof(INFO), &dwByte, nullptr);
 		ReadFile(hFile, &iDrawID, sizeof(int), &dwByte, nullptr);
 		ReadFile(hFile, &iOption, sizeof(int), &dwByte, nullptr);
+		ReadFile(hFile, &bIsBossTile, sizeof(bool), &dwByte, nullptr);
 
 		if (dwByte == 0)
 			break;
@@ -229,6 +250,8 @@ void TileManager::Load_Tile()
 		Obj* pTile = AbstractFactory<Tile>::Create(tInfo.fX, tInfo.fY);
 		static_cast<Tile*>(pTile)->Set_DrawID(iDrawID);
 		static_cast<Tile*>(pTile)->Set_Option(iOption);
+		if (bIsBossTile)
+			static_cast<Tile*>(pTile)->Set_IsBossTile();
 
 		m_vecTile.push_back(pTile);
 	}

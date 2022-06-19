@@ -19,18 +19,20 @@ public:
 	}
 
 	// Instance with Position, Direction and Owner
-	static Obj*	Create(float fX, float fY, DIRID eDir = DIR_END, Obj* pObj = nullptr)
+	static Obj*	Create(float fX, float fY, DIRID eDir = DIR_END, Obj* pOwner = nullptr)
 	{
 		Obj* pInstance = new T;
-		pInstance->Initialize();
+
 		pInstance->Set_Position(fX, fY);
 
 		if (eDir != DIR_END)
 			pInstance->Set_Direction(eDir);
 
-		if (pObj)
-			pInstance->Set_Owner(pObj);
+		if (pOwner)
+			pInstance->Set_Owner(pOwner);
 
+		pInstance->Initialize();
+	
 		return pInstance;
 	}
 };

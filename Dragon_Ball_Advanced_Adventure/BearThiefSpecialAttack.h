@@ -2,12 +2,12 @@
 
 #include "Projectile.h"
 
-class Bullet :
+class BearThiefSpecialAttack :
 	public Projectile
 {
 public:
-	Bullet();
-	~Bullet();
+	BearThiefSpecialAttack();
+	~BearThiefSpecialAttack();
 
 	void Initialize() override;
 	void Release() override;

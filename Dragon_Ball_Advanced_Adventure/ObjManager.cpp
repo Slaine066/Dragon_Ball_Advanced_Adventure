@@ -86,7 +86,8 @@ void ObjManager::Late_Update()
 	// Collision Handling Methods
 	CollisionManager::Collision_Rect(Get_Player(), Get_Enemies()); // Player damages Enemies
 	CollisionManager::Collision_Rect(Get_Enemies(), Get_Player()); // Enemies damage Player
-	CollisionManager::Collision_Bullet(Get_Projectiles(), Get_Player()); // Bullets damage Player
+	CollisionManager::Collision_Projectile(Get_Projectiles(), Get_Player()); // Projectiles damage Player
+	CollisionManager::Collision_Projectile(Get_Projectiles(), Get_Enemies()); // Projectiles damage Enemies
 }
 
 void ObjManager::Render(HDC hDC)

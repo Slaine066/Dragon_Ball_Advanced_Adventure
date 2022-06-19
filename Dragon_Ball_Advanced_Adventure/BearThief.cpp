@@ -4,6 +4,8 @@
 #include "ScrollManager.h"
 #include "ObjManager.h"
 #include "TileManager.h"
+#include "AbstractFactory.h"
+#include "BearThiefSpecialAttack.h"
 
 BearThief::BearThief() : m_ePreState(END), m_eCurState(IDLE)
 {
@@ -27,15 +29,13 @@ void BearThief::Initialize()
 	m_tFrameInfoRender.fCX = 300.f;
 	m_tFrameInfoRender.fCY = 200.f;
 
-	m_tStats.iHealthMax = 50.f;
+	m_tStats.iHealthMax = 500.f;
 	m_tStats.iHealth = m_tStats.iHealthMax;
-	m_tStats.iDamage = 25.f;
+	m_tStats.iDamage = 15.f;
 
-	m_fSpeed = .5f;
+	m_fSpeed = 1.f;
 
 	// AI
-	m_iWalkRange = 200;
-	m_iTargetRange = 250;
 	m_iAttackRange = 120;
 
 	m_eDir = DIR_LEFT;
@@ -43,7 +43,12 @@ void BearThief::Initialize()
 
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Enemy/Bear_Thief_LEFT.bmp", L"Bear_Thief_LEFT");
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Enemy/Bear_Thief_RIGHT.bmp", L"Bear_Thief_RIGHT");
-	// TODO: Load Special Attack *.bmp
+
+	// Projectile
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Enemy/Bear_Thief_Attack_Special_LEFT.bmp", L"Bear_Thief_Attack_Special_LEFT");
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Enemy/Bear_Thief_Attack_Special_RIGHT.bmp", L"Bear_Thief_Attack_Special_RIGHT");
+
+	srand(time(NULL));
 
 	// Start First Animation
 	Change_Motion();
@@ -130,6 +135,8 @@ void BearThief::Change_Motion()
 		case ATTACK_SPECIAL:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 9;
+			m_tFrame.iDamageNotifyStart = 7;
+			m_tFrame.iDamageNotifyEnd = 7;
 			m_tFrame.iMotion = 3;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
@@ -190,9 +197,7 @@ void BearThief::Gravity()
 	float fTargetY = 0.f;
 	bool bFloor = false;
 
-	// If TRUE there is a Collision Tile below
-	// If FALSE there is NO Collision Tile below
-	bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfoRender.fCY / 2) - 22, &fTargetY); // 6: Distance from end of Sprite to end of the Frame (in Pixels)
+	bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfoRender.fCY / 2) - 22, &fTargetY);
 	if (bFloor)
 		m_tInfo.fY = fTargetY;
 
@@ -207,9 +212,7 @@ void BearThief::Gravity()
 
 bool BearThief::Die()
 {
-	if (m_eCurState == DEAD && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed + 1000)
-		return true;
-	else if (m_bDead && m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+	if (m_bDead && m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
 		m_eCurState = DEAD;
 	else if (m_bDead)
 		m_bIsHit = true;
@@ -224,7 +227,7 @@ int BearThief::Get_ColSize()
 
 void BearThief::Can_Damage()
 {
-	if (m_bIsAttacking)
+	if (m_bIsAttacking && m_eCurState != ATTACK_SPECIAL)
 	{
 		if (m_tFrame.iFrameStart >= m_tFrame.iDamageNotifyStart && m_tFrame.iFrameStart <= m_tFrame.iDamageNotifyEnd)
 			if (!m_bMotionAlreadyDamaged)
@@ -256,7 +259,10 @@ void BearThief::Reset_Animation()
 
 	// Reset HIT
 	if (m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+	{
 		m_bIsHit = false;
+		m_eCurState = IDLE;
+	}
 }
 
 void BearThief::Find_Target()
@@ -265,39 +271,27 @@ void BearThief::Find_Target()
 		return;
 
 	Obj* pPlayer = ObjManager::Get_Instance()->Get_Player().front();
-
 	if (pPlayer)
 	{
+		m_pTarget = pPlayer;
+
 		float fDistanceX = abs(pPlayer->Get_Info().fX - m_tInfo.fX);
-		float fDistanceY = abs(pPlayer->Get_Info().fY - m_tInfo.fY);
+		if (fDistanceX <= m_iAttackRange)
+			m_bIsInAttackRange = true;
+		else
+			m_bIsInAttackRange = false;
 
-		if (fDistanceX <= m_iTargetRange && fDistanceY < (TILECX >> 1))
+		// Set Direction
+		if (m_pTarget->Get_Info().fX > m_tInfo.fX)
 		{
-			m_pTarget = pPlayer; // Set pTarget
-
-								 // Set bIsInAttackRange
-			if (fDistanceX <= m_iAttackRange)
-				m_bIsInAttackRange = true;
-			else
-			{
-				m_bIsInAttackRange = false;
-				m_dwAttackTime = 0;
-			}
-
-			// Set Direction
-			if (m_pTarget->Get_Info().fX > m_tInfo.fX)
-			{
-				m_eDir = DIR_RIGHT;
-				m_pFrameKey = L"Bear_Thief_RIGHT";
-			}
-			else
-			{
-				m_eDir = DIR_LEFT;
-				m_pFrameKey = L"Bear_Thief_LEFT";
-			}
+			m_eDir = DIR_RIGHT;
+			m_pFrameKey = L"Bear_Thief_RIGHT";
 		}
 		else
-			m_pTarget = nullptr;
+		{
+			m_eDir = DIR_LEFT;
+			m_pFrameKey = L"Bear_Thief_LEFT";
+		}
 	}
 	else
 		m_pTarget = nullptr;
@@ -313,22 +307,46 @@ void BearThief::AI_Behavior()
 			// If in Attack Range: Attack
 			if (m_bIsInAttackRange)
 			{
-				if (!m_bIsAttacking && m_eCurState != ATTACK && GetTickCount() > m_dwAttackTime + 2000)
+				if (!m_bIsAttacking && m_eCurState != ATTACK && m_eCurState != ATTACK_SPECIAL && GetTickCount() > m_dwAttackTime + 1500)
 				{
 					m_eCurState = ATTACK;
 					m_bIsAttacking = true;
 					m_bMotionAlreadyDamaged = false;
+					m_iPattern = 0;
 				}
 				else if (!m_bIsAttacking)
 					m_eCurState = IDLE;
 			}
-			// If NOT in Attack Range: Move to Target
-			else
-				Move_ToTarget();
+			// If NOT in Attack Range: 1 = Follow Player, 2 = Special Attack
+			else 
+			{
+				if (!m_iPattern)
+					m_iPattern = rand() % 2 + 1;
+
+				if (m_iPattern == 2)
+				{
+					if (!m_bIsAttacking && m_eCurState != ATTACK && m_eCurState != ATTACK_SPECIAL && GetTickCount() > m_dwAttackTime + 1500)
+					{
+						m_eCurState = ATTACK_SPECIAL;
+						m_bIsAttacking = true;
+						m_bMotionAlreadyDamaged = false;
+						m_iPattern = 0;
+
+					}
+					else if (!m_bIsAttacking)
+						m_eCurState = IDLE;
+				}
+				else
+					Move_ToTarget();
+			}
 		}
-		// If !Target: Patrol
-		else
-			Patrol();
+	}
+
+	// Spawn Projectile
+	if (m_bIsAttacking && m_eCurState == ATTACK_SPECIAL && m_tFrame.iFrameStart >= m_tFrame.iDamageNotifyStart && m_tFrame.iFrameStart <= m_tFrame.iDamageNotifyEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+	{
+		float fBulletOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX : -m_tInfo.fCX;
+		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<BearThiefSpecialAttack>::Create(m_tInfo.fX + fBulletOffset, m_tInfo.fY + 50, m_eDir, this));
 	}
 
 	if (m_bIsHit && m_eCurState != DEAD)
@@ -349,38 +367,4 @@ void BearThief::Move_ToTarget()
 
 void BearThief::Patrol()
 {
-	// Switch between Idle and Walk based on time
-	if (m_eCurState == IDLE)
-	{
-		if (GetTickCount() > m_dwIdleTime + 2000)
-		{
-			m_eCurState = WALK;
-			m_dwWalkTime = GetTickCount();
-		}
-	}
-	else if (m_eCurState == WALK)
-	{
-		if (GetTickCount() > m_dwWalkTime + 4000)
-		{
-			m_eCurState = IDLE;
-			m_dwIdleTime = GetTickCount();
-			m_bShouldSwitchDir = true;
-		}
-		else
-			m_bShouldSwitchDir = false;
-	}
-
-	// Movement
-	if (m_eCurState == WALK)
-	{
-		// Switch Direction
-		if (m_bShouldSwitchDir)
-		{
-			m_eDir = m_eDir == DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
-			m_pFrameKey = m_pFrameKey == L"Bear_Thief_RIGHT" ? L"Bear_Thief_LEFT" : L"Bear_Thief_RIGHT";
-		}
-
-		bool bIsRight = m_eDir == DIR_RIGHT ? true : false;
-		m_tInfo.fX += m_eDir ? m_fSpeed : -m_fSpeed;
-	}
 }

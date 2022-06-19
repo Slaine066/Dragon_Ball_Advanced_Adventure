@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Obj.h"
+#include "Projectile.h"
 
 class Kamehameha :
-	public Obj
+	public Projectile
 {
 public:
 	Kamehameha();
@@ -17,5 +17,18 @@ public:
 	void Late_Update() override;
 	void Render(HDC hDC) override;
 
+private:
+	// Obj overrides
+	void Change_Motion() override;
 
+	// Projectile Overrides
+	bool Get_CanDamage() override;
+
+	bool m_bFirstTick;
+	DWORD m_dwDamageTime;
+	DWORD m_dwDuration;
+	bool m_bIsLimit;
+	bool m_bShouldDestroy;
+
+	void Check_DamageTime();
 };

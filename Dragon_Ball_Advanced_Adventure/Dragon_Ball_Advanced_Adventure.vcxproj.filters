@@ -130,6 +130,15 @@
     <Filter Include="02. Scene\022. Stage\0220. Boss Stage">
       <UniqueIdentifier>{571f999c-c956-4b2e-ab1e-68d7c993f84b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Obj\012. Projectile\0122. Bear Thief Special Attack">
+      <UniqueIdentifier>{0b2364aa-fe99-45c1-9064-284449aba7d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\014. UI\0142. Health Bar">
+      <UniqueIdentifier>{d3137a97-4d86-4c80-8621-725ee7235a54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\014. UI\0143. Energy Bar">
+      <UniqueIdentifier>{54d79228-052b-407e-b5ab-79f68cd9eef1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -261,6 +270,18 @@
     <ClInclude Include="BossStage.h">
       <Filter>02. Scene\022. Stage\0220. Boss Stage</Filter>
     </ClInclude>
+    <ClInclude Include="BearThiefSpecialAttack.h">
+      <Filter>01. Obj\012. Projectile\0122. Bear Thief Special Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthBar.h">
+      <Filter>01. Obj\014. UI\0142. Health Bar</Filter>
+    </ClInclude>
+    <ClInclude Include="EnergyBar.h">
+      <Filter>01. Obj\014. UI\0143. Energy Bar</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>01. Obj\012. Projectile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -289,9 +310,6 @@
     </ClCompile>
     <ClCompile Include="Wolf.cpp">
       <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010103. Wolf</Filter>
-    </ClCompile>
-    <ClCompile Include="Boss.cpp">
-      <Filter>01. Obj\010. Character\0101. Enemy\01011. Boss</Filter>
     </ClCompile>
     <ClCompile Include="BearThief.cpp">
       <Filter>01. Obj\010. Character\0101. Enemy\01011. Boss\010110. Bear Thief</Filter>
@@ -355,6 +373,18 @@
     </ClCompile>
     <ClCompile Include="BossStage.cpp">
       <Filter>02. Scene\022. Stage\0220. Boss Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="BearThiefSpecialAttack.cpp">
+      <Filter>01. Obj\012. Projectile\0122. Bear Thief Special Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthBar.cpp">
+      <Filter>01. Obj\014. UI\0142. Health Bar</Filter>
+    </ClCompile>
+    <ClCompile Include="EnergyBar.cpp">
+      <Filter>01. Obj\014. UI\0143. Energy Bar</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>01. Obj\012. Projectile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -242,7 +242,10 @@ void PigWarrior::Reset_Animation()
 	
 	// Reset HIT
 	if (m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+	{
 		m_bIsHit = false;
+		m_eCurState = IDLE;
+	}
 }
 
 void PigWarrior::Find_Target()

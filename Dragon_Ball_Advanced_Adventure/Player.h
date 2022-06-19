@@ -53,8 +53,10 @@ private:
 	void Key_Input();
 	void Offset();
 	void Move(bool bIsRight);
+	void Jump();
 	void Attack();
 	void Attack_Special();
+	void Check_Combo();
 
 	STATE m_ePreState;
 	STATE m_eCurState;

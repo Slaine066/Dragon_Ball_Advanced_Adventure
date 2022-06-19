@@ -23,6 +23,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <time.h>
 
 #include <io.h>
 //#include "fmod.h"

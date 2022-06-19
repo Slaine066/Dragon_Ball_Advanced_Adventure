@@ -5,6 +5,7 @@
 #include "DamageNumbers.h"
 #include "Enum.h"
 #include "AbstractFactory.h"
+#include "Kamehameha.h"
 
 CollisionManager::CollisionManager()
 {
@@ -64,7 +65,7 @@ void CollisionManager::Collision_Rect(list<Obj*> _Colliders, list<Obj*> _Collide
 	}
 }
 
-void CollisionManager::Collision_Bullet(list<Obj*> _Colliders, list<Obj*> _Collided)
+void CollisionManager::Collision_Projectile(list<Obj*> _Colliders, list<Obj*> _Collided)
 {
 	RECT Rect{};
 
@@ -74,35 +75,47 @@ void CollisionManager::Collision_Bullet(list<Obj*> _Colliders, list<Obj*> _Colli
 		{
 			if (!Collided->Get_Dead())
 			{
-				if (IntersectRect(&Rect, &(Collider->Get_Rect()), &(Collided->Get_Rect())))
+				Character* pColliderOwner = dynamic_cast<Character*>(Collider->Get_Owner());
+				if (!pColliderOwner)
+					return;
+				Character* pCollided = dynamic_cast<Character*>(Collided);
+				if (!pCollided)
+					return;
+
+				if (pColliderOwner != pCollided)
 				{
-					Character* pColliderOwner = dynamic_cast<Character*>(Collider->Get_Owner());
-					if (!pColliderOwner)
-						return;
+					if (IntersectRect(&Rect, &(Collider->Get_Rect()), &(Collided->Get_Rect())))
+					{
+						Projectile* pProjectile = dynamic_cast<Projectile*>(Collider);
+						if (!pProjectile)
+							return;
 
-					Character* pCollided = dynamic_cast<Character*>(Collided);
-					if (!pCollided)
-						return;
+						Kamehameha* pKamehameha = dynamic_cast<Kamehameha*>(Collider);
 
-					// Subtract Health
-					pCollided->Set_Health(pColliderOwner->Get_Stats().iDamage);
+						if (pProjectile->Get_CanDamage())
+						{
+							// Subtract Health
+							pCollided->Set_Health(pKamehameha ? pColliderOwner->Get_Stats().iSpecialDamage : pColliderOwner->Get_Stats().iDamage);
 
-					// Spawn DamageNumber UI
-					DamageNumbers* pDamageNumber = new DamageNumbers();
-					pDamageNumber->Initialize();
-					pDamageNumber->Set_Position(pCollided->Get_Info().fX, pCollided->Get_Info().fY - (pCollided->Get_FrameInfoRender().fCY / 2));
-					pDamageNumber->Set_Number(pColliderOwner->Get_Stats().iDamage);
-					UIManager::Get_Instance()->Add_Object(UI_DAMAGE_NUMBERS, pDamageNumber);
+							// Spawn DamageNumber UI
+							DamageNumbers* pDamageNumber = new DamageNumbers();
+							pDamageNumber->Initialize();
+							pDamageNumber->Set_Position(pCollided->Get_Info().fX, pCollided->Get_Info().fY - (pCollided->Get_FrameInfoRender().fCY / 2));
+							pDamageNumber->Set_Number(pKamehameha ? pColliderOwner->Get_Stats().iSpecialDamage : pColliderOwner->Get_Stats().iDamage);
+							UIManager::Get_Instance()->Add_Object(UI_DAMAGE_NUMBERS, pDamageNumber);
 
-					// If Health <= 0:	Die
-					// If Health > 0:	Hit
-					if (pCollided->Get_Stats().iHealth <= 0)
-						pCollided->Set_Dead();
-					else
-						pCollided->Set_IsHit();
+							// If Health <= 0:	Die
+							// If Health > 0:	Hit
+							if (pCollided->Get_Stats().iHealth <= 0)
+								pCollided->Set_Dead();
+							else
+								pCollided->Set_IsHit();
+						}
 
-					// Destroy Bullet
-					Collider->Set_Dead();
+						// If Collider is Kamehameha do NOT destroy Projectile
+						if (!pKamehameha)
+							Collider->Set_Dead();
+					}
 				}
 			}
 		}

@@ -5,6 +5,7 @@ KeyManager* KeyManager::m_pInstance = nullptr;
 
 KeyManager::KeyManager()
 {
+	ZeroMemory(m_bKeyState, sizeof(m_bKeyState));
 }
 
 KeyManager::~KeyManager()

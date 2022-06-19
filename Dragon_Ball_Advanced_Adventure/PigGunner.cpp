@@ -148,7 +148,7 @@ void PigGunner::Change_Motion()
 			break;
 		case HIT:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 1;
+			m_tFrame.iFrameEnd = 2;
 			m_tFrame.iMotion = 3;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
@@ -237,7 +237,10 @@ void PigGunner::Reset_Animation()
 
 	// Reset HIT
 	if (m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+	{
 		m_bIsHit = false;
+		m_eCurState = IDLE;
+	}
 }
 
 void PigGunner::Find_Target()

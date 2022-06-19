@@ -5,11 +5,14 @@
 #include "BmpManager.h"
 #include "KeyManager.h"
 #include "TileManager.h"
+#include "ObjManager.h"
+#include "AbstractFactory.h"
+#include "Kamehameha.h"
 
 Player::Player() 
 	: m_ePreState(END), m_eCurState(IDLE), m_fSprintSpeed(0.f), m_fFallSpeed(6.f), 
 	m_bIsJumping(false), m_fJumpPower(0.f), m_fJumpTime(0.f), m_fAccel(9.8f),
-	m_bIsComboActive(false), m_dwChargingTime(0)
+	m_bIsComboActive(false), m_dwChargingTime(GetTickCount())
 {
 }
 
@@ -20,8 +23,8 @@ Player::~Player()
 void Player::Initialize()
 {
 	// Player Rect Size
-	m_tInfo.fCX = 80.f;
-	m_tInfo.fCY = 80.f;
+	m_tInfo.fCX = 60.f;
+	m_tInfo.fCY = 70.f;
 
 	// Sprite REAL Size
 	m_tFrameInfo.fCX = 100.f;
@@ -37,6 +40,7 @@ void Player::Initialize()
 	m_tStats.iEnergyMax = 100.f;
 	m_tStats.iEnergy = m_tStats.iEnergyMax;
 	m_tStats.iDamage = 10.f;
+	m_tStats.iSpecialDamage = 20.f;
 
 	// Speeds
 	m_fSpeed = 3.f;
@@ -48,7 +52,7 @@ void Player::Initialize()
 
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Goku_LEFT.bmp", L"Player_LEFT");
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Goku_RIGHT.bmp", L"Player_RIGHT");
-	// TODO: Load "Kamehameha.bmp"
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Kamehameha.bmp", L"Kamehameha");
 	
 	// Start First Animation
 	Change_Motion(); 
@@ -62,11 +66,12 @@ int Player::Update()
 {
 	if (Die())
 		return OBJ_DEAD;
-	
+
+	Gravity();
 	Can_Damage();
 	Key_Input();
 	Offset();
-	Gravity();
+	Jump();
 
 	Update_Rect();
 	Update_Collision_Rect(10, Get_ColSize());
@@ -76,11 +81,10 @@ int Player::Update()
 
 void Player::Late_Update()
 {
-	Reset_Animation();
-
+	Check_Combo();
 	Change_Motion();
 	Change_Frame();
-	
+	Reset_Animation();
 }
 
 void Player::Render(HDC hDC)
@@ -106,30 +110,29 @@ void Player::Render(HDC hDC)
 
 void Player::Key_Input()
 {
-	// Left Arrow - Move Left
+	// MOVEMENT
+		// Left Arrow - Move Left
 	if (KeyManager::Get_Instance()->Key_Pressing(VK_LEFT) && !m_bIsAttacking && !m_bIsHit && m_eCurState != CHARGING && m_eCurState != ATTACK_SPECIAL)
 		Move(false);
-
-	// Right Arrow - Move Right
+		// Right Arrow - Move Right
 	else if (KeyManager::Get_Instance()->Key_Pressing(VK_RIGHT) && !m_bIsAttacking && !m_bIsHit  && m_eCurState != CHARGING && m_eCurState != ATTACK_SPECIAL)
 		Move(true);
-
+		// NO Input - Idle
 	else if (!m_bIsJumping && !m_bIsAttacking && !m_bIsHit && m_eCurState != CHARGING && m_eCurState != ATTACK_SPECIAL)
 		m_eCurState = IDLE;
 
-	// Space Bar - Jump
+	// ACTION
+		// Space Bar - Jump
 	if (KeyManager::Get_Instance()->Key_Down(VK_SPACE) && !m_bIsAttacking && !m_bIsHit)
 	{
 		m_bIsJumping = true;
 		m_eCurState = JUMP;
 	}
-
-	// Keyboard 'A' - Attack
-	if (KeyManager::Get_Instance()->Key_Down('A') && !m_bIsHit)
+		// Keyboard 'A' - Attack
+	if (KeyManager::Get_Instance()->Key_Down('A') && !m_bIsHit && !m_bIsJumping)
 		Attack();
-
-	// Keyboard 'S' Pressing - Charging
-	if (KeyManager::Get_Instance()->Key_Pressing('S') && !m_bIsJumping && !m_bIsAttacking)
+		// Keyboard 'S' Pressing - Charging
+	if (KeyManager::Get_Instance()->Key_Pressing('S') && !m_bIsHit && !m_bIsJumping && !m_bIsAttacking)
 	{
 		if (m_eCurState != CHARGING)
 		{
@@ -137,35 +140,30 @@ void Player::Key_Input()
 			m_dwChargingTime = GetTickCount();
 		}
 	}
-		
-	// Keyboard 'S' Up - Special Attack
-	if (KeyManager::Get_Instance()->Key_Up('S') && !m_bIsJumping && !m_bIsAttacking)
-	{
-		m_eCurState = ATTACK_SPECIAL;
+		// Keyboard 'S' Up - Special Attack
+	if (KeyManager::Get_Instance()->Key_Up('S') && !m_bIsHit && !m_bIsJumping && !m_bIsAttacking)
 		Attack_Special();
-	}
-
-	// NO INPUT
+	
 	if (m_bIsHit && m_eCurState != DEAD)
 		m_eCurState = HIT;
 }
 
 void Player::Offset()
 {
-	int iOffsetMinX = 100.f;
-	int iOffsetMaxX = 700.f;
+	int iOffsetMinX = 200.f;
+	int iOffsetMaxX = 400.f;
 
-	int iOffsetMinY = 100.f;
-	int iOffsetMaxY = 500.f;
+	int iOffsetMinY = 300.f;
+	int iOffsetMaxY = 400.f;
 
 	int iScrollX = (int)ScrollManager::Get_Instance()->Get_ScrollX();
 	int iScrollY = (int)ScrollManager::Get_Instance()->Get_ScrollY();
 	
 	if (iOffsetMinX > m_tInfo.fX + iScrollX)
-		ScrollManager::Get_Instance()->Set_ScrollX(m_fSpeed);
+		ScrollManager::Get_Instance()->Set_ScrollX(m_eCurState == SPRINT ? m_fSprintSpeed : m_fSpeed);
 
 	if (iOffsetMaxX < m_tInfo.fX + iScrollX)
-		ScrollManager::Get_Instance()->Set_ScrollX(-m_fSpeed);
+		ScrollManager::Get_Instance()->Set_ScrollX(m_eCurState == SPRINT ? -m_fSprintSpeed : -m_fSpeed);
 
 	if (iOffsetMinY > m_tInfo.fY + iScrollY)
 		ScrollManager::Get_Instance()->Set_ScrollY(m_fSpeed);
@@ -176,45 +174,19 @@ void Player::Offset()
 
 void Player::Gravity()
 {
-	bool bFloor = false;
-	float fTargetY = 0.f;
+	if (!m_bDead)
+	{
+		bool bFloor = false;
+		float fTargetY = 0.f;
 
-	if (m_eCurState != JUMP)
-		// If TRUE there is a Collision Tile below
-		// If FALSE there is NO Collision Tile below
-		bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfoRender.fCY / 2) - 12, &fTargetY); // 6: Distance from end of Sprite to end of the Frame (in Pixels)
-		
-	// JUMPING
-	if (m_bIsJumping)
-	{	
-		float fJumpPos = m_fJumpPower * m_fJumpTime - (m_fAccel * pow(m_fJumpTime, 2) * 0.5f);
-		
-		m_tInfo.fY -= fJumpPos;
-		m_fJumpTime += 0.15f;
+		if (m_eCurState != JUMP && m_eCurState != FALL)
+			bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfoRender.fCY / 2) - 12, &fTargetY);
 
-		// Highest point reached: Start FALL Animation
-		if ((m_tInfo.fY - fJumpPos) > m_tInfo.fY)
+		if (bFloor && !m_bIsJumping && !m_bIsAttacking && !m_bIsHit && m_eCurState != CHARGING)
 		{
-			m_bIsJumping = false;
-			m_fJumpTime = 0.f;
+			m_eCurState = IDLE;
+			m_tInfo.fY = fTargetY;
 		}
-	}
-
-	// NOT JUMPING
-		// There is Floor and Player is above Target Tile
-	else if (bFloor && m_tInfo.fY < fTargetY)
-	{
-		m_tInfo.fY += m_fFallSpeed;
-		m_eCurState = FALL;
-	}
-		// There is Floor but Player is NOT above Target Tile
-	else if (bFloor)
-		m_tInfo.fY = fTargetY;
-		// There is NO Floor
-	else
-	{
-		m_tInfo.fY += m_fFallSpeed;
-		m_eCurState = FALL;
 	}
 }
 
@@ -230,6 +202,45 @@ void Player::Move(bool bIsRight)
 	m_eCurState = m_bIsJumping ? m_eCurState : eNewState;
 }
 
+void Player::Jump()
+{
+	bool bFloor = false;
+	float fTargetY = 0.f;
+
+	if (m_eCurState != JUMP)
+		bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfoRender.fCY / 2) - 12, &fTargetY);
+
+	// JUMPING
+	if (m_bIsJumping)
+	{
+		float fJumpPos = m_fJumpPower * m_fJumpTime - (m_fAccel * pow(m_fJumpTime, 2) * 0.5f);
+
+		m_tInfo.fY -= fJumpPos;
+		m_fJumpTime += 0.15f;
+
+		// Highest point reached: Start FALL Animation
+		if ((m_tInfo.fY - fJumpPos) > m_tInfo.fY)
+		{
+			m_bIsJumping = false;
+			m_fJumpTime = 0.f;
+		}
+	}
+
+	// NOT JUMPING
+	// There is Floor and Player is above Target Tile
+	else if (bFloor && m_tInfo.fY < fTargetY)
+	{
+		m_tInfo.fY += m_fFallSpeed;
+		m_eCurState = m_bIsHit ? HIT : FALL;
+	}
+	// There is Floor but Player is NOT above Target Tile
+	else if (!bFloor)
+	{
+		m_tInfo.fY += m_fFallSpeed;
+		m_eCurState = m_bIsHit ? HIT : FALL;
+	}
+}
+
 void Player::Attack()
 {
 	if (!m_bIsAttacking)
@@ -238,14 +249,74 @@ void Player::Attack()
 		m_bIsAttacking = true;
 	}
 	else if (m_eCurState != ATTACK_5)
+	{
+		m_bIsAttacking = true;
 		m_bIsComboActive = true;
+	}
 }
 
 void Player::Attack_Special()
 {
-	m_dwChargingTime = GetTickCount() - m_dwChargingTime;
+	// If 'S' has been held more than 2 seconds
+	if (GetTickCount() > m_dwChargingTime + 2000)
+	{
+		m_eCurState = ATTACK_SPECIAL;
+		m_bIsAttacking = true;
 
-	// TODO: Implement Attack_Special
+		// Spawn Projectile
+		float fOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX / 2 : -m_tInfo.fCX / 2;
+		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<Kamehameha>::Create(m_tInfo.fX + fOffset, m_tInfo.fY + 4, m_eDir, this));
+	}
+	else
+		m_eCurState = IDLE;
+}
+
+void Player::Check_Combo()
+{
+	if (m_bIsAttacking && m_eCurState != ATTACK_SPECIAL && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+	{
+		if (m_bIsComboActive)
+		{
+			switch (m_eCurState)
+			{
+			case ATTACK_1:
+				m_eCurState = ATTACK_2;
+				m_bIsAttacking = true;
+				m_bIsComboActive = false;
+				m_bMotionAlreadyDamaged = false;
+				break;
+			case ATTACK_2:
+				m_eCurState = ATTACK_3;
+				m_bIsAttacking = true;
+				m_bIsComboActive = false;
+				m_bMotionAlreadyDamaged = false;
+				break;
+			case ATTACK_3:
+				m_eCurState = ATTACK_4;
+				m_bIsAttacking = true;
+				m_bIsComboActive = false;
+				m_bMotionAlreadyDamaged = false;
+				break;
+			case ATTACK_4:
+				m_eCurState = ATTACK_5;
+				m_bIsAttacking = true;
+				m_bIsComboActive = false;
+				m_bMotionAlreadyDamaged = false;
+				break;
+			case ATTACK_5:
+				m_bIsAttacking = true;
+				m_bIsComboActive = false;
+				m_bMotionAlreadyDamaged = false;
+				break;
+			}
+		}
+		else
+		{
+			m_bIsAttacking = false;
+			m_bIsComboActive = false;
+			m_bMotionAlreadyDamaged = false;
+		}
+	}
 }
 
 void Player::Change_Motion()
@@ -457,52 +528,6 @@ void Player::Can_Damage()
 
 void Player::Reset_Animation()
 {
-	// Reset ATTACK
-	if (m_bIsAttacking && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
-	{
-		if (m_bIsComboActive)
-		{
-			switch (m_eCurState)
-			{
-			case ATTACK_1:
-				m_eCurState = ATTACK_2;
-				m_bIsAttacking = true;
-				m_bIsComboActive = false;
-				m_bMotionAlreadyDamaged = false;
-				break;
-			case ATTACK_2:
-				m_eCurState = ATTACK_3;
-				m_bIsAttacking = true;
-				m_bIsComboActive = false;
-				m_bMotionAlreadyDamaged = false;
-				break;
-			case ATTACK_3:
-				m_eCurState = ATTACK_4;
-				m_bIsAttacking = true;
-				m_bIsComboActive = false;
-				m_bMotionAlreadyDamaged = false;
-				break;
-			case ATTACK_4:
-				m_eCurState = ATTACK_5;
-				m_bIsAttacking = true;
-				m_bIsComboActive = false;
-				m_bMotionAlreadyDamaged = false;
-				break;
-			case ATTACK_5:
-				m_bIsAttacking = true;
-				m_bIsComboActive = false;
-				m_bMotionAlreadyDamaged = false;
-				break;
-			}
-		}
-		else
-		{
-			m_bIsAttacking = false;
-			m_bIsComboActive = false;
-			m_bMotionAlreadyDamaged = false;
-		}
-	}
-
 	// Reset HIT
 	if (m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
 		m_bIsHit = false;

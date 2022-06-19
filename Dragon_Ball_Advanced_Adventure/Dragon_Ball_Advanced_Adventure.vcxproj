@@ -150,6 +150,7 @@
     <ClInclude Include="Bmp.h" />
     <ClInclude Include="BmpManager.h" />
     <ClInclude Include="Boss.h" />
+    <ClInclude Include="BearThiefSpecialAttack.h" />
     <ClInclude Include="BossStage.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Button.h" />
@@ -160,8 +161,11 @@
     <ClInclude Include="Dragon_Ball_Advanced_Adventure.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnergyBar.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Function.h" />
+    <ClInclude Include="HealthBar.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Kamehameha.h" />
@@ -192,7 +196,7 @@
     <ClCompile Include="BearThief.cpp" />
     <ClCompile Include="Bmp.cpp" />
     <ClCompile Include="BmpManager.cpp" />
-    <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BearThiefSpecialAttack.cpp" />
     <ClCompile Include="BossStage.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -200,6 +204,9 @@
     <ClCompile Include="DamageNumbers.cpp" />
     <ClCompile Include="Dragon_Ball_Advanced_Adventure.cpp" />
     <ClCompile Include="Editor.cpp" />
+    <ClCompile Include="EnergyBar.cpp" />
+    <ClCompile Include="HealthBar.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Kamehameha.cpp" />
     <ClCompile Include="KeyManager.cpp" />

@@ -18,13 +18,13 @@ void ScrollManager::Scroll_Lock()
 	if (m_fScrollX > 0.f)
 		m_fScrollX = 0.f;
 
-	if (m_fScrollX < WINCX - 1920)
-		m_fScrollX = WINCX - 1920;
+	//if (m_fScrollX < WINCX - 1920)
+	//	m_fScrollX = WINCX - 1920;
 
-	// Lock Y
-	if (m_fScrollY > 0.f)
-		m_fScrollY = 0.f;
+	//// Lock Y
+	//if (m_fScrollY > 0.f)
+	//	m_fScrollY = 0.f;
 
-	if (m_fScrollY < WINCY - 1280)
-		m_fScrollY = WINCY - 1280;
+	//if (m_fScrollY < WINCY - 1280)
+	//	m_fScrollY = WINCY - 1280;
 }

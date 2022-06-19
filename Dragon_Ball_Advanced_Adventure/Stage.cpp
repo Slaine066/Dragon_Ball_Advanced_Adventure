@@ -26,19 +26,20 @@ void Stage::Initialize()
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Background.bmp", L"Background");
 
 	TileManager::Get_Instance()->Load_Tile();
+
 	UIManager::Get_Instance()->Initialize();
 	
 	// Test Player
 	ObjManager::Get_Instance()->Add_Object(OBJ_PLAYER, AbstractFactory<Player>::Create(100, 0));
 
 	// Test Enemy Warrior
-	//ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigWarrior>::Create(400, 0));
+	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigWarrior>::Create(400, 0));
 
 	// Test Enemy Gunner
-	//ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigGunner>::Create(600, 0));
+	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigGunner>::Create(500, 0));
 
 	// Test Enemy Bear Thief (Boss)
-	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<BearThief>::Create(600, 0));
+	//ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<BearThief>::Create(600, 0));
 }
 
 void Stage::Release()
@@ -61,6 +62,9 @@ void Stage::Late_Update()
 	TileManager::Get_Instance()->Late_Update();
 	ObjManager::Get_Instance()->Late_Update();
 	UIManager::Get_Instance()->Late_Update();
+
+	// If End Stage reached
+	// Go To Boss Stage
 }
 
 void Stage::Render(HDC hDC)

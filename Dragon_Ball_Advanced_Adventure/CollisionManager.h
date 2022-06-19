@@ -10,6 +10,6 @@ private:
 
 public:
 	static void	Collision_Rect(list<Obj*> _Colliders, list<Obj*> _Collided);
-	static void Collision_Bullet(list<Obj*> _Colliders, list<Obj*> _Collided);
+	static void Collision_Projectile(list<Obj*> _Colliders, list<Obj*> _Collided);
 };
 
