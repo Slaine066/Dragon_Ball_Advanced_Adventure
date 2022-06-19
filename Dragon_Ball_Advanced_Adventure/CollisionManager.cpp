@@ -6,6 +6,7 @@
 #include "Enum.h"
 #include "AbstractFactory.h"
 #include "Kamehameha.h"
+#include "Enemy.h"
 
 CollisionManager::CollisionManager()
 {
@@ -73,7 +74,7 @@ void CollisionManager::Collision_Projectile(list<Obj*> _Colliders, list<Obj*> _C
 	{
 		for (auto& Collided : _Collided)
 		{
-			if (!Collided->Get_Dead())
+			if (!Collided->Get_Dead() && !Collider->Get_Owner()->Get_Dead() && !Collider->Get_Dead())
 			{
 				Character* pColliderOwner = dynamic_cast<Character*>(Collider->Get_Owner());
 				if (!pColliderOwner)
@@ -81,8 +82,8 @@ void CollisionManager::Collision_Projectile(list<Obj*> _Colliders, list<Obj*> _C
 				Character* pCollided = dynamic_cast<Character*>(Collided);
 				if (!pCollided)
 					return;
-
-				if (pColliderOwner != pCollided)
+				
+				if (pColliderOwner != pCollided && pColliderOwner->Get_ObjId() != pCollided->Get_ObjId())
 				{
 					if (IntersectRect(&Rect, &(Collider->Get_Rect()), &(Collided->Get_Rect())))
 					{

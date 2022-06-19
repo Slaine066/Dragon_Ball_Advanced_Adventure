@@ -87,7 +87,11 @@ void Kamehameha::Change_Motion()
 
 				Character* pCharacter = dynamic_cast<Character*>(ObjManager::Get_Instance()->Get_Player().front());
 				if (pCharacter)
+				{
 					pCharacter->Set_IsAttacking(false);
+					if (pCharacter->Get_IsHit())
+						pCharacter->Set_IsHit(false);
+				}
 			}
 				
 			else

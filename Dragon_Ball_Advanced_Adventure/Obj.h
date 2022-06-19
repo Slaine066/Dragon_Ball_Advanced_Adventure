@@ -24,9 +24,10 @@ public:
 	const FRAMEINFO Get_FrameInfo() const { return m_tFrameInfo; }
 	const FRAMEINFO Get_FrameInfoRender() const { return m_tFrameInfoRender; }
 	const DIRID Get_Direction() const { return m_eDir; }
-	bool Get_Dead() { return m_bDead; }
-	Obj* Get_Target() { return m_pTarget; }
-	Obj* Get_Owner() { return m_pOwner; }
+	const bool Get_Dead() const { return m_bDead; }
+	const Obj* Get_Target() const { return m_pTarget; }
+	const OBJID Get_ObjId() const { return m_eObjId; }
+	Obj* Get_Owner() const { return m_pOwner; }
 
 	// Setters
 	void Set_Position(float fX, float fY) { m_tInfo.fX = fX; m_tInfo.fY = fY; }
@@ -36,7 +37,8 @@ public:
 	void Set_Dead() { m_bDead = true; }
 	void Set_Angle(float fAngle) { m_fAngle = fAngle; }
 	void Set_Target(Obj* pTarget) { m_pTarget = pTarget; }
-	void Set_FrameKey(TCHAR* pFrameKey) { m_pFrameKey = pFrameKey; }	
+	void Set_FrameKey(TCHAR* pFrameKey) { m_pFrameKey = pFrameKey; }
+	void Set_ObjId(OBJID eObjId) { m_eObjId = eObjId; }
 	void Set_Owner(Obj* pOwner) { m_pOwner = pOwner; }
 
 protected:
@@ -51,6 +53,7 @@ protected:
 	FRAMEINFO m_tFrameInfoRender;	// Frame RENDER Size
 	FRAME m_tFrame;
 	DIRID m_eDir;
+	OBJID m_eObjId;
 	Obj* m_pOwner;
 
 	bool m_bDead;

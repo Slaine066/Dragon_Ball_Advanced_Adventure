@@ -36,7 +36,7 @@ void PigGunner::Initialize()
 	m_tStats.iHealth = m_tStats.iHealthMax;
 	m_tStats.iDamage = 5.f;
 
-	m_fSpeed = 0.5f;
+	m_fSpeed = .5f;
 
 	// AI
 	m_iWalkRange = 200;
@@ -298,24 +298,21 @@ void PigGunner::AI_Behavior()
 	{
 		if (m_pTarget)
 		{
-			if (!m_bDead)
+			if (m_bIsInAttackRange)
 			{
-				if (m_bIsInAttackRange)
+				if (!m_bIsAttacking && m_eCurState != ATTACK && GetTickCount() > m_dwAttackTime + 1500)
 				{
-					if (!m_bIsAttacking && m_eCurState != ATTACK && GetTickCount() > m_dwAttackTime + 1500)
-					{
-						m_eCurState = ATTACK;
-						m_bIsAttacking = true;
-						m_bMotionAlreadyDamaged = false;
+					m_eCurState = ATTACK;
+					m_bIsAttacking = true;
+					m_bMotionAlreadyDamaged = false;
 
 						
-					}
-					else if (!m_bIsAttacking)
-						m_eCurState = IDLE;
 				}
-				else
-					Move_ToTarget();
+				else if (!m_bIsAttacking)
+					m_eCurState = IDLE;
 			}
+			else
+				Move_ToTarget();
 		}
 		else
 			Patrol();
@@ -325,7 +322,7 @@ void PigGunner::AI_Behavior()
 	if (m_bIsAttacking && m_tFrame.iFrameStart >= m_tFrame.iDamageNotifyStart && m_tFrame.iFrameStart <= m_tFrame.iDamageNotifyEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
 	{
 		float fBulletOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX : -m_tInfo.fCX;
-		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<Bullet>::Create(m_tInfo.fX + fBulletOffset, m_tInfo.fY, m_eDir, this));
+		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<Bullet>::Create(m_tInfo.fX + fBulletOffset, m_tInfo.fY, m_eDir, m_eObjId, this));
 	}
 
 	if (m_bIsHit && m_eCurState != DEAD)

@@ -7,7 +7,7 @@ public:
 	Enemy() : m_ePreState(END), m_eCurState(IDLE), m_iWalkRange(0), m_iTargetRange(0), m_iAttackRange(0), m_bIsInAttackRange(0), m_bShouldSwitchDir(false),
 		m_dwAttackTime(GetTickCount()), m_dwIdleTime(GetTickCount()), m_dwWalkTime(GetTickCount()), m_dwDeadTime(GetTickCount())
 	{
-
+		m_eObjId = OBJ_ENEMY;
 	};
 	virtual ~Enemy() {};
 

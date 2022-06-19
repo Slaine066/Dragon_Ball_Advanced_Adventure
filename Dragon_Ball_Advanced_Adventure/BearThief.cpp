@@ -346,7 +346,7 @@ void BearThief::AI_Behavior()
 	if (m_bIsAttacking && m_eCurState == ATTACK_SPECIAL && m_tFrame.iFrameStart >= m_tFrame.iDamageNotifyStart && m_tFrame.iFrameStart <= m_tFrame.iDamageNotifyEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
 	{
 		float fBulletOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX : -m_tInfo.fCX;
-		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<BearThiefSpecialAttack>::Create(m_tInfo.fX + fBulletOffset, m_tInfo.fY + 50, m_eDir, this));
+		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<BearThiefSpecialAttack>::Create(m_tInfo.fX + fBulletOffset, m_tInfo.fY + 50, m_eDir, m_eObjId, this));
 	}
 
 	if (m_bIsHit && m_eCurState != DEAD)

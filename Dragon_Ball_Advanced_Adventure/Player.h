@@ -55,7 +55,9 @@ private:
 	void Move(bool bIsRight);
 	void Jump();
 	void Attack();
+	void Charge();
 	void Attack_Special();
+	void Reload_Energy();
 	void Check_Combo();
 
 	STATE m_ePreState;
@@ -71,5 +73,6 @@ private:
 	
 	bool m_bIsComboActive;
 
-	DWORD m_dwChargingTime;
+	DWORD m_dwEnergyReloadTime;
+	DWORD m_dwChargeTime;
 };

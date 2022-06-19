@@ -24,6 +24,7 @@
 #include <map>
 #include <algorithm>
 #include <time.h>
+#include <typeinfo>
 
 #include <io.h>
 //#include "fmod.h"

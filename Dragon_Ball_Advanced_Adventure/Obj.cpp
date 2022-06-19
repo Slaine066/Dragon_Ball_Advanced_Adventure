@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Obj.h"
 
-Obj::Obj() : m_fSpeed(0.f), m_eDir(DIR_END), m_bDead(false), m_fAngle(0.f), m_fDistance(0.f), m_pTarget(nullptr), m_pFrameKey(L"")
+Obj::Obj() : m_fSpeed(0.f), m_eDir(DIR_END), m_eObjId(OBJ_END), m_bDead(false), m_fAngle(0.f), m_fDistance(0.f), m_pTarget(nullptr), m_pFrameKey(L"")
 {
 	ZeroMemory(&m_tInfo, sizeof(INFO));
 	ZeroMemory(&m_tRect, sizeof(RECT));

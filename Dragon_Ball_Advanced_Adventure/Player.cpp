@@ -12,7 +12,7 @@
 Player::Player() 
 	: m_ePreState(END), m_eCurState(IDLE), m_fSprintSpeed(0.f), m_fFallSpeed(6.f), 
 	m_bIsJumping(false), m_fJumpPower(0.f), m_fJumpTime(0.f), m_fAccel(9.8f),
-	m_bIsComboActive(false), m_dwChargingTime(GetTickCount())
+	m_bIsComboActive(false), m_dwChargeTime(GetTickCount()), m_dwEnergyReloadTime(GetTickCount())
 {
 }
 
@@ -48,6 +48,8 @@ void Player::Initialize()
 	m_fJumpPower = 14.f;
 
 	m_eDir = DIR_RIGHT;
+	m_eObjId = OBJ_PLAYER;
+
 	m_pFrameKey = L"Player_RIGHT";
 
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Goku_LEFT.bmp", L"Player_LEFT");
@@ -72,6 +74,7 @@ int Player::Update()
 	Key_Input();
 	Offset();
 	Jump();
+	Reload_Energy();
 
 	Update_Rect();
 	Update_Collision_Rect(10, Get_ColSize());
@@ -123,7 +126,7 @@ void Player::Key_Input()
 
 	// ACTION
 		// Space Bar - Jump
-	if (KeyManager::Get_Instance()->Key_Down(VK_SPACE) && !m_bIsAttacking && !m_bIsHit)
+	if (KeyManager::Get_Instance()->Key_Down(VK_SPACE) && !m_bIsJumping && !m_bIsAttacking && !m_bIsHit)
 	{
 		m_bIsJumping = true;
 		m_eCurState = JUMP;
@@ -133,19 +136,16 @@ void Player::Key_Input()
 		Attack();
 		// Keyboard 'S' Pressing - Charging
 	if (KeyManager::Get_Instance()->Key_Pressing('S') && !m_bIsHit && !m_bIsJumping && !m_bIsAttacking)
-	{
-		if (m_eCurState != CHARGING)
-		{
-			m_eCurState = CHARGING;
-			m_dwChargingTime = GetTickCount();
-		}
-	}
+		Charge();
 		// Keyboard 'S' Up - Special Attack
 	if (KeyManager::Get_Instance()->Key_Up('S') && !m_bIsHit && !m_bIsJumping && !m_bIsAttacking)
 		Attack_Special();
 	
-	if (m_bIsHit && m_eCurState != DEAD)
+	if (m_bIsHit && m_eCurState != ATTACK_SPECIAL && m_eCurState != DEAD)
+	{
 		m_eCurState = HIT;
+		m_tStats.iCharge = 0;
+	}
 }
 
 void Player::Offset()
@@ -255,20 +255,50 @@ void Player::Attack()
 	}
 }
 
+void Player::Charge()
+{
+	if (m_tStats.iEnergy == 100 && m_tStats.iCharge < 100)
+	{
+		if (m_eCurState != CHARGING)
+			m_eCurState = CHARGING;
+
+		if (GetTickCount() > m_dwChargeTime + 200)
+		{
+			m_tStats.iCharge += 10;
+			m_dwChargeTime = GetTickCount();
+		}
+	}
+}
+
 void Player::Attack_Special()
 {
 	// If 'S' has been held more than 2 seconds
-	if (GetTickCount() > m_dwChargingTime + 2000)
+	if (m_tStats.iEnergy == 100 && m_tStats.iCharge == 100)
 	{
 		m_eCurState = ATTACK_SPECIAL;
 		m_bIsAttacking = true;
+		m_tStats.iEnergy = 0;
 
 		// Spawn Projectile
 		float fOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX / 2 : -m_tInfo.fCX / 2;
-		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<Kamehameha>::Create(m_tInfo.fX + fOffset, m_tInfo.fY + 4, m_eDir, this));
+		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<Kamehameha>::Create(m_tInfo.fX + fOffset, m_tInfo.fY + 4, m_eDir, m_eObjId, this));
 	}
 	else
 		m_eCurState = IDLE;
+
+	m_tStats.iCharge = 0;
+}
+
+void Player::Reload_Energy()
+{
+	if (m_tStats.iEnergy < 100)
+	{
+		if (GetTickCount() > m_dwEnergyReloadTime + 200)
+		{
+			m_tStats.iEnergy += 2;
+			m_dwEnergyReloadTime = GetTickCount();
+		}
+	}
 }
 
 void Player::Check_Combo()

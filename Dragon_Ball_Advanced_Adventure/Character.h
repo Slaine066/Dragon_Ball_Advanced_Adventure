@@ -16,12 +16,13 @@ public:
 	STATS Get_Stats() { return m_tStats; }
 	RECT Get_CollisionRect() { return m_tCollisionRect; }
 	bool Get_CanDamage() { return m_bCanDamage; }
+	bool Get_IsHit() { return  m_bIsHit; }
 	
 	// Setters
 	void Set_Health(int iDamage) { m_tStats.iHealth -= iDamage; };
 	void Set_IsAttacking(bool bIsAttacking) { m_bIsAttacking = bIsAttacking; }
 	void Set_MotionAlreadyDamaged(bool bAlreadyDamaged) { m_bMotionAlreadyDamaged = bAlreadyDamaged; }
-	void Set_IsHit() { m_bIsHit = true; }
+	void Set_IsHit(bool bIsHit = true) { m_bIsHit = bIsHit; }
 
 	void Update_Collision_Rect(int iColRectStart, int iColRectSize)
 	{
