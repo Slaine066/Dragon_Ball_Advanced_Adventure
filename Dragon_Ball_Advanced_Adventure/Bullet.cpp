@@ -58,6 +58,12 @@ void Bullet::Late_Update()
 	// TODO: Destroy if out of screen
 
 	Change_Frame();
+
+	int iScrollX = (int)ScrollManager::Get_Instance()->Get_ScrollX();
+	int iScrollY = (int)ScrollManager::Get_Instance()->Get_ScrollY();
+
+	if ((m_tRect.left + iScrollX) <= 0 || (m_tRect.right + iScrollX) >= WINCX)
+		m_bDead = true;
 }
 
 void Bullet::Render(HDC hDC)

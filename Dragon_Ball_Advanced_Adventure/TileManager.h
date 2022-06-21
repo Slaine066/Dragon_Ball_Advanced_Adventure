@@ -30,6 +30,7 @@ public:
 
 	void Pick_Tile(POINT& _pt);
 	void Reset_Tile(POINT& _pt);
+	void Pick_Enemy(POINT& _pt, int iType);
 
 	void Save_Tile();
 	void Load_Tile();

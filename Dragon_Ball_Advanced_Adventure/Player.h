@@ -37,6 +37,10 @@ public:
 	void Render(HDC hDC) override;
 
 	STATE Get_CurState() { return m_eCurState; }
+	int Get_ComboCounter() { return m_iComboCounter; }
+
+	void Increase_ComboCounter() { m_iComboCounter += 1; }
+	void Set_ComboTime(DWORD dwComboTime) { m_dwComboTime = dwComboTime; }
 
 private:
 	// Obj overrides
@@ -59,6 +63,7 @@ private:
 	void Attack_Special();
 	void Reload_Energy();
 	void Check_Combo();
+	void Reset_Combo_Counter();
 
 	STATE m_ePreState;
 	STATE m_eCurState;
@@ -71,8 +76,10 @@ private:
 	float m_fJumpTime;
 	float m_fAccel;
 	
+	int m_iComboCounter;
 	bool m_bIsComboActive;
 
+	DWORD m_dwComboTime;
 	DWORD m_dwEnergyReloadTime;
 	DWORD m_dwChargeTime;
 };

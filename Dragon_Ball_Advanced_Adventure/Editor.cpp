@@ -4,6 +4,7 @@
 #include "KeyManager.h"
 #include "ScrollManager.h"
 #include "BmpManager.h"
+#include "ObjManager.h"
 
 Editor::Editor()
 {
@@ -30,6 +31,7 @@ void Editor::Release()
 int Editor::Update()
 {
 	TileManager::Get_Instance()->Update();
+	ObjManager::Get_Instance()->Update_Editor();
 
 	Key_Input();
 
@@ -47,6 +49,7 @@ void Editor::Render(HDC hDC)
 	BitBlt(hDC, 0, 0, WINCX, WINCY, hGroundDC, 0, 0, SRCCOPY);
 
 	TileManager::Get_Instance()->Render(hDC);
+	ObjManager::Get_Instance()->Render(hDC);
 }
 
 void Editor::Key_Input()
@@ -85,6 +88,29 @@ void Editor::Key_Input()
 		pt.y -= (int)ScrollManager::Get_Instance()->Get_ScrollY();
 
 		TileManager::Get_Instance()->Reset_Tile(pt);
+	}
+
+	if (KeyManager::Get_Instance()->Key_Down('1'))
+	{
+		POINT pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)ScrollManager::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)ScrollManager::Get_Instance()->Get_ScrollY();
+
+		TileManager::Get_Instance()->Pick_Enemy(pt, 1);
+	}
+	if (KeyManager::Get_Instance()->Key_Down('2'))
+	{
+		POINT pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)ScrollManager::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)ScrollManager::Get_Instance()->Get_ScrollY();
+
+		TileManager::Get_Instance()->Pick_Enemy(pt, 2);
 	}
 
 	// Save

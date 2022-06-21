@@ -26,6 +26,7 @@ public:
 
 	// Functions which run every frame
 	int	Update();
+	void Update_Editor();
 	void Late_Update();
 	void Render(HDC hDC);
 

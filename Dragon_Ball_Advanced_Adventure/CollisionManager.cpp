@@ -7,6 +7,7 @@
 #include "AbstractFactory.h"
 #include "Kamehameha.h"
 #include "Enemy.h"
+#include "Player.h"
 
 CollisionManager::CollisionManager()
 {
@@ -45,6 +46,14 @@ void CollisionManager::Collision_Rect(list<Obj*> _Colliders, list<Obj*> _Collide
 						// Subtract Health
 						pCollidedCharacter->Set_Health(pCharacter->Get_Stats().iDamage); 
 						pCharacter->Set_MotionAlreadyDamaged(true);
+
+						// If Collider is Player* - Increase Combo Counter
+						Player* pPlayer = dynamic_cast<Player*>(pCharacter);
+						if (pPlayer)
+						{
+							pPlayer->Increase_ComboCounter();
+							pPlayer->Set_ComboTime(GetTickCount());
+						}
 															
 						// Spawn DamageNumber UI
 						DamageNumbers* pDamageNumber = new DamageNumbers();
@@ -97,6 +106,14 @@ void CollisionManager::Collision_Projectile(list<Obj*> _Colliders, list<Obj*> _C
 						{
 							// Subtract Health
 							pCollided->Set_Health(pKamehameha ? pColliderOwner->Get_Stats().iSpecialDamage : pColliderOwner->Get_Stats().iDamage);
+
+							// If Collider is Player* - Increase Combo Counter
+							Player* pPlayer = dynamic_cast<Player*>(pColliderOwner);
+							if (pPlayer)
+							{
+								pPlayer->Increase_ComboCounter();
+								pPlayer->Set_ComboTime(GetTickCount());
+							}
 
 							// Spawn DamageNumber UI
 							DamageNumbers* pDamageNumber = new DamageNumbers();

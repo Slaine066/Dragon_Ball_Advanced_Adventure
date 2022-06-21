@@ -70,6 +70,15 @@ int ObjManager::Update()
 	return iEvent;
 }
 
+void ObjManager::Update_Editor()
+{
+	for (size_t i = 0; i < OBJ_END; ++i)
+	{
+		for (auto& iter : m_ObjList[i])
+			iter->Update_Editor();
+	}
+}
+
 void ObjManager::Late_Update()
 {
 	for (size_t i = 0; i < OBJ_END; ++i)

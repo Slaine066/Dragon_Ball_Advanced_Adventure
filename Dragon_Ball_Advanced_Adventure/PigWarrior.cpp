@@ -4,6 +4,9 @@
 #include "ScrollManager.h"
 #include "TileManager.h"
 #include "ObjManager.h"
+#include "SoundManager.h"
+
+extern float g_fSound;
 
 PigWarrior::PigWarrior()
 {
@@ -307,6 +310,7 @@ void PigWarrior::AI_Behavior()
 					m_eCurState = ATTACK;
 					m_bIsAttacking = true;
 					m_bMotionAlreadyDamaged = false;
+					SoundManager::Get_Instance()->PlaySound(L"Pig_Warrior_Attack.wav", CHANNEL_EFFECT, g_fSound);
 				}
 				else if (!m_bIsAttacking)
 					m_eCurState = IDLE;

@@ -6,12 +6,16 @@
 #include "BmpManager.h"
 #include "ScrollManager.h"
 #include "TileManager.h"
+#include "SoundManager.h"
 #include "UIManager.h"
 #include "PigWarrior.h"
 #include "PigGunner.h"
 #include "BearThief.h"
 #include "HealthBar.h"
 #include "EnergyBar.h"
+#include "ComboCounter.h"
+
+extern float g_fSound;
 
 Stage::Stage()
 {
@@ -27,28 +31,16 @@ void Stage::Initialize()
 
 	TileManager::Get_Instance()->Load_Tile();
 	
-	// Test Player
+	// Player
 	ObjManager::Get_Instance()->Add_Object(OBJ_PLAYER, AbstractFactory<Player>::Create(100, 0));
 
-	// Test Enemy Warrior
-	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigWarrior>::Create(500, 0));
-	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigWarrior>::Create(1500, 0));
-	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigWarrior>::Create(2500, 0));
-	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigWarrior>::Create(3400, 0));
-
-	// Test Enemy Gunner
-	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigGunner>::Create(700, 0));
-	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigGunner>::Create(1000, 0));
-	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigGunner>::Create(3000, 0));
-	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<PigGunner>::Create(4000, 0));
-
-	// Test Enemy Bear Thief (Boss)
-	//ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<BearThief>::Create(600, 0));
-
+	// UI
 	UIManager::Get_Instance()->Add_Object(UI_HEALTH_BAR, AbstractFactory<HealthBar>::Create(150, 43));
 	UIManager::Get_Instance()->Add_Object(UI_ENERGY_BAR, AbstractFactory<EnergyBar>::Create(130, 560));
-
+	UIManager::Get_Instance()->Add_Object(UI_COMBO_COUNTER, AbstractFactory<ComboCounter>::Create(700, 200));
 	UIManager::Get_Instance()->Initialize();
+
+	SoundManager::Get_Instance()->PlaySound(L"Stage.mp3", CHANNEL_BGM, g_fSound);
 }
 
 void Stage::Release()

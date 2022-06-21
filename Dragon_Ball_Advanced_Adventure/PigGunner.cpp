@@ -8,6 +8,7 @@
 #include "Enum.h"
 #include "AbstractFactory.h"
 #include "Bullet.h"
+#include "Function.h"
 
 PigGunner::PigGunner()
 {
@@ -15,6 +16,7 @@ PigGunner::PigGunner()
 
 PigGunner::~PigGunner()
 {
+	Release();
 }
 
 void PigGunner::Initialize()
@@ -56,6 +58,12 @@ void PigGunner::Initialize()
 
 void PigGunner::Release()
 {
+	list<Obj*> Projectiles = ObjManager::Get_Instance()->Get_Projectiles();
+	for (auto& pProj : Projectiles)
+	{
+		if (pProj->Get_Owner() == this)
+			pProj->Set_Dead();
+	}
 }
 
 int PigGunner::Update()

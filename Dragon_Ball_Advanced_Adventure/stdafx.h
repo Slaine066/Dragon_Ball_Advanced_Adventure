@@ -22,13 +22,14 @@
 #include <list>
 #include <vector>
 #include <map>
+#include <deque>
 #include <algorithm>
 #include <time.h>
 #include <typeinfo>
 
 #include <io.h>
-//#include "fmod.h"
-//#include "fmod.hpp"
-//#pragma comment(lib, "fmodex_vc.lib")
+#include "fmod.h"
+#include "fmod.hpp"
+#pragma comment(lib, "fmodex_vc.lib")
 
 using namespace std;

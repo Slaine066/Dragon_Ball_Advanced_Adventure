@@ -6,6 +6,9 @@
 #include "BmpManager.h"
 #include "ScrollManager.h"
 #include "ObjManager.h"
+#include "SoundManager.h"
+
+float g_fSound = 1.f;
 
 Main::Main() : m_dwTime(GetTickCount()), m_iFPS(0)
 {
@@ -15,21 +18,25 @@ Main::Main() : m_dwTime(GetTickCount()), m_iFPS(0)
 Main::~Main()
 {
 	Release();
-}
+} 
 
 void Main::Initialize()
 {
 	m_hDC = GetDC(g_hWnd);
 
+	SoundManager::Get_Instance()->Initialize();
+
 	// To open Map Builder uncomment line 25 and comment line 26
 	//SceneManager::Get_Instance()->Change_Scene(SCENE_EDITOR);
 	SceneManager::Get_Instance()->Change_Scene(SCENE_STAGE);
+
 }
 
 void Main::Release()
 {
 	ReleaseDC(g_hWnd, m_hDC);
 
+	SoundManager::Get_Instance()->Destroy_Instance();
 	KeyManager::Get_Instance()->Destroy_Instance();
 	BmpManager::Get_Instance()->Destroy_Instance();
 	SceneManager::Get_Instance()->Destroy_Instance();

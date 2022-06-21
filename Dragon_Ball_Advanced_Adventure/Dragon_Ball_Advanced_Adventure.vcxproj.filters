@@ -139,6 +139,9 @@
     <Filter Include="01. Obj\014. UI\0143. Energy Bar">
       <UniqueIdentifier>{54d79228-052b-407e-b5ab-79f68cd9eef1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Obj\014. UI\0144. Combo Counter">
+      <UniqueIdentifier>{fad74344-0dcd-46f6-acb9-0841f7335dcc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -282,6 +285,9 @@
     <ClInclude Include="Projectile.h">
       <Filter>01. Obj\012. Projectile</Filter>
     </ClInclude>
+    <ClInclude Include="ComboCounter.h">
+      <Filter>01. Obj\014. UI\0144. Combo Counter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -385,6 +391,9 @@
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>01. Obj\012. Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="ComboCounter.cpp">
+      <Filter>01. Obj\014. UI\0144. Combo Counter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

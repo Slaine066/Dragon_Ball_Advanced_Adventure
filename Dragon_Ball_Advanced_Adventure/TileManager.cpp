@@ -3,7 +3,10 @@
 #include "AbstractFactory.h"
 #include "Tile.h"
 #include "ScrollManager.h"
+#include "ObjManager.h"
 #include "Function.h"
+#include "PigWarrior.h"
+#include "PigGunner.h"
 
 TileManager* TileManager::m_pInstance = nullptr;
 
@@ -197,10 +200,29 @@ void TileManager::Reset_Tile(POINT & _pt)
 	pTile->Set_Option(0);
 }
 
+void TileManager::Pick_Enemy(POINT & _pt, int iType)
+{
+	Obj* pEnemy;
+	switch (iType)
+	{
+	case 1:
+		pEnemy = AbstractFactory<PigWarrior>::Create((float)_pt.x, (float)_pt.y);
+		ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
+		break;
+	case 2:
+		pEnemy = AbstractFactory<PigGunner>::Create((float)_pt.x, (float)_pt.y);
+		ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
+		break;
+	default:
+		pEnemy = AbstractFactory<PigWarrior>::Create((float)_pt.x, (float)_pt.y);
+		ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
+	}
+}
+
 void TileManager::Save_Tile()
 {
+	// TILES
 	HANDLE hFile = CreateFile(m_bIsBossTile ? L"../Data/Boss_Tile.dat" : L"../Data/Tile.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-
 	if (hFile == INVALID_HANDLE_VALUE)
 		return;
 
@@ -221,12 +243,39 @@ void TileManager::Save_Tile()
 	}
 
 	CloseHandle(hFile);
+
+	// ENEMIES
+	HANDLE hFile2 = CreateFile(L"../Data/Enemies.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (hFile2 == INVALID_HANDLE_VALUE)
+		return;
+
+	char cType;
+	for (auto& iter : ObjManager::Get_Instance()->Get_Enemies())
+	{
+		PigWarrior* pWarrior = dynamic_cast<PigWarrior*>(iter);
+		if (pWarrior)
+		{
+			cType = '1';
+			WriteFile(hFile2, &(pWarrior->Get_Info()), sizeof(INFO), &dwByte, nullptr);
+			WriteFile(hFile2, &cType, sizeof(char), &dwByte, nullptr);
+		}
+		
+		PigGunner* pGunner = dynamic_cast<PigGunner*>(iter);
+		if (pGunner)
+		{
+			cType = '2';
+			WriteFile(hFile2, &(pGunner->Get_Info()), sizeof(INFO), &dwByte, nullptr);
+			WriteFile(hFile2, &cType, sizeof(char), &dwByte, nullptr);
+		}
+	}
+
+	CloseHandle(hFile2);
 }
 
 void TileManager::Load_Tile()
 {
+	// TILES
 	HANDLE hFile = CreateFile(m_bIsBossTile ? L"../Data/Boss_Tile.dat" : L"../Data/Tile.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
 	if (hFile == INVALID_HANDLE_VALUE)
 		return;
 
@@ -257,4 +306,34 @@ void TileManager::Load_Tile()
 	}
 	
 	CloseHandle(hFile);
+
+	// ENEMIES
+	HANDLE hFile2 = CreateFile(L"../Data/Enemies.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (hFile2 == INVALID_HANDLE_VALUE)
+		return;
+
+	INFO tInfo2{};
+	char cType;
+
+	while (true)
+	{
+		ReadFile(hFile2, &tInfo2, sizeof(INFO), &dwByte, nullptr);
+		ReadFile(hFile2, &cType, sizeof(char), &dwByte, nullptr);
+
+		if (dwByte == 0)
+			break;
+
+		if (cType == '1')
+		{
+			Obj* pEnemy = AbstractFactory<PigWarrior>::Create(tInfo2.fX, tInfo2.fY);
+			ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
+		}
+		else if (cType == '2')
+		{
+			Obj* pEnemy = AbstractFactory<PigGunner>::Create(tInfo2.fX, tInfo2.fY);
+			ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
+		}
+	}
+
+	CloseHandle(hFile2);
 }

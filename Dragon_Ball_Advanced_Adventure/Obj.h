@@ -15,6 +15,7 @@ public:
 
 	// Functions which run every frame
 	virtual int Update() PURE;
+	virtual void Update_Editor();
 	virtual void Late_Update() PURE;
 	virtual void Render(HDC hDC) PURE;
 

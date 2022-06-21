@@ -6,13 +6,17 @@
 #include "KeyManager.h"
 #include "TileManager.h"
 #include "ObjManager.h"
+#include "SoundManager.h"
 #include "AbstractFactory.h"
 #include "Kamehameha.h"
+
+extern float g_fSound;
 
 Player::Player() 
 	: m_ePreState(END), m_eCurState(IDLE), m_fSprintSpeed(0.f), m_fFallSpeed(6.f), 
 	m_bIsJumping(false), m_fJumpPower(0.f), m_fJumpTime(0.f), m_fAccel(9.8f),
-	m_bIsComboActive(false), m_dwChargeTime(GetTickCount()), m_dwEnergyReloadTime(GetTickCount())
+	m_iComboCounter(0), m_bIsComboActive(false), 
+	m_dwComboTime(GetTickCount()), m_dwChargeTime(GetTickCount()), m_dwEnergyReloadTime(GetTickCount())
 {
 }
 
@@ -75,6 +79,7 @@ int Player::Update()
 	Offset();
 	Jump();
 	Reload_Energy();
+	Reset_Combo_Counter();
 
 	Update_Rect();
 	Update_Collision_Rect(10, Get_ColSize());
@@ -123,6 +128,7 @@ void Player::Key_Input()
 		// NO Input - Idle
 	else if (!m_bIsJumping && !m_bIsAttacking && !m_bIsHit && m_eCurState != CHARGING && m_eCurState != ATTACK_SPECIAL)
 		m_eCurState = IDLE;
+		
 
 	// ACTION
 		// Space Bar - Jump
@@ -132,7 +138,7 @@ void Player::Key_Input()
 		m_eCurState = JUMP;
 	}
 		// Keyboard 'A' - Attack
-	if (KeyManager::Get_Instance()->Key_Down('A') && !m_bIsHit && !m_bIsJumping)
+	if (KeyManager::Get_Instance()->Key_Down('A') && !m_bIsHit && !m_bIsJumping && m_eCurState != CHARGING && m_eCurState != ATTACK_SPECIAL)
 		Attack();
 		// Keyboard 'S' Pressing - Charging
 	if (KeyManager::Get_Instance()->Key_Pressing('S') && !m_bIsHit && !m_bIsJumping && !m_bIsAttacking)
@@ -145,6 +151,7 @@ void Player::Key_Input()
 	{
 		m_eCurState = HIT;
 		m_tStats.iCharge = 0;
+		m_bIsAttacking = false;
 	}
 }
 
@@ -282,6 +289,9 @@ void Player::Attack_Special()
 		// Spawn Projectile
 		float fOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX / 2 : -m_tInfo.fCX / 2;
 		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<Kamehameha>::Create(m_tInfo.fX + fOffset, m_tInfo.fY + 4, m_eDir, m_eObjId, this));
+
+		SoundManager::Get_Instance()->StopSound(CHANNEL_EFFECT);
+		SoundManager::Get_Instance()->PlaySound(L"Kamehameha.wav", CHANNEL_EFFECT, g_fSound);
 	}
 	else
 		m_eCurState = IDLE;
@@ -346,6 +356,15 @@ void Player::Check_Combo()
 			m_bIsComboActive = false;
 			m_bMotionAlreadyDamaged = false;
 		}
+	}
+}
+
+void Player::Reset_Combo_Counter()
+{
+	if (GetTickCount() > m_dwComboTime + 1500)
+	{
+		m_iComboCounter = 0;
+		m_dwComboTime = GetTickCount();
 	}
 }
 

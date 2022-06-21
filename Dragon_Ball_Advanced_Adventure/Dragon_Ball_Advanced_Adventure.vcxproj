@@ -156,6 +156,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="ComboCounter.h" />
     <ClInclude Include="DamageNumbers.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Dragon_Ball_Advanced_Adventure.h" />
@@ -201,6 +202,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="ComboCounter.cpp" />
     <ClCompile Include="DamageNumbers.cpp" />
     <ClCompile Include="Dragon_Ball_Advanced_Adventure.cpp" />
     <ClCompile Include="Editor.cpp" />
