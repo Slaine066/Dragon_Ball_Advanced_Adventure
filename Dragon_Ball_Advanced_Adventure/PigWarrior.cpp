@@ -33,6 +33,7 @@ void PigWarrior::Initialize()
 	m_tStats.iHealthMax = 70.f;
 	m_tStats.iHealth = m_tStats.iHealthMax;
 	m_tStats.iDamage = 5.f;
+	m_tStats.iDamageOffset = 1.f;
 
 	m_fSpeed = .5f;
 
@@ -77,6 +78,7 @@ void PigWarrior::Late_Update()
 	
 	Change_Motion();
 	Change_Frame();
+	Sound_On_Animation();
 }
 
 void PigWarrior::Render(HDC hDC)
@@ -139,9 +141,11 @@ void PigWarrior::Change_Motion()
 			m_tFrame.iFrameEnd = 7;
 			m_tFrame.iDamageNotifyStart = 4;
 			m_tFrame.iDamageNotifyEnd = 5;
+			m_tFrame.iSoundNotifyStart = 2;
 			m_tFrame.iMotion = 2;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			m_bCanPlaySound = true;
 			break;
 		case HIT:
 			m_tFrame.iFrameStart = 0;
@@ -149,6 +153,7 @@ void PigWarrior::Change_Motion()
 			m_tFrame.iMotion = 3;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			m_bCanPlaySound = true;
 			break;
 		case DEAD:
 			m_tFrame.iFrameStart = 0;
@@ -251,12 +256,29 @@ void PigWarrior::Reset_Animation()
 	}
 }
 
+void PigWarrior::Sound_On_Animation()
+{
+	switch (m_eCurState)
+	{
+	case ATTACK:
+		if (m_tFrame.iFrameStart == m_tFrame.iSoundNotifyStart && m_bCanPlaySound)
+		{
+			SoundManager::Get_Instance()->PlaySound(L"Pig_Warrior_Attack.wav", CHANNEL_EFFECT, g_fSound);
+			m_bCanPlaySound = false;
+		}
+	case DEAD:
+		break;
+	}
+}
+
 void PigWarrior::Find_Target()
 {
 	if (m_bDead)
 		return;
 
-	Obj* pPlayer = ObjManager::Get_Instance()->Get_Player().front();
+	Obj* pPlayer = nullptr;
+	if (!ObjManager::Get_Instance()->Get_Player().empty())
+		pPlayer = ObjManager::Get_Instance()->Get_Player().front();
 	
 	if (pPlayer)
 	{
@@ -310,7 +332,6 @@ void PigWarrior::AI_Behavior()
 					m_eCurState = ATTACK;
 					m_bIsAttacking = true;
 					m_bMotionAlreadyDamaged = false;
-					SoundManager::Get_Instance()->PlaySound(L"Pig_Warrior_Attack.wav", CHANNEL_EFFECT, g_fSound);
 				}
 				else if (!m_bIsAttacking)
 					m_eCurState = IDLE;

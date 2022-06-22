@@ -5,6 +5,8 @@
 #include "Stage.h"
 #include "BossStage.h"
 #include "Editor.h"
+#include "ObjManager.h"
+#include "ScrollManager.h"
 
 SceneManager* SceneManager::m_pInstance = nullptr;
 
@@ -21,6 +23,15 @@ void SceneManager::Release()
 {
 	Safe_Delete(m_pScene);
 	Safe_Delete(m_pPlayer);
+}
+
+void SceneManager::Reset_Scene()
+{
+	Safe_Delete(m_pScene);
+
+	m_pScene = new Stage();
+	m_pScene->Initialize();
+	ScrollManager::Get_Instance()->Reset_Scroll();
 }
 
 void SceneManager::Change_Scene(SCENEID eScene)
@@ -62,6 +73,9 @@ void SceneManager::Update()
 
 void SceneManager::Late_Update()
 {
+	if ((m_eCurScene == SCENE_STAGE || m_eCurScene == SCENE_BOSS_STAGE) && ObjManager::Get_Instance()->Get_Player().empty())
+		Reset_Scene();
+
 	m_pScene->Late_Update();
 }
 

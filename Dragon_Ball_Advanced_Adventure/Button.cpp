@@ -4,8 +4,13 @@
 #include "SceneManager.h"
 #include "Enum.h"
 #include "BmpManager.h"
+#include "SoundManager.h"
 
-Button::Button() : m_bShouldBlink(false), m_dwTime(GetTickCount()), m_bIsVisible(true)
+extern float g_fSound;
+
+Button::Button() : 
+	m_bShouldBlink(false), m_bShouldChange(false), 
+	m_dwTime(GetTickCount()), m_dwSoundTime(GetTickCount()), m_bIsVisible(true)
 {
 }
 
@@ -43,7 +48,14 @@ int Button::Update()
 void Button::Late_Update()
 {
 	if (KeyManager::Get_Instance()->Key_Down('A'))
-		SceneManager::Get_Instance()->Change_Scene(SCENE_MENU);
+	{
+		m_dwSoundTime = GetTickCount();
+		m_bShouldChange = true;
+		SoundManager::Get_Instance()->PlaySound(L"Start.wav", CHANNEL_SYSTEM, g_fSound);
+	}
+
+	if (m_bShouldChange && GetTickCount() > m_dwSoundTime + 1000)
+		SceneManager::Get_Instance()->Change_Scene(SCENE_STAGE);
 }
 
 void Button::Render(HDC hDC)

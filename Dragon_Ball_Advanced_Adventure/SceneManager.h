@@ -20,6 +20,8 @@ private:
 	SCENEID	m_ePreScene;
 	SCENEID	m_eCurScene;
 
+	void Reset_Scene();
+
 public:
 	void Change_Scene(SCENEID eScene);
 

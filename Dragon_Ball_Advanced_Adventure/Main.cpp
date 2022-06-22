@@ -24,9 +24,9 @@ void Main::Initialize()
 {
 	m_hDC = GetDC(g_hWnd);
 
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Back.bmp", L"Back");
 	SoundManager::Get_Instance()->Initialize();
-	//SceneManager::Get_Instance()->Change_Scene(SCENE_STAGE);
-	SceneManager::Get_Instance()->Change_Scene(SCENE_BOSS_STAGE);
+	SceneManager::Get_Instance()->Change_Scene(SCENE_LOGO);
 
 	// To open the Stage Builder uncomment the line below and comment line 28
 	//SceneManager::Get_Instance()->Change_Scene(SCENE_EDITOR);
@@ -58,8 +58,12 @@ void Main::Late_Update()
 void Main::Render()
 {
 	Render_FPS();
+
+	HDC	hBackDC = BmpManager::Get_Instance()->Find_Bmp(L"Back");
 	
-	SceneManager::Get_Instance()->Render(m_hDC);
+	SceneManager::Get_Instance()->Render(hBackDC);
+
+	BitBlt(m_hDC, 0, 0, WINCX, WINCY, hBackDC, 0, 0, SRCCOPY);
 }
 
 void Main::Render_FPS()

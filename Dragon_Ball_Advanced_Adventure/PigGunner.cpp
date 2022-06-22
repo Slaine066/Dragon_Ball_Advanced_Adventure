@@ -36,7 +36,8 @@ void PigGunner::Initialize()
 	// Stats
 	m_tStats.iHealthMax = 50.f;
 	m_tStats.iHealth = m_tStats.iHealthMax;
-	m_tStats.iDamage = 5.f;
+	m_tStats.iDamage = 7.f;
+	m_tStats.iDamageOffset = 2.f;
 
 	m_fSpeed = .5f;
 
@@ -251,12 +252,18 @@ void PigGunner::Reset_Animation()
 	}
 }
 
+void PigGunner::Sound_On_Animation()
+{
+}
+
 void PigGunner::Find_Target()
 {
 	if (m_bDead)
 		return;
 
-	Obj* pPlayer = ObjManager::Get_Instance()->Get_Player().front();
+	Obj* pPlayer = nullptr;
+	if (!ObjManager::Get_Instance()->Get_Player().empty())
+		pPlayer = ObjManager::Get_Instance()->Get_Player().front();
 
 	if (pPlayer)
 	{

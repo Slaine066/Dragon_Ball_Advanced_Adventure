@@ -25,7 +25,7 @@ void Bullet::Initialize()
 	m_tFrameInfoRender.fCX = 32.f;
 	m_tFrameInfoRender.fCY = 32.f;
 
-	m_fSpeed = 5.f;
+	m_fSpeed = 7.f;
 
 	m_pFrameKey = L"Bullet";
 

@@ -8,6 +8,9 @@
 #include "Button.h"
 #include "Define.h"
 #include "UIManager.h"
+#include "SoundManager.h"
+
+extern float g_fSound;
 
 Logo::Logo()
 {
@@ -32,11 +35,14 @@ void Logo::Initialize()
 	pObj->Set_FrameKey(L"Press Start");
 	static_cast<Button*>(pObj)->Set_Blink(true);
 	UIManager::Get_Instance()->Add_Object(UI_BUTTON, pObj);
+
+	SoundManager::Get_Instance()->PlayBGM(L"Logo.mp3", g_fSound / 2);
 }
 
 void Logo::Release()
 {
 	UIManager::Get_Instance()->Delete_Objects(UI_BUTTON);
+	SoundManager::Get_Instance()->StopAll();
 }
 
 int Logo::Update()

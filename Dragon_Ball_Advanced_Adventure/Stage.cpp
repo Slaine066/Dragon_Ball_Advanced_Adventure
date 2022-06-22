@@ -42,7 +42,7 @@ void Stage::Initialize()
 	UIManager::Get_Instance()->Add_Object(UI_COMBO_COUNTER, AbstractFactory<ComboCounter>::Create(700, 200));
 	UIManager::Get_Instance()->Initialize();
 
-	SoundManager::Get_Instance()->PlaySound(L"Stage.mp3", CHANNEL_BGM, g_fSound);
+	SoundManager::Get_Instance()->PlayBGM(L"Stage.mp3", g_fSound / 2);
 }
 
 void Stage::Release()
@@ -69,17 +69,19 @@ void Stage::Late_Update()
 	UIManager::Get_Instance()->Late_Update();
 
 	// If End Stage reached: Go To Boss Stage
-	if (ObjManager::Get_Instance()->Get_Player().front()->Get_Info().fX >= 4500)
+	if (!ObjManager::Get_Instance()->Get_Player().empty())
 	{
-		Player* pPlayer = static_cast<Player*>(ObjManager::Get_Instance()->Get_Player().front());
-		SceneManager::Get_Instance()->Set_Player(pPlayer);
-		SceneManager::Get_Instance()->Change_Scene(SCENE_BOSS_STAGE);
+		if (ObjManager::Get_Instance()->Get_Player().front()->Get_Info().fX >= 4600)
+		{
+			Player* pPlayer = static_cast<Player*>(ObjManager::Get_Instance()->Get_Player().front());
+			SceneManager::Get_Instance()->Set_Player(pPlayer);
+			SceneManager::Get_Instance()->Change_Scene(SCENE_BOSS_STAGE);
+		}
 	}
 }
 
 void Stage::Render(HDC hDC)
 {
-	// TODO: Fix Image Resolution
 	HDC	hGroundDC = BmpManager::Get_Instance()->Find_Bmp(L"Background");
 	BitBlt(hDC, 0, 0, WINCX, WINCY, hGroundDC, 0, 0, SRCCOPY);
 

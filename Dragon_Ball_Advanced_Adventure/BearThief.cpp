@@ -32,6 +32,7 @@ void BearThief::Initialize()
 	m_tStats.iHealthMax = 500.f;
 	m_tStats.iHealth = m_tStats.iHealthMax;
 	m_tStats.iDamage = 15.f;
+	m_tStats.iDamageOffset = 3.f;
 
 	m_fSpeed = 1.f;
 
@@ -265,12 +266,19 @@ void BearThief::Reset_Animation()
 	}
 }
 
+void BearThief::Sound_On_Animation()
+{
+}
+
 void BearThief::Find_Target()
 {
 	if (m_bDead)
 		return;
 
-	Obj* pPlayer = ObjManager::Get_Instance()->Get_Player().front();
+	Obj* pPlayer = nullptr;
+	if (!ObjManager::Get_Instance()->Get_Player().empty())
+		pPlayer = ObjManager::Get_Instance()->Get_Player().front();
+
 	if (pPlayer)
 	{
 		m_pTarget = pPlayer;

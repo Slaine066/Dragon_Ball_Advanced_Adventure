@@ -43,7 +43,8 @@ void EnergyBar::Initialize()
 
 	m_eObjId = OBJ_PLAYER;
 
-	m_iCurrentEnergy = static_cast<Character*>(ObjManager::Get_Instance()->Get_Player().front())->Get_Stats().iEnergy;
+	if (!ObjManager::Get_Instance()->Get_Player().empty())
+		m_iCurrentEnergy = static_cast<Character*>(ObjManager::Get_Instance()->Get_Player().front())->Get_Stats().iEnergy;
 
 	m_pFrameKey = L"Energy_Bar";
 
@@ -73,26 +74,32 @@ void EnergyBar::Render(HDC hDC)
 	// Test Rectangle
 	//Rectangle(hDC, m_tRect.left, m_tRect.top, m_tRect.right, m_tRect.bottom);
 
-	HBRUSH myBrush = nullptr;
-	HBRUSH oldBrush = nullptr;
+	{
+		// Background Bar
+		HBRUSH myBrush = (HBRUSH)CreateSolidBrush(RGB(0, 0, 0));
+		HBRUSH oldBrush = (HBRUSH)SelectObject(hDC, myBrush);
+		Rectangle(hDC, m_tBackgroundBar.left, m_tBackgroundBar.top, m_tBackgroundBar.right, m_tBackgroundBar.bottom);
+		SelectObject(hDC, oldBrush);
+		DeleteObject(myBrush);
+	}
 
-	// Background Bar
-	myBrush = (HBRUSH)CreateSolidBrush(RGB(0, 0, 0));
-	oldBrush = (HBRUSH)SelectObject(hDC, myBrush);
-	Rectangle(hDC, m_tBackgroundBar.left, m_tBackgroundBar.top, m_tBackgroundBar.right, m_tBackgroundBar.bottom);
+	{
+		// Energy Bar
+		HBRUSH myBrush = (HBRUSH)CreateSolidBrush(RGB(248, 248, 0));
+		HBRUSH oldBrush = (HBRUSH)SelectObject(hDC, myBrush);
+		Rectangle(hDC, m_tEnergyBar.left, m_tEnergyBar.top, m_tEnergyBar.right, m_tEnergyBar.bottom);
+		SelectObject(hDC, oldBrush);
+		DeleteObject(myBrush);
+	}
 
-	// Energy Bar
-	myBrush = (HBRUSH)CreateSolidBrush(RGB(248, 248, 0));
-	oldBrush = (HBRUSH)SelectObject(hDC, myBrush);
-	Rectangle(hDC, m_tEnergyBar.left, m_tEnergyBar.top, m_tEnergyBar.right, m_tEnergyBar.bottom);
-
-	// Loading Bar
-	myBrush = (HBRUSH)CreateSolidBrush(RGB(176, 22, 42));
-	oldBrush = (HBRUSH)SelectObject(hDC, myBrush);
-	Rectangle(hDC, m_tChargingBar.left, m_tChargingBar.top, m_tChargingBar.right, m_tChargingBar.bottom);
-
-	SelectObject(hDC, oldBrush);
-	DeleteObject(myBrush);
+	{
+		// Loading Bar
+		HBRUSH myBrush = (HBRUSH)CreateSolidBrush(RGB(176, 22, 42));
+		HBRUSH oldBrush = (HBRUSH)SelectObject(hDC, myBrush);
+		Rectangle(hDC, m_tChargingBar.left, m_tChargingBar.top, m_tChargingBar.right, m_tChargingBar.bottom);
+		SelectObject(hDC, oldBrush);
+		DeleteObject(myBrush);
+	}
 
 	GdiTransparentBlt(hDC, m_tRect.left, m_tRect.top, m_tInfo.fCX, m_tInfo.fCY, hMemDC, 0, 0, m_tInfo.fCX, m_tInfo.fCY, RGB(248, 248, 0));
 }
@@ -100,14 +107,16 @@ void EnergyBar::Render(HDC hDC)
 void EnergyBar::Update_Bars()
 {
 	// ENERGY
-	m_iCurrentEnergy = static_cast<Character*>(ObjManager::Get_Instance()->Get_Player().front())->Get_Stats().iEnergy;
+	if (!ObjManager::Get_Instance()->Get_Player().empty())
+		m_iCurrentEnergy = static_cast<Character*>(ObjManager::Get_Instance()->Get_Player().front())->Get_Stats().iEnergy;
 	if (m_iCurrentEnergy > 0 && m_iCurrentEnergy < 100)
 		m_tEnergyBar.right = 60.f + (m_fBarLength * m_iCurrentEnergy / 100.f); // Reload the Energy Bar
 	else if (m_iCurrentEnergy <= 0)
 		m_tEnergyBar.right = 60.f; // Empty the Energy Bar
 
 	// CHARGING
-	m_iCurrentCharge = static_cast<Character*>(ObjManager::Get_Instance()->Get_Player().front())->Get_Stats().iCharge;
+	if (!ObjManager::Get_Instance()->Get_Player().empty())
+		m_iCurrentCharge = static_cast<Character*>(ObjManager::Get_Instance()->Get_Player().front())->Get_Stats().iCharge;
 	if (m_iCurrentCharge > 0 && m_iCurrentCharge <= 100)
 		m_tChargingBar.right = 60.f + (m_fBarLength * m_iCurrentCharge / 100.f); // Reload the Charge Bar
 	else if (m_iCurrentCharge <= 0)

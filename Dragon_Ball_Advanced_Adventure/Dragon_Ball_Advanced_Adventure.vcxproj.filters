@@ -289,7 +289,7 @@
       <Filter>01. Obj\014. UI\0144. Combo Counter</Filter>
     </ClInclude>
     <ClInclude Include="BossHealthBar.h">
-      <Filter>Header Files</Filter>
+      <Filter>01. Obj\014. UI\0142. Health Bar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -399,7 +399,7 @@
       <Filter>01. Obj\014. UI\0144. Combo Counter</Filter>
     </ClCompile>
     <ClCompile Include="BossHealthBar.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01. Obj\014. UI\0142. Health Bar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

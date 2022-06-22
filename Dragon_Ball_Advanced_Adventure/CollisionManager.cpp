@@ -8,9 +8,16 @@
 #include "Kamehameha.h"
 #include "Enemy.h"
 #include "Player.h"
+#include "SoundManager.h"
+#include "stdafx.h"
+
+extern float g_fSound;
+
+
 
 CollisionManager::CollisionManager()
 {
+	srand(time(NULL));
 }
 
 CollisionManager::~CollisionManager()
@@ -43,8 +50,10 @@ void CollisionManager::Collision_Rect(list<Obj*> _Colliders, list<Obj*> _Collide
 						if (!pCollidedCharacter)
 							return;
 
+						int iDamage = pCharacter->Calculate_Damage();
+
 						// Subtract Health
-						pCollidedCharacter->Set_Health(pCharacter->Get_Stats().iDamage); 
+						pCollidedCharacter->Set_Health(iDamage);
 						pCharacter->Set_MotionAlreadyDamaged(true);
 
 						// If Collider is Player* - Increase Combo Counter
@@ -59,15 +68,21 @@ void CollisionManager::Collision_Rect(list<Obj*> _Colliders, list<Obj*> _Collide
 						DamageNumbers* pDamageNumber = new DamageNumbers();
 						pDamageNumber->Initialize();
 						pDamageNumber->Set_Position(pCollidedCharacter->Get_Info().fX, pCollidedCharacter->Get_Info().fY - (pCollidedCharacter->Get_FrameInfoRender().fCY / 2));
-						pDamageNumber->Set_Number(pCharacter->Get_Stats().iDamage);
+						pDamageNumber->Set_Number(iDamage);
 						UIManager::Get_Instance()->Add_Object(UI_DAMAGE_NUMBERS, pDamageNumber);
 
 						// If Health <= 0:	Die
 						// If Health > 0:	Hit
 						if (pCollidedCharacter->Get_Stats().iHealth <= 0)
+						{
 							pCollidedCharacter->Set_Dead();
+							SoundManager::Get_Instance()->PlaySound(L"Hit_Dead.wav", CHANNEL_EFFECT, g_fSound / 2);
+						}
 						else
+						{
 							pCollidedCharacter->Set_IsHit();
+							SoundManager::Get_Instance()->PlaySound(L"Hit_1.wav", CHANNEL_EFFECT, g_fSound / 2);
+						}
 					}
 				}
 			}
@@ -104,8 +119,9 @@ void CollisionManager::Collision_Projectile(list<Obj*> _Colliders, list<Obj*> _C
 
 						if (pProjectile->Get_CanDamage())
 						{
+							int iDamage = pColliderOwner->Calculate_Damage(pKamehameha);
 							// Subtract Health
-							pCollided->Set_Health(pKamehameha ? pColliderOwner->Get_Stats().iSpecialDamage : pColliderOwner->Get_Stats().iDamage);
+							pCollided->Set_Health(iDamage);
 
 							// If Collider is Player* - Increase Combo Counter
 							Player* pPlayer = dynamic_cast<Player*>(pColliderOwner);
@@ -119,15 +135,21 @@ void CollisionManager::Collision_Projectile(list<Obj*> _Colliders, list<Obj*> _C
 							DamageNumbers* pDamageNumber = new DamageNumbers();
 							pDamageNumber->Initialize();
 							pDamageNumber->Set_Position(pCollided->Get_Info().fX, pCollided->Get_Info().fY - (pCollided->Get_FrameInfoRender().fCY / 2));
-							pDamageNumber->Set_Number(pKamehameha ? pColliderOwner->Get_Stats().iSpecialDamage : pColliderOwner->Get_Stats().iDamage);
+							pDamageNumber->Set_Number(iDamage);
 							UIManager::Get_Instance()->Add_Object(UI_DAMAGE_NUMBERS, pDamageNumber);
 
 							// If Health <= 0:	Die
 							// If Health > 0:	Hit
 							if (pCollided->Get_Stats().iHealth <= 0)
+							{
 								pCollided->Set_Dead();
+								SoundManager::Get_Instance()->PlaySound(L"Hit_Dead.wav", CHANNEL_EFFECT, g_fSound / 2);
+							}
 							else
+							{
 								pCollided->Set_IsHit();
+								SoundManager::Get_Instance()->PlaySound(L"Hit_1.wav", CHANNEL_EFFECT, g_fSound / 2);
+							}
 						}
 
 						// If Collider is Kamehameha do NOT destroy Projectile

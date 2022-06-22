@@ -20,6 +20,8 @@ public:
 
 private:
 	bool m_bShouldBlink;
+	bool m_bShouldChange;
 	DWORD m_dwTime;
+	DWORD m_dwSoundTime;
 	bool m_bIsVisible;
 };

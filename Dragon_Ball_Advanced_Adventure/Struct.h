@@ -18,12 +18,10 @@ typedef struct tagFrame
 {
 	int iFrameStart;
 	int	iFrameEnd;
-
 	int iDamageNotifyStart;
 	int iDamageNotifyEnd;
-
+	int iSoundNotifyStart;
 	int	iMotion;
-
 	DWORD dwFrameSpeed;
 	DWORD dwFrameTime;
 } FRAME;
@@ -37,4 +35,5 @@ typedef struct tagStats
 	int iCharge;
 	int iDamage;
 	int iSpecialDamage;
+	int iDamageOffset;
 } STATS;

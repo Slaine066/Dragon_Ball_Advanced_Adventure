@@ -62,12 +62,17 @@ int ComboCounter::Update()
 
 void ComboCounter::Late_Update()
 {
-	Player* pPlayer = static_cast<Player*>(ObjManager::Get_Instance()->Get_Player().front());
-	m_iComboCounter = pPlayer->Get_ComboCounter();
+	Player* pPlayer = nullptr;
+	if (!ObjManager::Get_Instance()->Get_Player().empty())
+		pPlayer = static_cast<Player*>(ObjManager::Get_Instance()->Get_Player().front());
 
-	m_Numbers.clear();
-	if (m_iComboCounter != 0)
-		Get_Digit(m_iComboCounter); // Populate Vector
+	if (pPlayer)
+	{
+		m_iComboCounter = pPlayer->Get_ComboCounter();
+		m_Numbers.clear();
+		if (m_iComboCounter != 0)
+			Get_Digit(m_iComboCounter); // Populate Vector
+	}
 }
 
 void ComboCounter::Render(HDC hDC)

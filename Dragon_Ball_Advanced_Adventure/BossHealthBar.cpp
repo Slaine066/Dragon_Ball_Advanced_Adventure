@@ -72,26 +72,32 @@ void BossHealthBar::Render(HDC hDC)
 	// Test Rectangle
 	//Rectangle(hDC, m_tRect.left, m_tRect.top, m_tRect.right, m_tRect.bottom);
 
-	HBRUSH myBrush = nullptr;
-	HBRUSH oldBrush = nullptr;
-
-	// Background Bar
-	myBrush = (HBRUSH)CreateSolidBrush(RGB(48, 104, 164));
-	oldBrush = (HBRUSH)SelectObject(hDC, myBrush);
-	Rectangle(hDC, m_tBackgroundBar.left, m_tBackgroundBar.top, m_tBackgroundBar.right, m_tBackgroundBar.bottom);
-
-	// First Bar
-	myBrush = (HBRUSH)CreateSolidBrush(RGB(245, 32, 59));
-	oldBrush = (HBRUSH)SelectObject(hDC, myBrush);
-	Rectangle(hDC, m_tBarInfoFirst.left, m_tBarInfoFirst.top, m_tBarInfoFirst.right, m_tBarInfoFirst.bottom);
-
-	// Second Bar
-	myBrush = (HBRUSH)CreateSolidBrush(RGB(247, 142, 1));
-	oldBrush = (HBRUSH)SelectObject(hDC, myBrush);
-	Rectangle(hDC, m_tBarInfoSecond.left, m_tBarInfoSecond.top, m_tBarInfoSecond.right, m_tBarInfoSecond.bottom);
-
-	SelectObject(hDC, oldBrush);
-	DeleteObject(myBrush);
+	{
+		// Background Bar
+		HBRUSH myBrush = (HBRUSH)CreateSolidBrush(RGB(48, 104, 164));
+		HBRUSH oldBrush = (HBRUSH)SelectObject(hDC, myBrush);
+		Rectangle(hDC, m_tBackgroundBar.left, m_tBackgroundBar.top, m_tBackgroundBar.right, m_tBackgroundBar.bottom);
+		SelectObject(hDC, oldBrush);
+		DeleteObject(myBrush);
+	}
+	
+	{
+		// First Bar
+		HBRUSH myBrush = (HBRUSH)CreateSolidBrush(RGB(245, 32, 59));
+		HBRUSH oldBrush = (HBRUSH)SelectObject(hDC, myBrush);
+		Rectangle(hDC, m_tBarInfoFirst.left, m_tBarInfoFirst.top, m_tBarInfoFirst.right, m_tBarInfoFirst.bottom);
+		SelectObject(hDC, oldBrush);
+		DeleteObject(myBrush);
+	}
+	
+	{
+		// Second Bar
+		HBRUSH myBrush = (HBRUSH)CreateSolidBrush(RGB(247, 142, 1));
+		HBRUSH oldBrush = (HBRUSH)SelectObject(hDC, myBrush);
+		Rectangle(hDC, m_tBarInfoSecond.left, m_tBarInfoSecond.top, m_tBarInfoSecond.right, m_tBarInfoSecond.bottom);
+		SelectObject(hDC, oldBrush);
+		DeleteObject(myBrush);
+	}
 
 	GdiTransparentBlt(hDC, m_tRect.left, m_tRect.top, m_tInfo.fCX, m_tInfo.fCY, hMemDC, 0, 0, m_tInfo.fCX, m_tInfo.fCY, RGB(103, 184, 208));
 }

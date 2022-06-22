@@ -40,6 +40,7 @@ private:
 	int Get_ColSize() override;
 	void Can_Damage() override;
 	void Reset_Animation() override;
+	void Sound_On_Animation() override;
 	
 	// Enemy Overrides
 	void Find_Target() override;

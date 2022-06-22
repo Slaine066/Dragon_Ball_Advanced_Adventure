@@ -5,10 +5,11 @@
 class Character abstract : public Obj
 {
 public:
-	Character() : m_bIsAttacking(false), m_bCanDamage(false), m_bMotionAlreadyDamaged(false), m_bIsHit(false)
+	Character() : m_bIsAttacking(false), m_bCanDamage(false), m_bMotionAlreadyDamaged(false), m_bIsHit(false), m_bCanPlaySound(false)
 	{ 
 		ZeroMemory(&m_tStats, sizeof(m_tStats)); 
 		ZeroMemory(&m_tCollisionRect, sizeof(m_tCollisionRect));
+		srand(time(NULL));
 	};
 	virtual ~Character() {};
 
@@ -24,6 +25,16 @@ public:
 	void Set_MotionAlreadyDamaged(bool bAlreadyDamaged) { m_bMotionAlreadyDamaged = bAlreadyDamaged; }
 	void Set_IsHit(bool bIsHit = true) { m_bIsHit = bIsHit; }
 
+	int Calculate_Damage(bool bSpecial = false)
+	{
+		bool bAddSub = rand() % 2;
+		
+		if (bAddSub)
+			return (bSpecial ? m_tStats.iSpecialDamage : m_tStats.iDamage) + (rand() % m_tStats.iDamageOffset + 1);
+		else
+			return (bSpecial ? m_tStats.iSpecialDamage : m_tStats.iDamage) - (rand() % m_tStats.iDamageOffset + 1);
+	}
+
 	void Update_Collision_Rect(int iColRectStart, int iColRectSize)
 	{
 		m_tCollisionRect.left = m_eDir == DIR_RIGHT ? m_tInfo.fX + iColRectStart : m_tInfo.fX - iColRectStart - iColRectSize;
@@ -38,6 +49,7 @@ protected:
 	virtual int Get_ColSize() PURE;
 	virtual void Can_Damage() PURE;
 	virtual void Reset_Animation() PURE;
+	virtual void Sound_On_Animation() PURE;
 
 	STATS m_tStats;
 	RECT m_tCollisionRect;
@@ -46,4 +58,5 @@ protected:
 	bool m_bCanDamage;
 	bool m_bMotionAlreadyDamaged;
 	bool m_bIsHit;
+	bool m_bCanPlaySound;
 };

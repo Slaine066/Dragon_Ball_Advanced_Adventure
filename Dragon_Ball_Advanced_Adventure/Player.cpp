@@ -45,6 +45,7 @@ void Player::Initialize()
 	m_tStats.iEnergy = m_tStats.iEnergyMax;
 	m_tStats.iDamage = 10.f;
 	m_tStats.iSpecialDamage = 20.f;
+	m_tStats.iDamageOffset = 3;
 
 	// Speeds
 	m_fSpeed = 3.f;
@@ -80,7 +81,7 @@ int Player::Update()
 	Jump();
 	Reload_Energy();
 	Reset_Combo_Counter();
-
+	
 	Update_Rect();
 	Update_Collision_Rect(10, Get_ColSize());
 
@@ -92,6 +93,7 @@ void Player::Late_Update()
 	Check_Combo();
 	Change_Motion();
 	Change_Frame();
+	Sound_On_Animation();
 	Reset_Animation();
 }
 
@@ -126,7 +128,7 @@ void Player::Key_Input()
 	else if (KeyManager::Get_Instance()->Key_Pressing(VK_RIGHT) && !m_bIsAttacking && !m_bIsHit  && m_eCurState != CHARGING && m_eCurState != ATTACK_SPECIAL)
 		Move(true);
 		// NO Input - Idle
-	else if (!m_bIsJumping && !m_bIsAttacking && !m_bIsHit && m_eCurState != CHARGING && m_eCurState != ATTACK_SPECIAL)
+	else if (!m_bIsJumping && !m_bIsAttacking && !m_bIsHit && m_eCurState != CHARGING && m_eCurState != ATTACK_SPECIAL && !m_bDead && m_eCurState != DEAD)
 		m_eCurState = IDLE;
 		
 
@@ -177,23 +179,25 @@ void Player::Offset()
 
 	if (iOffsetMaxY < m_tInfo.fY + iScrollY)
 		ScrollManager::Get_Instance()->Set_ScrollY(-m_fSpeed);
+
+	
 }
 
 void Player::Gravity()
 {
-	if (!m_bDead)
+	if (m_bDead || m_eCurState == DEAD)
+		return;
+
+	bool bFloor = false;
+	float fTargetY = 0.f;
+
+	if (m_eCurState != JUMP && m_eCurState != FALL)
+		bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfoRender.fCY / 2) - 12, &fTargetY);
+
+	if (bFloor && !m_bIsJumping && !m_bIsAttacking && !m_bIsHit && m_eCurState != CHARGING)
 	{
-		bool bFloor = false;
-		float fTargetY = 0.f;
-
-		if (m_eCurState != JUMP && m_eCurState != FALL)
-			bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfoRender.fCY / 2) - 12, &fTargetY);
-
-		if (bFloor && !m_bIsJumping && !m_bIsAttacking && !m_bIsHit && m_eCurState != CHARGING)
-		{
-			m_eCurState = IDLE;
-			m_tInfo.fY = fTargetY;
-		}
+		m_eCurState = IDLE;
+		m_tInfo.fY = fTargetY;
 	}
 }
 
@@ -211,6 +215,9 @@ void Player::Move(bool bIsRight)
 
 void Player::Jump()
 {
+	if (m_bDead || m_eCurState == DEAD)
+		return;
+
 	bool bFloor = false;
 	float fTargetY = 0.f;
 
@@ -286,9 +293,6 @@ void Player::Attack_Special()
 		// Spawn Projectile
 		float fOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX / 2 : -m_tInfo.fCX / 2;
 		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<Kamehameha>::Create(m_tInfo.fX + fOffset, m_tInfo.fY + 4, m_eDir, m_eObjId, this));
-
-		SoundManager::Get_Instance()->StopSound(CHANNEL_EFFECT);
-		SoundManager::Get_Instance()->PlaySound(L"Kamehameha.wav", CHANNEL_EFFECT, g_fSound);
 	}
 	else
 		m_eCurState = IDLE;
@@ -300,7 +304,7 @@ void Player::Reload_Energy()
 {
 	if (m_tStats.iEnergy < 100)
 	{
-		if (GetTickCount() > m_dwEnergyReloadTime + 200)
+		if (GetTickCount() > m_dwEnergyReloadTime + 50)
 		{
 			m_tStats.iEnergy += 2;
 			m_dwEnergyReloadTime = GetTickCount();
@@ -414,6 +418,7 @@ void Player::Change_Motion()
 			m_tFrame.iMotion = 4;
 			m_tFrame.dwFrameSpeed = 50;
 			m_tFrame.dwFrameTime = GetTickCount();
+			m_bCanPlaySound = true;
 			break;
 		case ATTACK_2:
 			m_tFrame.iFrameStart = 0;
@@ -432,6 +437,7 @@ void Player::Change_Motion()
 			m_tFrame.iMotion = 6;
 			m_tFrame.dwFrameSpeed = 50;
 			m_tFrame.dwFrameTime = GetTickCount();
+			m_bCanPlaySound = true;
 			break;
 		case ATTACK_4:
 			m_tFrame.iFrameStart = 0;
@@ -441,6 +447,7 @@ void Player::Change_Motion()
 			m_tFrame.iMotion = 7;
 			m_tFrame.dwFrameSpeed = 50;
 			m_tFrame.dwFrameTime = GetTickCount();
+			m_bCanPlaySound = true;
 			break;
 		case ATTACK_5:
 			m_tFrame.iFrameStart = 0;
@@ -471,6 +478,7 @@ void Player::Change_Motion()
 			m_tFrame.iMotion = 13;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			m_bCanPlaySound = true;
 			break;
 		case HIT:
 			m_tFrame.iFrameStart = 0;
@@ -478,6 +486,7 @@ void Player::Change_Motion()
 			m_tFrame.iMotion = 10;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			m_bCanPlaySound = true;
 			break;
 		case DEAD:
 			m_tFrame.iFrameStart = 0;
@@ -485,6 +494,7 @@ void Player::Change_Motion()
 			m_tFrame.iMotion = 11;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			m_bCanPlaySound = true;
 		}
 
 		m_ePreState = m_eCurState;
@@ -532,12 +542,23 @@ void Player::Change_Frame()
 
 bool Player::Die()
 {
-	if (m_eCurState == DEAD && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed + 1000)
-		return true;
-	else if (m_bDead && m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
-		m_eCurState = DEAD;
-	else if (m_bDead)
-		m_bIsHit = true;
+	float fY = ScrollManager::Get_Instance()->Get_ScrollY();
+	if (m_tInfo.fY > WINCY + abs(fY))
+	{
+		if (m_eCurState == DEAD && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed + 1000)
+			return true;
+		else
+			m_eCurState = DEAD;
+	}
+	else
+	{
+		if (m_eCurState == DEAD && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed + 1000)
+			return true;
+		else if (m_bDead && m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+			m_eCurState = DEAD;
+		else if (m_bDead)
+			m_bIsHit = true;
+	}
 
 	return false;
 }
@@ -579,4 +600,60 @@ void Player::Reset_Animation()
 	// Reset HIT
 	if (m_eCurState == HIT && m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
 		m_bIsHit = false;
+
+}
+
+void Player::Sound_On_Animation()
+{
+	switch (m_eCurState)
+	{
+	case JUMP:
+		break;
+	case FALL:
+		break;
+	case ATTACK_1:
+		if (m_tFrame.iFrameStart == m_tFrame.iSoundNotifyStart && m_bCanPlaySound)
+		{
+			SoundManager::Get_Instance()->PlaySound(L"Goku_Attack_1.wav", CHANNEL_VOICE, g_fSound);
+			m_bCanPlaySound = false;
+		}
+		break;
+	case ATTACK_3:
+		if (m_tFrame.iFrameStart == m_tFrame.iSoundNotifyStart && m_bCanPlaySound)
+		{
+			SoundManager::Get_Instance()->PlaySound(L"Goku_Attack_2.wav", CHANNEL_VOICE, g_fSound);
+			m_bCanPlaySound = false;
+		}
+		break;
+	case ATTACK_4:
+		if (m_tFrame.iFrameStart == m_tFrame.iSoundNotifyStart && m_bCanPlaySound)
+		{
+			SoundManager::Get_Instance()->PlaySound(L"Goku_Attack_3.wav", CHANNEL_VOICE, g_fSound);
+			m_bCanPlaySound = false;
+		}
+		break;
+	case CHARGING:
+		break;
+	case ATTACK_SPECIAL:
+		if (m_tFrame.iFrameStart == m_tFrame.iSoundNotifyStart && m_bCanPlaySound)
+		{
+			SoundManager::Get_Instance()->PlaySound(L"Kamehameha.wav", CHANNEL_VOICE, g_fSound);
+			m_bCanPlaySound = false;
+		}
+		break;
+	case HIT:
+		if (m_tFrame.iFrameStart == m_tFrame.iSoundNotifyStart && m_bCanPlaySound)
+		{
+			SoundManager::Get_Instance()->PlaySound(L"Goku_Hit.wav", CHANNEL_VOICE, g_fSound);
+			m_bCanPlaySound = false;
+		}
+		break;
+	case DEAD:
+		if (m_tFrame.iFrameStart == m_tFrame.iSoundNotifyStart && m_bCanPlaySound)
+		{
+			SoundManager::Get_Instance()->PlaySound(L"Goku_Dead.wav", CHANNEL_VOICE, g_fSound);
+			m_bCanPlaySound = false;
+		}
+		break;
+	}
 }

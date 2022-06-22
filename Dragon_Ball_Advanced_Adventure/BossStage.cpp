@@ -12,8 +12,11 @@
 #include "ScrollManager.h"
 #include "BearThief.h"
 #include "BossHealthBar.h"
+#include "SoundManager.h"
 
-BossStage::BossStage() : m_bStageClear(false)
+extern float g_fSound;
+
+BossStage::BossStage(): m_bStageClear(false)
 {
 }
 
@@ -33,7 +36,10 @@ void BossStage::Initialize()
 	Player* pPlayer = SceneManager::Get_Instance()->Get_Player();
 	ObjManager::Get_Instance()->Add_Object(OBJ_PLAYER, AbstractFactory<Player>::Create(0, 0));
 
-	Character* pCharacter = dynamic_cast<Character*>(ObjManager::Get_Instance()->Get_Player().front());
+	Character* pCharacter = nullptr;
+	if (pPlayer)
+		pCharacter = dynamic_cast<Character*>(ObjManager::Get_Instance()->Get_Player().front());
+
 	if (pCharacter && pPlayer)
 		pCharacter->Set_Health(100 - pPlayer->Get_Stats().iHealth);
 
@@ -46,6 +52,8 @@ void BossStage::Initialize()
 	UIManager::Get_Instance()->Add_Object(UI_COMBO_COUNTER, AbstractFactory<ComboCounter>::Create(700, 200));
 	UIManager::Get_Instance()->Add_Object(UI_HEALTH_BAR, AbstractFactory<BossHealthBar>::Create(650, 55));
 	UIManager::Get_Instance()->Initialize();
+
+	SoundManager::Get_Instance()->PlayBGM(L"Stage_Boss.mp3", g_fSound / 2);
 }
 
 void BossStage::Release()
@@ -70,8 +78,13 @@ void BossStage::Late_Update()
 	UIManager::Get_Instance()->Late_Update();
 	ScrollManager::Get_Instance()->Reset_Scroll();
 
-	//if (m_bStageClear)
-		// TODO: Show Stage Clear
+	if (ObjManager::Get_Instance()->Get_Enemies().front()->Get_Dead() && !m_bStageClear)
+	{
+		// TODO: Show "Stage Clear"
+		SoundManager::Get_Instance()->StopSound(CHANNEL_BGM);
+		SoundManager::Get_Instance()->PlaySound(L"Stage_Clear.mp3", CHANNEL_SYSTEM, g_fSound / 2);
+		m_bStageClear = true;
+	}
 }
 
 void BossStage::Render(HDC hDC)
