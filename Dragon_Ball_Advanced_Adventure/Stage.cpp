@@ -19,7 +19,7 @@
 
 extern float g_fSound;
 
-Stage::Stage()
+Stage::Stage() : m_dwGoTime(GetTickCount()), m_bShowGo(true)
 {
 }
 
@@ -31,6 +31,7 @@ Stage::~Stage()
 void Stage::Initialize()
 {
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Background.bmp", L"Background");
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Go.bmp", L"Go");
 
 	TileManager::Get_Instance()->Load_Tile();
 	
@@ -69,6 +70,9 @@ void Stage::Late_Update()
 	ObjManager::Get_Instance()->Late_Update();
 	UIManager::Get_Instance()->Late_Update();
 
+	if (GetTickCount() > m_dwGoTime + 1500)
+		m_bShowGo = false;
+
 	// If End Stage reached: Go To Boss Stage
 	if (!ObjManager::Get_Instance()->Get_Player().empty())
 	{
@@ -89,4 +93,13 @@ void Stage::Render(HDC hDC)
 	TileManager::Get_Instance()->Render(hDC);
 	ObjManager::Get_Instance()->Render(hDC);
 	UIManager::Get_Instance()->Render(hDC);
+
+	if (m_bShowGo)
+	{
+		HDC	hMemDC = BmpManager::Get_Instance()->Find_Bmp(L"Go");
+
+		GdiTransparentBlt(
+			hDC, 400 - 320 / 4, 200 - 177 / 4, 320 / 2, 177 / 2,
+			hMemDC, 0, 0, 320, 177, RGB(132, 0, 132));
+	}
 }

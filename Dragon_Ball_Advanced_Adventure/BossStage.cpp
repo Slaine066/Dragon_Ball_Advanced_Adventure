@@ -28,6 +28,7 @@ BossStage::~BossStage()
 void BossStage::Initialize()
 {
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Background.bmp", L"Background");
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Stage_Clear.bmp", L"Stage_Clear");
 
 	TileManager::Get_Instance()->Set_BossStage();
 	TileManager::Get_Instance()->Load_Tile();
@@ -80,7 +81,6 @@ void BossStage::Late_Update()
 
 	if (ObjManager::Get_Instance()->Get_Enemies().front()->Get_Dead() && !m_bStageClear)
 	{
-		// TODO: Show "Stage Clear"
 		SoundManager::Get_Instance()->StopSound(CHANNEL_BGM);
 		SoundManager::Get_Instance()->PlaySound(L"Stage_Clear.mp3", CHANNEL_SYSTEM, g_fSound / 2);
 		m_bStageClear = true;
@@ -95,4 +95,12 @@ void BossStage::Render(HDC hDC)
 	TileManager::Get_Instance()->Render(hDC);
 	ObjManager::Get_Instance()->Render(hDC);
 	UIManager::Get_Instance()->Render(hDC);
+
+	if (m_bStageClear)
+	{
+		HDC	hMemDC = BmpManager::Get_Instance()->Find_Bmp(L"Stage_Clear");
+		GdiTransparentBlt(
+			hDC, 400 - 797 / 4, 200 - 163 / 4, 797 / 2, 163 / 2,
+			hMemDC, 0, 0, 797, 163, RGB(132, 0, 132));
+	}
 }

@@ -16,4 +16,8 @@ public:
 	int Update() override;
 	void Late_Update() override;
 	void Render(HDC hDC) override;
+
+private:
+	DWORD m_dwGoTime;
+	bool m_bShowGo;
 };
