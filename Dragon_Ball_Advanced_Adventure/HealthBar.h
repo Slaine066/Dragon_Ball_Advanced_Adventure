@@ -23,6 +23,7 @@ private:
 	RECT m_tBarInfoSecond;
 	float m_fBarLength;
 	int m_iCurrentHealth;
+	int m_iMaxHealth;
 
 	void Update_Bars();
 };

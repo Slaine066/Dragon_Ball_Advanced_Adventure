@@ -108,7 +108,7 @@ void BossHealthBar::Update_Bars()
 	m_iCurrentHealth = pBoss->Get_Stats().iHealth;
 	m_iMaxHealth = pBoss->Get_Stats().iHealthMax;
 
-	if (m_iCurrentHealth > 0 && m_iCurrentHealth < m_iMaxHealth)
+	if (m_iCurrentHealth > 0 && m_iCurrentHealth <= m_iMaxHealth)
 	{
 		// Reduce Orange Bar
 		if (m_iCurrentHealth > m_iMaxHealth / 2)

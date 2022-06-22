@@ -9,7 +9,7 @@
 #include "Enemy.h"
 #include "Player.h"
 #include "SoundManager.h"
-#include "stdafx.h"
+#include "Item.h"
 
 extern float g_fSound;
 
@@ -24,7 +24,7 @@ CollisionManager::~CollisionManager()
 {
 }
 
-void CollisionManager::Collision_Rect(list<Obj*> _Colliders, list<Obj*> _Collided)
+void CollisionManager::Collision_Damage(list<Obj*> _Colliders, list<Obj*> _Collided)
 {
 	RECT Rect{};
 
@@ -85,6 +85,30 @@ void CollisionManager::Collision_Rect(list<Obj*> _Colliders, list<Obj*> _Collide
 						}
 					}
 				}
+			}
+		}
+	}
+}
+
+void CollisionManager::Collision_Item(list<Obj*> _Colliders, list<Obj*> _Collided)
+{
+	RECT Rect{};
+
+	for (auto& Collider : _Colliders)
+	{
+		Character* pCharacter = dynamic_cast<Character*>(Collider);
+		if (!pCharacter) return;
+
+		for (auto& Collided : _Collided)
+		{
+			if (IntersectRect(&Rect, &(pCharacter->Get_CollisionRect()), &(Collided->Get_Rect())))
+			{
+				Item* pItem = dynamic_cast<Item*>(Collided);
+				if (!pItem) return;
+
+				pItem->Item_Effect(pCharacter);
+				pItem->Item_Sound();
+				pItem->Set_Dead();
 			}
 		}
 	}

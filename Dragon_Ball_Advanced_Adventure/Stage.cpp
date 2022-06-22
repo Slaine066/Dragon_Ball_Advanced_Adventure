@@ -15,6 +15,7 @@
 #include "HealthBar.h"
 #include "EnergyBar.h"
 #include "ComboCounter.h"
+#include "Milk.h"
 
 extern float g_fSound;
 

@@ -3,16 +3,39 @@
 #include "Function.h"
 #include "Define.h"
 #include "CollisionManager.h"
+#include "Enemy.h"
+#include "AbstractFactory.h"
+#include "Milk.h"
 
 ObjManager* ObjManager::m_pInstance = nullptr;
 
 ObjManager::ObjManager()
 {
+	srand(time(NULL));
 }
 
 ObjManager::~ObjManager()
 {
 	Release();
+}
+
+void ObjManager::Spawn_Item(Obj* pSource)
+{
+	// TODO: Should Check pSource for droppable Items
+
+	if (!Get_Player().empty())
+	{
+		Player* pPlayer = static_cast<Player*>(Get_Player().front());
+
+		if (pPlayer->Get_Stats().iHealth < pPlayer->Get_Stats().iHealthMax)
+		{
+			Obj* pItem = AbstractFactory<Milk>::Create(pSource->Get_Info().fX, pSource->Get_Info().fY);
+			Item* pMilk = static_cast<Item*>(pItem);
+
+			if ((rand() % 10 + 1) <= pMilk->Get_SpawnRate())
+				Add_Object(OBJ_ITEM, pItem);
+		}
+	}
 }
 
 void ObjManager::Add_Object(OBJID eID, Obj * pObj)
@@ -59,6 +82,11 @@ int ObjManager::Update()
 
 			if (iEvent == OBJ_DEAD)
 			{
+				// If OBJ_DEAD source is an Enemy
+				Enemy* pEnemy = dynamic_cast<Enemy*>(*iter);
+				if (pEnemy)
+					Spawn_Item(pEnemy);
+
 				Safe_Delete(*iter);
 				iter = m_ObjList[i].erase(iter);
 			}
@@ -93,10 +121,11 @@ void ObjManager::Late_Update()
 	}
 
 	// Collision Handling Methods
-	CollisionManager::Collision_Rect(Get_Player(), Get_Enemies()); // Player damages Enemies
-	CollisionManager::Collision_Rect(Get_Enemies(), Get_Player()); // Enemies damage Player
-	CollisionManager::Collision_Projectile(Get_Projectiles(), Get_Player()); // Projectiles damage Player
-	CollisionManager::Collision_Projectile(Get_Projectiles(), Get_Enemies()); // Projectiles damage Enemies
+	CollisionManager::Collision_Damage(Get_Player(), Get_Enemies()); // Player Interects Enemies
+	CollisionManager::Collision_Damage(Get_Enemies(), Get_Player()); // Enemies Interects Player
+	CollisionManager::Collision_Item(Get_Player(), Get_Items()); // Player Intersects Item
+	CollisionManager::Collision_Projectile(Get_Projectiles(), Get_Player()); // Projectiles Interects Player
+	CollisionManager::Collision_Projectile(Get_Projectiles(), Get_Enemies()); // Projectiles Interects Enemies
 }
 
 void ObjManager::Render(HDC hDC)

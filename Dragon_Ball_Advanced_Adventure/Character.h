@@ -21,6 +21,13 @@ public:
 	
 	// Setters
 	void Set_Health(int iDamage) { m_tStats.iHealth -= iDamage; };
+	void Increase_Health(int iAmount) 
+	{ 
+		if ((m_tStats.iHealth + iAmount) > m_tStats.iHealthMax)
+			m_tStats.iHealth = m_tStats.iHealthMax;
+		else
+			m_tStats.iHealth += iAmount;
+	}
 	void Set_IsAttacking(bool bIsAttacking) { m_bIsAttacking = bIsAttacking; }
 	void Set_MotionAlreadyDamaged(bool bAlreadyDamaged) { m_bMotionAlreadyDamaged = bAlreadyDamaged; }
 	void Set_IsHit(bool bIsHit = true) { m_bIsHit = bIsHit; }

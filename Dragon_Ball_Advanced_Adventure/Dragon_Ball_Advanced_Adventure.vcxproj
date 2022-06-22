@@ -167,6 +167,7 @@
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="HealthBar.h" />
+    <ClInclude Include="Milk.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Item.h" />
@@ -210,6 +211,7 @@
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="EnergyBar.cpp" />
     <ClCompile Include="HealthBar.cpp" />
+    <ClCompile Include="Milk.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Kamehameha.cpp" />

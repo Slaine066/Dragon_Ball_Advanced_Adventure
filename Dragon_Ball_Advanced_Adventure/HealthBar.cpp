@@ -5,7 +5,7 @@
 #include "ObjManager.h"
 #include "Character.h"
 
-HealthBar::HealthBar() : m_iCurrentHealth(100), m_fBarLength(0.f)
+HealthBar::HealthBar() : m_iCurrentHealth(100), m_iMaxHealth(100), m_fBarLength(0.f)
 {
 	ZeroMemory(&m_tBackgroundBar, sizeof(m_tBackgroundBar));
 	ZeroMemory(&m_tBarInfoFirst, sizeof(m_tBarInfoFirst));
@@ -110,13 +110,13 @@ void HealthBar::Update_Bars()
 	if (!ObjManager::Get_Instance()->Get_Player().empty())
 		m_iCurrentHealth = static_cast<Character*>(ObjManager::Get_Instance()->Get_Player().front())->Get_Stats().iHealth;
 
-	if (m_iCurrentHealth > 0 && m_iCurrentHealth < 100)
+	if (m_iCurrentHealth > 0 && m_iCurrentHealth <= m_iMaxHealth)
 	{
 		// Reduce Orange Bar
-		if (m_iCurrentHealth > 50)
+		if (m_iCurrentHealth > m_iMaxHealth / 2)
 		{
 			m_tBarInfoSecond.right = 260.f;
-			m_tBarInfoSecond.right = 260.f - (m_fBarLength / (50.f / (100.f - (float)m_iCurrentHealth)));
+			m_tBarInfoSecond.right = 260.f - (m_fBarLength / ((m_iMaxHealth / 2) / (m_iMaxHealth - (float)m_iCurrentHealth)));
 		}
 		// Reduce Red Bar
 		else
@@ -124,7 +124,7 @@ void HealthBar::Update_Bars()
 			m_tBarInfoSecond.right = 80.f; // Empty the Orange Bar
 
 			m_tBarInfoFirst.right = 260.f;
-			m_tBarInfoFirst.right = 260.f - (m_fBarLength / (50.f / (50.f - (float)m_iCurrentHealth)));
+			m_tBarInfoFirst.right = 260.f - (m_fBarLength / ((m_iMaxHealth / 2) / ((m_iMaxHealth / 2) - (float)m_iCurrentHealth)));
 		}
 	}
 	else if (m_iCurrentHealth <= 0)
