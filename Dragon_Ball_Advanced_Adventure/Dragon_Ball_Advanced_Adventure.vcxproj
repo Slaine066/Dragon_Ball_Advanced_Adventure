@@ -151,6 +151,7 @@
     <ClInclude Include="BmpManager.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="BearThiefSpecialAttack.h" />
+    <ClInclude Include="BossHealthBar.h" />
     <ClInclude Include="BossStage.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Button.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="Bmp.cpp" />
     <ClCompile Include="BmpManager.cpp" />
     <ClCompile Include="BearThiefSpecialAttack.cpp" />
+    <ClCompile Include="BossHealthBar.cpp" />
     <ClCompile Include="BossStage.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />

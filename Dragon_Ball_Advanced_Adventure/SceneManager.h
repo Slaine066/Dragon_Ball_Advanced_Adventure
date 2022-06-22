@@ -3,6 +3,8 @@
 #include "Enum.h"
 #include "Function.h"
 #include "Scene.h"
+#include "Obj.h"
+#include "Player.h"
 
 class SceneManager
 {
@@ -12,6 +14,8 @@ private:
 
 	static SceneManager* m_pInstance;
 	Scene* m_pScene;
+
+	Player* m_pPlayer;
 
 	SCENEID	m_ePreScene;
 	SCENEID	m_eCurScene;
@@ -25,6 +29,9 @@ public:
 	void Update();
 	void Late_Update();
 	void Render(HDC hDC);
+
+	void Set_Player(Player* pPlayer) { m_pPlayer = new Player(*pPlayer); }
+	Player* Get_Player() { return m_pPlayer; }
 
 	static SceneManager* Get_Instance()
 	{
@@ -43,4 +50,3 @@ public:
 		}
 	}
 };
-

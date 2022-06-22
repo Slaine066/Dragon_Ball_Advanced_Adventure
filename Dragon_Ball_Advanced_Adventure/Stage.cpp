@@ -8,6 +8,7 @@
 #include "TileManager.h"
 #include "SoundManager.h"
 #include "UIManager.h"
+#include "SceneManager.h"
 #include "PigWarrior.h"
 #include "PigGunner.h"
 #include "BearThief.h"
@@ -23,6 +24,7 @@ Stage::Stage()
 
 Stage::~Stage()
 {
+	Release();
 }
 
 void Stage::Initialize()
@@ -45,7 +47,9 @@ void Stage::Initialize()
 
 void Stage::Release()
 {
+	SoundManager::Get_Instance()->StopSound(CHANNEL_BGM);
 	TileManager::Get_Instance()->Destroy_Instance();
+	ObjManager::Get_Instance()->Destroy_Instance();
 	UIManager::Get_Instance()->Destroy_Instance();
 }
 
@@ -64,7 +68,13 @@ void Stage::Late_Update()
 	ObjManager::Get_Instance()->Late_Update();
 	UIManager::Get_Instance()->Late_Update();
 
-	//TODO: If End Stage reached: Go To Boss Stage
+	// If End Stage reached: Go To Boss Stage
+	if (ObjManager::Get_Instance()->Get_Player().front()->Get_Info().fX >= 4500)
+	{
+		Player* pPlayer = static_cast<Player*>(ObjManager::Get_Instance()->Get_Player().front());
+		SceneManager::Get_Instance()->Set_Player(pPlayer);
+		SceneManager::Get_Instance()->Change_Scene(SCENE_BOSS_STAGE);
+	}
 }
 
 void Stage::Render(HDC hDC)

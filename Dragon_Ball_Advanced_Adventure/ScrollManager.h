@@ -16,6 +16,8 @@ public:
 	void Set_ScrollX(float x) { m_fScrollX += x; }
 	void Set_ScrollY(float y) { m_fScrollY += y; }
 
+	void Reset_Scroll() { m_fScrollX = 0.f; m_fScrollY = 0.f; }
+
 	void Scroll_Lock();
 
 	static ScrollManager* Get_Instance()

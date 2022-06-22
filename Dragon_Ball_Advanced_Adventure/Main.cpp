@@ -25,11 +25,11 @@ void Main::Initialize()
 	m_hDC = GetDC(g_hWnd);
 
 	SoundManager::Get_Instance()->Initialize();
+	//SceneManager::Get_Instance()->Change_Scene(SCENE_STAGE);
+	SceneManager::Get_Instance()->Change_Scene(SCENE_BOSS_STAGE);
 
-	// To open Map Builder uncomment line 25 and comment line 26
+	// To open the Stage Builder uncomment the line below and comment line 28
 	//SceneManager::Get_Instance()->Change_Scene(SCENE_EDITOR);
-	SceneManager::Get_Instance()->Change_Scene(SCENE_STAGE);
-
 }
 
 void Main::Release()

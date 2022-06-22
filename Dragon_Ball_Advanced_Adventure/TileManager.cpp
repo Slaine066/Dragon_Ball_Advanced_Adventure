@@ -244,32 +244,35 @@ void TileManager::Save_Tile()
 
 	CloseHandle(hFile);
 
-	// ENEMIES
-	HANDLE hFile2 = CreateFile(L"../Data/Enemies.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hFile2 == INVALID_HANDLE_VALUE)
-		return;
-
-	char cType;
-	for (auto& iter : ObjManager::Get_Instance()->Get_Enemies())
+	if (!m_bIsBossTile)
 	{
-		PigWarrior* pWarrior = dynamic_cast<PigWarrior*>(iter);
-		if (pWarrior)
-		{
-			cType = '1';
-			WriteFile(hFile2, &(pWarrior->Get_Info()), sizeof(INFO), &dwByte, nullptr);
-			WriteFile(hFile2, &cType, sizeof(char), &dwByte, nullptr);
-		}
-		
-		PigGunner* pGunner = dynamic_cast<PigGunner*>(iter);
-		if (pGunner)
-		{
-			cType = '2';
-			WriteFile(hFile2, &(pGunner->Get_Info()), sizeof(INFO), &dwByte, nullptr);
-			WriteFile(hFile2, &cType, sizeof(char), &dwByte, nullptr);
-		}
-	}
+		// ENEMIES
+		HANDLE hFile2 = CreateFile(L"../Data/Enemies.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		if (hFile2 == INVALID_HANDLE_VALUE)
+			return;
 
-	CloseHandle(hFile2);
+		char cType;
+		for (auto& iter : ObjManager::Get_Instance()->Get_Enemies())
+		{
+			PigWarrior* pWarrior = dynamic_cast<PigWarrior*>(iter);
+			if (pWarrior)
+			{
+				cType = '1';
+				WriteFile(hFile2, &(pWarrior->Get_Info()), sizeof(INFO), &dwByte, nullptr);
+				WriteFile(hFile2, &cType, sizeof(char), &dwByte, nullptr);
+			}
+
+			PigGunner* pGunner = dynamic_cast<PigGunner*>(iter);
+			if (pGunner)
+			{
+				cType = '2';
+				WriteFile(hFile2, &(pGunner->Get_Info()), sizeof(INFO), &dwByte, nullptr);
+				WriteFile(hFile2, &cType, sizeof(char), &dwByte, nullptr);
+			}
+		}
+
+		CloseHandle(hFile2);
+	}
 }
 
 void TileManager::Load_Tile()
@@ -307,33 +310,36 @@ void TileManager::Load_Tile()
 	
 	CloseHandle(hFile);
 
-	// ENEMIES
-	HANDLE hFile2 = CreateFile(L"../Data/Enemies.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hFile2 == INVALID_HANDLE_VALUE)
-		return;
-
-	INFO tInfo2{};
-	char cType;
-
-	while (true)
+	if (!m_bIsBossTile)
 	{
-		ReadFile(hFile2, &tInfo2, sizeof(INFO), &dwByte, nullptr);
-		ReadFile(hFile2, &cType, sizeof(char), &dwByte, nullptr);
+		// ENEMIES
+		HANDLE hFile2 = CreateFile(L"../Data/Enemies.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		if (hFile2 == INVALID_HANDLE_VALUE)
+			return;
 
-		if (dwByte == 0)
-			break;
+		INFO tInfo2{};
+		char cType;
 
-		if (cType == '1')
+		while (true)
 		{
-			Obj* pEnemy = AbstractFactory<PigWarrior>::Create(tInfo2.fX, tInfo2.fY);
-			ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
+			ReadFile(hFile2, &tInfo2, sizeof(INFO), &dwByte, nullptr);
+			ReadFile(hFile2, &cType, sizeof(char), &dwByte, nullptr);
+
+			if (dwByte == 0)
+				break;
+
+			if (cType == '1')
+			{
+				Obj* pEnemy = AbstractFactory<PigWarrior>::Create(tInfo2.fX, tInfo2.fY);
+				ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
+			}
+			else if (cType == '2')
+			{
+				Obj* pEnemy = AbstractFactory<PigGunner>::Create(tInfo2.fX, tInfo2.fY);
+				ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
+			}
 		}
-		else if (cType == '2')
-		{
-			Obj* pEnemy = AbstractFactory<PigGunner>::Create(tInfo2.fX, tInfo2.fY);
-			ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
-		}
+
+		CloseHandle(hFile2);
 	}
-
-	CloseHandle(hFile2);
 }

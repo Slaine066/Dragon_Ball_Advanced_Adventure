@@ -288,6 +288,9 @@
     <ClInclude Include="ComboCounter.h">
       <Filter>01. Obj\014. UI\0144. Combo Counter</Filter>
     </ClInclude>
+    <ClInclude Include="BossHealthBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -394,6 +397,9 @@
     </ClCompile>
     <ClCompile Include="ComboCounter.cpp">
       <Filter>01. Obj\014. UI\0144. Combo Counter</Filter>
+    </ClCompile>
+    <ClCompile Include="BossHealthBar.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

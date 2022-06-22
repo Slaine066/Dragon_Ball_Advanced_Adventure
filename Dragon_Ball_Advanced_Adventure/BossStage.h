@@ -16,5 +16,7 @@ public:
 	int Update() override;
 	void Late_Update() override;
 	void Render(HDC hDC) override;
-};
 
+private:
+	bool m_bStageClear;
+};

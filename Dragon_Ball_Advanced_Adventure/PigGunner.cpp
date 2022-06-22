@@ -42,8 +42,8 @@ void PigGunner::Initialize()
 
 	// AI
 	m_iWalkRange = 200;
-	m_iTargetRange = 300;
-	m_iAttackRange = 200;
+	m_iTargetRange = 350;
+	m_iAttackRange = 300;
 
 	m_eDir = DIR_RIGHT;
 	m_pFrameKey = L"Pig_Gunner_RIGHT";

@@ -8,7 +8,7 @@
 
 SceneManager* SceneManager::m_pInstance = nullptr;
 
-SceneManager::SceneManager() : m_pScene(nullptr), m_ePreScene(SCENE_END), m_eCurScene(SCENE_LOGO)
+SceneManager::SceneManager() : m_pScene(nullptr), m_pPlayer(nullptr), m_ePreScene(SCENE_END), m_eCurScene(SCENE_LOGO)
 {
 }
 
@@ -20,6 +20,7 @@ SceneManager::~SceneManager()
 void SceneManager::Release()
 {
 	Safe_Delete(m_pScene);
+	Safe_Delete(m_pPlayer);
 }
 
 void SceneManager::Change_Scene(SCENEID eScene)
@@ -43,6 +44,7 @@ void SceneManager::Change_Scene(SCENEID eScene)
 			break;
 		case SCENE_BOSS_STAGE:
 			m_pScene = new BossStage();
+			break;
 		case SCENE_EDITOR:
 			m_pScene = new Editor();
 			break;

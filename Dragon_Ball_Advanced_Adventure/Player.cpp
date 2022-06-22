@@ -256,10 +256,7 @@ void Player::Attack()
 		m_bIsAttacking = true;
 	}
 	else if (m_eCurState != ATTACK_5)
-	{
-		m_bIsAttacking = true;
 		m_bIsComboActive = true;
-	}
 }
 
 void Player::Charge()
@@ -573,6 +570,8 @@ void Player::Can_Damage()
 
 		m_bCanDamage = false;
 	}
+	else
+		m_bCanDamage = false;
 }
 
 void Player::Reset_Animation()
