@@ -31,6 +31,8 @@ void SceneManager::Reset_Scene()
 
 	m_pScene = new Stage();
 	m_pScene->Initialize();
+	m_eCurScene = SCENE_STAGE;
+	m_ePreScene = SCENE_STAGE;
 	ScrollManager::Get_Instance()->Reset_Scroll();
 }
 

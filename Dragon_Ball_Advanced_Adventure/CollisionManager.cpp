@@ -10,10 +10,9 @@
 #include "Player.h"
 #include "SoundManager.h"
 #include "Item.h"
+#include "Boss.h"
 
 extern float g_fSound;
-
-
 
 CollisionManager::CollisionManager()
 {
@@ -52,6 +51,11 @@ void CollisionManager::Collision_Damage(list<Obj*> _Colliders, list<Obj*> _Colli
 
 						int iDamage = pCharacter->Calculate_Damage(pCharacter->Get_Stats().iDamage);
 
+						// If Collided is Boss* - Increase Stagger Damage
+						Boss* pBoss = dynamic_cast<Boss*>(pCollidedCharacter);
+						if (pBoss)
+							pBoss->Increase_StaggerDamage(iDamage);
+
 						// Subtract Health
 						pCollidedCharacter->Set_Health(iDamage);
 						pCharacter->Set_MotionAlreadyDamaged(true);
@@ -80,7 +84,14 @@ void CollisionManager::Collision_Damage(list<Obj*> _Colliders, list<Obj*> _Colli
 						}
 						else
 						{
-							pCollidedCharacter->Set_IsHit();
+							if (pBoss)
+							{
+								if (pBoss->Can_Stagger())
+									pCollidedCharacter->Set_IsHit();
+							}
+							else
+								pCollidedCharacter->Set_IsHit();
+
 							SoundManager::Get_Instance()->PlaySound(L"Hit_1.wav", CHANNEL_EFFECT, g_fSound / 2);
 						}
 					}
@@ -142,6 +153,12 @@ void CollisionManager::Collision_Projectile(list<Obj*> _Colliders, list<Obj*> _C
 						if (pProjectile->Get_CanDamage())
 						{
 							int iDamage = pColliderOwner->Calculate_Damage(pProjectile->Get_Damage());
+
+							// If Collided is Boss* - Increase Stagger Damage
+							Boss* pBoss = dynamic_cast<Boss*>(pCollided);
+							if (pBoss)
+								pBoss->Increase_StaggerDamage(iDamage);
+
 							// Subtract Health
 							pCollided->Set_Health(iDamage);
 
@@ -169,7 +186,14 @@ void CollisionManager::Collision_Projectile(list<Obj*> _Colliders, list<Obj*> _C
 							}
 							else
 							{
-								pCollided->Set_IsHit();
+								if (pBoss)
+								{
+									if (pBoss->Can_Stagger())
+										pCollided->Set_IsHit();
+								}
+								else
+									pCollided->Set_IsHit();
+
 								SoundManager::Get_Instance()->PlaySound(L"Hit_1.wav", CHANNEL_EFFECT, g_fSound / 2);
 							}
 						}

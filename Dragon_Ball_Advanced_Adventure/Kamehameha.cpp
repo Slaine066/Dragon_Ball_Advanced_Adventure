@@ -58,6 +58,9 @@ int Kamehameha::Update()
 
 void Kamehameha::Late_Update()
 {
+	if (!ObjManager::Get_Instance()->Get_Player().empty())
+		if (ObjManager::Get_Instance()->Get_Player().front()->Get_Dead())
+			m_bDead = true;
 }
 
 void Kamehameha::Render(HDC hDC)

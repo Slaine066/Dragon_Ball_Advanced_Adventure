@@ -153,7 +153,7 @@ void Player::Key_Input()
 	if (KeyManager::Get_Instance()->Key_Up('S') && !m_bIsHit && !m_bIsJumping && !m_bIsAttacking)
 		Attack_Special();
 	
-	if (m_bIsHit && m_eCurState != ATTACK_SPECIAL && m_eCurState != DEAD)
+	if (m_bIsHit && (m_eCurState != ATTACK_SPECIAL || (m_eCurState == ATTACK_SPECIAL && m_bDead)) && m_eCurState != DEAD)
 	{
 		m_eCurState = HIT;
 		m_tStats.iCharge = 0;
@@ -671,7 +671,11 @@ void Player::Sound_On_Animation()
 	case ATTACK_SPECIAL:
 		if (m_tFrame.iFrameStart == m_tFrame.iSoundNotifyStart && m_bCanPlaySound)
 		{
-			SoundManager::Get_Instance()->PlaySound(L"Kamehameha.wav", CHANNEL_VOICE, g_fSound);
+			if (m_bSpecialNoLoop)
+				SoundManager::Get_Instance()->PlaySound(L"Energy_Sphere.wav", CHANNEL_VOICE, g_fSound);
+			else
+				SoundManager::Get_Instance()->PlaySound(L"Kamehameha.wav", CHANNEL_VOICE, g_fSound);
+			
 			m_bCanPlaySound = false;
 		}
 		break;

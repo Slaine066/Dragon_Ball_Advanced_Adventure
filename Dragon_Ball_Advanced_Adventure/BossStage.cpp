@@ -59,7 +59,9 @@ void BossStage::Initialize()
 
 void BossStage::Release()
 {
+	SoundManager::Get_Instance()->StopSound(CHANNEL_BGM);
 	TileManager::Get_Instance()->Destroy_Instance();
+	ObjManager::Get_Instance()->Destroy_Instance();
 	UIManager::Get_Instance()->Destroy_Instance();
 }
 

@@ -39,6 +39,8 @@ void BearThief::Initialize()
 	// AI
 	m_iAttackRange = 120;
 
+	m_iStaggerLimit = 25;
+
 	m_eDir = DIR_LEFT;
 	m_pFrameKey = L"Bear_Thief_LEFT";
 
@@ -375,4 +377,15 @@ void BearThief::Move_ToTarget()
 
 void BearThief::Patrol()
 {
+}
+
+bool BearThief::Can_Stagger()
+{
+	if (m_iStaggerDamage > m_iStaggerLimit)
+	{
+		m_iStaggerDamage = 0;
+		return true;
+	}
+	
+	return false;
 }

@@ -22,8 +22,8 @@ void ScrollManager::Scroll_Lock()
 		m_fScrollX = -3800.f;
 
 	// Lock Y Top
-	//if (m_fScrollY > 0.f)
-	//	m_fScrollY = 0.f;
+	if (m_fScrollY > 0.f)
+		m_fScrollY = 0.f;
 	// Lock Y Bottom
 	if (m_fScrollY < -150.f)
 		m_fScrollY = -150.f;
