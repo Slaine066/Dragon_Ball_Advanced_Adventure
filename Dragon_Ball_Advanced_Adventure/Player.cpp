@@ -323,7 +323,7 @@ void Player::Attack_Special()
 		// Spawn Kamehameha Small
 		float fOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX / 2 : -m_tInfo.fCX / 2;
 		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<Kamehameha>::Create(m_tInfo.fX + fOffset, m_tInfo.fY + 4, m_eDir, m_eObjId, this));
-		SoundManager::Get_Instance()->PlaySound(L"Kamehameha.wav", CHANNEL_VOICE, g_fSound);
+		SoundManager::Get_Instance()->PlaySound(L"Kamehameha_Small.wav", CHANNEL_VOICE, g_fSound);
 	}
 	else if (m_tStats.iEnergy >= 50 && m_tStats.iCharge >= 50)
 	{

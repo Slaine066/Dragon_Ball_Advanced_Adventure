@@ -112,6 +112,17 @@ void Editor::Key_Input()
 
 		TileManager::Get_Instance()->Pick_Enemy(pt, 2);
 	}
+	if (KeyManager::Get_Instance()->Key_Down('3'))
+	{
+		POINT pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)ScrollManager::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)ScrollManager::Get_Instance()->Get_ScrollY();
+
+		TileManager::Get_Instance()->Pick_Enemy(pt, 3);
+	}
 
 	// Save
 	if (KeyManager::Get_Instance()->Key_Down('S'))

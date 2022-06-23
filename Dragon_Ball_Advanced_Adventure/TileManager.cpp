@@ -7,6 +7,7 @@
 #include "Function.h"
 #include "PigWarrior.h"
 #include "PigGunner.h"
+#include "Wolf.h"
 
 TileManager* TileManager::m_pInstance = nullptr;
 
@@ -213,8 +214,8 @@ void TileManager::Pick_Enemy(POINT & _pt, int iType)
 		pEnemy = AbstractFactory<PigGunner>::Create((float)_pt.x, (float)_pt.y);
 		ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
 		break;
-	default:
-		pEnemy = AbstractFactory<PigWarrior>::Create((float)_pt.x, (float)_pt.y);
+	case 3:
+		pEnemy = AbstractFactory<Wolf>::Create((float)_pt.x, (float)_pt.y);
 		ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
 	}
 }
@@ -267,6 +268,14 @@ void TileManager::Save_Tile()
 			{
 				cType = '2';
 				WriteFile(hFile2, &(pGunner->Get_Info()), sizeof(INFO), &dwByte, nullptr);
+				WriteFile(hFile2, &cType, sizeof(char), &dwByte, nullptr);
+			}
+
+			Wolf* pWolf = dynamic_cast<Wolf*>(iter);
+			if (pWolf)
+			{
+				cType = '3';
+				WriteFile(hFile2, &(pWolf->Get_Info()), sizeof(INFO), &dwByte, nullptr);
 				WriteFile(hFile2, &cType, sizeof(char), &dwByte, nullptr);
 			}
 		}
@@ -336,6 +345,11 @@ void TileManager::Load_Tile()
 			else if (cType == '2')
 			{
 				Obj* pEnemy = AbstractFactory<PigGunner>::Create(tInfo2.fX, tInfo2.fY);
+				ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
+			}
+			else if (cType == '3')
+			{
+				Obj* pEnemy = AbstractFactory<Wolf>::Create(tInfo2.fX, tInfo2.fY);
 				ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, pEnemy);
 			}
 		}
