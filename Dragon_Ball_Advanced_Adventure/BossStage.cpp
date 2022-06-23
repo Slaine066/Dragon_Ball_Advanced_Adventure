@@ -95,6 +95,8 @@ void BossStage::Late_Update()
 		{
 			SoundManager::Get_Instance()->StopSound(CHANNEL_BGM);
 			SoundManager::Get_Instance()->PlaySound(L"Stage_Clear.mp3", CHANNEL_SYSTEM, g_fSound / 2);
+			SoundManager::Get_Instance()->PlaySound(L"Goku_Clear.wav", CHANNEL_VOICE, g_fSound / 2);
+
 			m_bStageClear = true;
 		}
 	}

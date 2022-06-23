@@ -73,4 +73,5 @@ void EnergyDrink::Render(HDC hDC)
 void EnergyDrink::Item_Effect(Character * pPlayer)
 {
 	pPlayer->Increase_Energy(m_iIncreaseAmount);
+	SoundManager::Get_Instance()->PlaySound(L"Goku_Joy.wav", CHANNEL_VOICE, .5f);
 }

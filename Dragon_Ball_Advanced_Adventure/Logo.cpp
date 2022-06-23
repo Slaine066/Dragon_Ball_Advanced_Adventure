@@ -23,15 +23,11 @@ Logo::~Logo()
 
 void Logo::Initialize()
 {
-	// TODO:
-	// - Add Logo Background Image
-	// - Add Logo Title Image
-	// - Add Press Start Button Image
-
-	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Logo/Background.bmp", L"Background");
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Logo/Logo_Background.bmp", L"Logo_Background");
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Logo/Title.bmp", L"Title");
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Logo/Press_Start.bmp", L"Press Start");
 
-	Obj* pObj = AbstractFactory<Button>::Create(400.f, 400.f);
+	Obj* pObj = AbstractFactory<Button>::Create(400.f, 450.f);
 	pObj->Set_FrameKey(L"Press Start");
 	static_cast<Button*>(pObj)->Set_Blink(true);
 	UIManager::Get_Instance()->Add_Object(UI_BUTTON, pObj);
@@ -59,8 +55,14 @@ void Logo::Late_Update()
 
 void Logo::Render(HDC hDC)
 {
-	HDC	hBackDC = BmpManager::Get_Instance()->Find_Bmp(L"Background");
+	HDC	hBackDC = BmpManager::Get_Instance()->Find_Bmp(L"Logo_Background");
 	BitBlt(hDC, 0, 0, WINCX, WINCY, hBackDC, 0, 0, SRCCOPY);
+
+
+	HDC hMemDC = BmpManager::Get_Instance()->Find_Bmp(L"Title");
+	GdiTransparentBlt(
+		hDC, (800 - 380) / 2, 30, 380, 178,
+		hMemDC, 0, 0, 380, 178, RGB(132, 0, 132));
 
 	UIManager::Get_Instance()->Render(hDC);
 }

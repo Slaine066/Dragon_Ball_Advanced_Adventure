@@ -34,9 +34,9 @@ void Stage::Initialize()
 	ObjManager::Get_Instance()->Add_Object(OBJ_PLAYER, AbstractFactory<Player>::Create(100, 0));
 
 	// Roshi
-	ObjManager::Get_Instance()->Add_Object(OBJ_NPC, AbstractFactory<Roshi>::Create(4600, 0));
+	ObjManager::Get_Instance()->Add_Object(OBJ_NPC, AbstractFactory<Roshi>::Create(2800, 0));
 	// Energy Drink
-	ObjManager::Get_Instance()->Add_Object(OBJ_ITEM, AbstractFactory<EnergyDrink>::Create(4500, 0));
+	ObjManager::Get_Instance()->Add_Object(OBJ_ITEM, AbstractFactory<EnergyDrink>::Create(2700, 0));
 
 	// Sound
 	SoundManager::Get_Instance()->PlayBGM(L"Stage.mp3", g_fSound / 2);

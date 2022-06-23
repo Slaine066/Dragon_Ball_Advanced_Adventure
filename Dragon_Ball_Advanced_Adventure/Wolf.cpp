@@ -32,7 +32,7 @@ void Wolf::Initialize()
 	m_tStats.iDamage = 4.f;
 	m_tStats.iDamageOffset = 1.f;
 
-	m_fSpeed = .5f;
+	m_fSpeed = 1.f;
 
 	// AI
 	m_iWalkRange = 200;
@@ -336,7 +336,7 @@ void Wolf::AI_Behavior()
 			// If in Attack Range: Attack
 			if (m_bIsInAttackRange)
 			{
-				if (!m_bIsAttacking && m_eCurState != ATTACK && GetTickCount() > m_dwAttackTime + 2000)
+				if (!m_bIsAttacking && m_eCurState != ATTACK && GetTickCount() > m_dwAttackTime + 1500)
 				{
 					m_eCurState = ATTACK;
 					m_bIsAttacking = true;

@@ -26,7 +26,7 @@ void Main::Initialize()
 
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Back.bmp", L"Back");
 	SoundManager::Get_Instance()->Initialize();
-	SceneManager::Get_Instance()->Change_Scene(SCENE_STAGE);
+	SceneManager::Get_Instance()->Change_Scene(SCENE_LOGO);
 
 	// To open the Stage Builder uncomment the line below and comment line 28
 	//SceneManager::Get_Instance()->Change_Scene(SCENE_EDITOR);

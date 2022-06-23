@@ -184,7 +184,6 @@
     <ClInclude Include="PigGunner.h" />
     <ClInclude Include="PigWarrior.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Pterodactyl.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
@@ -230,7 +229,6 @@
     <ClCompile Include="PigGunner.cpp" />
     <ClCompile Include="PigWarrior.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Pterodactyl.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScrollManager.cpp" />
     <ClCompile Include="SoundManager.cpp" />

@@ -14,7 +14,7 @@ Milk::~Milk()
 
 void Milk::Initialize()
 {
-	m_fSpawnRate = 2;
+	m_fSpawnRate = 3;
 
 	m_tInfo.fCX = 30.f;
 	m_tInfo.fCY = 30.f;

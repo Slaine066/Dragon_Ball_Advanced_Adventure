@@ -67,9 +67,6 @@
     <Filter Include="01. Obj\010. Character\0101. Enemy\01010. Mob\010101. Pig Gunner">
       <UniqueIdentifier>{38919a90-cc27-4e39-bcbc-7f73202cca86}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Obj\010. Character\0101. Enemy\01010. Mob\010102. Pterodactyl">
-      <UniqueIdentifier>{370de038-18fe-423a-a196-8e70ab2ef8ab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Obj\010. Character\0101. Enemy\01010. Mob\010103. Wolf">
       <UniqueIdentifier>{0b8d00bc-74f7-4405-8033-478775551868}</UniqueIdentifier>
     </Filter>
@@ -210,9 +207,6 @@
     <ClInclude Include="PigGunner.h">
       <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010101. Pig Gunner</Filter>
     </ClInclude>
-    <ClInclude Include="Pterodactyl.h">
-      <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010102. Pterodactyl</Filter>
-    </ClInclude>
     <ClInclude Include="Wolf.h">
       <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010103. Wolf</Filter>
     </ClInclude>
@@ -346,9 +340,6 @@
     </ClCompile>
     <ClCompile Include="PigGunner.cpp">
       <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010101. Pig Gunner</Filter>
-    </ClCompile>
-    <ClCompile Include="Pterodactyl.cpp">
-      <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010102. Pterodactyl</Filter>
     </ClCompile>
     <ClCompile Include="Wolf.cpp">
       <Filter>01. Obj\010. Character\0101. Enemy\01010. Mob\010103. Wolf</Filter>

@@ -21,8 +21,16 @@ Button::~Button()
 
 void Button::Initialize()
 {
-	m_tInfo.fCX = 200.f;
-	m_tInfo.fCY = 36.f;
+	m_tInfo.fCX = 267.f;
+	m_tInfo.fCY = 50.f;
+
+	// Sprite REAL Size
+	m_tFrameInfo.fCX = 267.f;
+	m_tFrameInfo.fCY = 50.f;
+
+	// Sprite RENDER Size
+	m_tFrameInfoRender.fCX = m_tFrameInfo.fCX * .7;
+	m_tFrameInfoRender.fCY = m_tFrameInfo.fCY * .7;
 }
 
 void Button::Release()
@@ -62,7 +70,14 @@ void Button::Render(HDC hDC)
 {
 	if (m_bIsVisible)
 	{
+		float fRectFrameDiffX = (m_tFrameInfoRender.fCX - m_tInfo.fCX) / 2;
+		float fRectFrameDiffY = (m_tFrameInfoRender.fCY - m_tInfo.fCY) / 2;
+
 		HDC	hMemDC = BmpManager::Get_Instance()->Find_Bmp(m_pFrameKey);
-		GdiTransparentBlt(hDC, int(m_tRect.left), int(m_tRect.top), int(m_tInfo.fCX), int(m_tInfo.fCY), hMemDC, 0, 0, (int)m_tInfo.fCX, (int)m_tInfo.fCY, RGB(132, 0, 132));
+		//GdiTransparentBlt(hDC, int(m_tRect.left), int(m_tRect.top), int(m_tInfo.fCX), int(m_tInfo.fCY), hMemDC, 0, 0, (int)m_tInfo.fCX, (int)m_tInfo.fCY, RGB(132, 0, 132));
+
+		GdiTransparentBlt(
+			hDC, m_tRect.left - fRectFrameDiffX, m_tRect.top - fRectFrameDiffY, m_tFrameInfoRender.fCX, m_tFrameInfoRender.fCY,
+			hMemDC, m_tFrame.iFrameStart * m_tFrameInfo.fCX, m_tFrame.iMotion * m_tFrameInfo.fCY, m_tFrameInfo.fCX, m_tFrameInfo.fCY, RGB(132, 0, 132));
 	}
 }
