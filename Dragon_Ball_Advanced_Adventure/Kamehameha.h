@@ -17,12 +17,16 @@ public:
 	void Late_Update() override;
 	void Render(HDC hDC) override;
 
+	void Set_IsBig() { m_bIsBig = true; m_pFrameKey = L"Kamehameha"; m_iDamage = 20; }
+
 private:
 	// Obj overrides
 	void Change_Motion() override;
 
 	// Projectile Overrides
 	bool Get_CanDamage() override;
+
+	bool m_bIsBig;
 
 	bool m_bFirstTick;
 	DWORD m_dwDamageTime;

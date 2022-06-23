@@ -145,6 +145,9 @@
     <Filter Include="01. Obj\011. Item\0110. Milk">
       <UniqueIdentifier>{4e8c421b-c742-4529-be9e-4a8db7b32147}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Obj\012. Projectile\0123. Energy Sphere">
+      <UniqueIdentifier>{50bddb4f-1c14-45b6-b8c7-4e5703228fd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -295,7 +298,10 @@
       <Filter>01. Obj\014. UI\0142. Health Bar</Filter>
     </ClInclude>
     <ClInclude Include="Milk.h">
-      <Filter>Header Files</Filter>
+      <Filter>01. Obj\011. Item\0110. Milk</Filter>
+    </ClInclude>
+    <ClInclude Include="EnergySphere.h">
+      <Filter>01. Obj\012. Projectile\0123. Energy Sphere</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -398,9 +404,6 @@
     <ClCompile Include="EnergyBar.cpp">
       <Filter>01. Obj\014. UI\0143. Energy Bar</Filter>
     </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>01. Obj\012. Projectile</Filter>
-    </ClCompile>
     <ClCompile Include="ComboCounter.cpp">
       <Filter>01. Obj\014. UI\0144. Combo Counter</Filter>
     </ClCompile>
@@ -408,7 +411,10 @@
       <Filter>01. Obj\014. UI\0142. Health Bar</Filter>
     </ClCompile>
     <ClCompile Include="Milk.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>01. Obj\011. Item\0110. Milk</Filter>
+    </ClCompile>
+    <ClCompile Include="EnergySphere.cpp">
+      <Filter>01. Obj\012. Projectile\0123. Energy Sphere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

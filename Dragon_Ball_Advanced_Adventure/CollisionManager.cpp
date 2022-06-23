@@ -50,7 +50,7 @@ void CollisionManager::Collision_Damage(list<Obj*> _Colliders, list<Obj*> _Colli
 						if (!pCollidedCharacter)
 							return;
 
-						int iDamage = pCharacter->Calculate_Damage();
+						int iDamage = pCharacter->Calculate_Damage(pCharacter->Get_Stats().iDamage);
 
 						// Subtract Health
 						pCollidedCharacter->Set_Health(iDamage);
@@ -139,11 +139,9 @@ void CollisionManager::Collision_Projectile(list<Obj*> _Colliders, list<Obj*> _C
 						if (!pProjectile)
 							return;
 
-						Kamehameha* pKamehameha = dynamic_cast<Kamehameha*>(Collider);
-
 						if (pProjectile->Get_CanDamage())
 						{
-							int iDamage = pColliderOwner->Calculate_Damage(pKamehameha);
+							int iDamage = pColliderOwner->Calculate_Damage(pProjectile->Get_Damage());
 							// Subtract Health
 							pCollided->Set_Health(iDamage);
 
@@ -177,6 +175,7 @@ void CollisionManager::Collision_Projectile(list<Obj*> _Colliders, list<Obj*> _C
 						}
 
 						// If Collider is Kamehameha do NOT destroy Projectile
+						Kamehameha* pKamehameha = dynamic_cast<Kamehameha*>(Collider);
 						if (!pKamehameha)
 							Collider->Set_Dead();
 					}

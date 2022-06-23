@@ -32,14 +32,14 @@ public:
 	void Set_MotionAlreadyDamaged(bool bAlreadyDamaged) { m_bMotionAlreadyDamaged = bAlreadyDamaged; }
 	void Set_IsHit(bool bIsHit = true) { m_bIsHit = bIsHit; }
 
-	int Calculate_Damage(bool bSpecial = false)
+	int Calculate_Damage(int iDamage)
 	{
 		bool bAddSub = rand() % 2;
 		
 		if (bAddSub)
-			return (bSpecial ? m_tStats.iSpecialDamage : m_tStats.iDamage) + (rand() % m_tStats.iDamageOffset + 1);
+			return iDamage + (rand() % m_tStats.iDamageOffset + 1);
 		else
-			return (bSpecial ? m_tStats.iSpecialDamage : m_tStats.iDamage) - (rand() % m_tStats.iDamageOffset + 1);
+			return iDamage - (rand() % m_tStats.iDamageOffset + 1);
 	}
 
 	void Update_Collision_Rect(int iColRectStart, int iColRectSize)

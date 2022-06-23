@@ -5,7 +5,7 @@
 #include "ObjManager.h"
 #include "Character.h"
 
-Kamehameha::Kamehameha() : m_bFirstTick(true), m_dwDamageTime(GetTickCount()), m_dwDuration(GetTickCount()), m_bIsLimit(false), m_bShouldDestroy(false)
+Kamehameha::Kamehameha() : m_bIsBig(false), m_bFirstTick(true), m_dwDamageTime(GetTickCount()), m_dwDuration(GetTickCount()), m_bIsLimit(false), m_bShouldDestroy(false)
 {
 }
 
@@ -28,15 +28,16 @@ void Kamehameha::Initialize()
 	m_tFrameInfoRender.fCY = m_tInfo.fCY * 2;
 
 	m_tInfo.fX += m_eDir == DIR_RIGHT ? m_tInfo.fCX / 2 : -m_tInfo.fCX / 2;
-	
-	// Frame
-	m_pFrameKey = L"Kamehameha";
+
+	m_pFrameKey = L"Kamehameha_Small";
 
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 0;
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwFrameSpeed = 50;
 	m_tFrame.dwFrameTime = GetTickCount();
+
+	m_iDamage = 15;
 }
 
 void Kamehameha::Release()

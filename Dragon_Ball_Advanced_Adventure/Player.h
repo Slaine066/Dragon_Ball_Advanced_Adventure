@@ -83,4 +83,6 @@ private:
 	DWORD m_dwComboTime;
 	DWORD m_dwEnergyReloadTime;
 	DWORD m_dwChargeTime;
+
+	bool m_bSpecialNoLoop;
 };

@@ -3,7 +3,7 @@
 #include "ScrollManager.h"
 #include "BmpManager.h"
 
-Milk::Milk() : m_iHealAmount(20)
+Milk::Milk() : m_iHealAmount(10)
 {
 	Initialize();
 }

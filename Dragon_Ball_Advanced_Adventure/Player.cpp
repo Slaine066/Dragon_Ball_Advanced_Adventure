@@ -9,6 +9,7 @@
 #include "SoundManager.h"
 #include "AbstractFactory.h"
 #include "Kamehameha.h"
+#include "EnergySphere.h"
 
 extern float g_fSound;
 
@@ -16,7 +17,7 @@ Player::Player()
 	: m_ePreState(END), m_eCurState(IDLE), m_fSprintSpeed(0.f), m_fFallSpeed(6.f), 
 	m_bIsJumping(false), m_fJumpPower(0.f), m_fJumpTime(0.f), m_fAccel(9.8f),
 	m_iComboCounter(0), m_bIsComboActive(false), 
-	m_dwComboTime(GetTickCount()), m_dwChargeTime(GetTickCount()), m_dwEnergyReloadTime(GetTickCount())
+	m_dwComboTime(GetTickCount()), m_dwChargeTime(GetTickCount()), m_dwEnergyReloadTime(GetTickCount()), m_bSpecialNoLoop(false)
 {
 }
 
@@ -44,7 +45,6 @@ void Player::Initialize()
 	m_tStats.iEnergyMax = 100.f;
 	m_tStats.iEnergy = m_tStats.iEnergyMax;
 	m_tStats.iDamage = 10.f;
-	m_tStats.iSpecialDamage = 20.f;
 	m_tStats.iDamageOffset = 3;
 
 	// Speeds
@@ -60,6 +60,9 @@ void Player::Initialize()
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Goku_LEFT.bmp", L"Player_LEFT");
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Goku_RIGHT.bmp", L"Player_RIGHT");
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Kamehameha.bmp", L"Kamehameha");
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Kamehameha_Small.bmp", L"Kamehameha_Small");
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Energy_Sphere_LEFT.bmp", L"Energy_Sphere_LEFT");
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Player/Energy_Sphere_RIGHT.bmp", L"Energy_Sphere_RIGHT");
 	
 	// Start First Animation
 	Change_Motion(); 
@@ -138,6 +141,7 @@ void Player::Key_Input()
 	{
 		m_bIsJumping = true;
 		m_eCurState = JUMP;
+		m_tStats.iCharge = 0;
 	}
 		// Keyboard 'A' - Attack
 	if (KeyManager::Get_Instance()->Key_Down('A') && !m_bIsHit && !m_bIsJumping && m_eCurState != CHARGING && m_eCurState != ATTACK_SPECIAL)
@@ -179,8 +183,6 @@ void Player::Offset()
 
 	if (iOffsetMaxY < m_tInfo.fY + iScrollY)
 		ScrollManager::Get_Instance()->Set_ScrollY(-m_fSpeed);
-
-	
 }
 
 void Player::Gravity()
@@ -268,7 +270,7 @@ void Player::Attack()
 
 void Player::Charge()
 {
-	if (m_tStats.iEnergy == 100 && m_tStats.iCharge < 100)
+	if (m_tStats.iCharge < 100)
 	{
 		if (m_eCurState != CHARGING)
 			m_eCurState = CHARGING;
@@ -276,6 +278,8 @@ void Player::Charge()
 		if (GetTickCount() > m_dwChargeTime + 200)
 		{
 			m_tStats.iCharge += 10;
+			if (m_tStats.iCharge > m_tStats.iEnergy)
+				m_tStats.iCharge = m_tStats.iEnergy;
 			m_dwChargeTime = GetTickCount();
 		}
 	}
@@ -290,9 +294,33 @@ void Player::Attack_Special()
 		m_bIsAttacking = true;
 		m_tStats.iEnergy = 0;
 
-		// Spawn Projectile
+		// Spawn Kamehameha
+		float fOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX / 2 : -m_tInfo.fCX / 2;
+		Obj* pObj = AbstractFactory<Kamehameha>::Create(m_tInfo.fX + fOffset, m_tInfo.fY + 4, m_eDir, m_eObjId, this);
+		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, pObj);
+		Kamehameha* pKamehameha = static_cast<Kamehameha*>(pObj);
+		pKamehameha->Set_IsBig();
+	}
+	else if (m_tStats.iEnergy > 75 && m_tStats.iCharge > 75)
+	{
+		m_eCurState = ATTACK_SPECIAL;
+		m_bIsAttacking = true;
+		m_tStats.iEnergy = m_tStats.iEnergy - m_tStats.iCharge;
+
+		// Spawn Kamehameha Small
 		float fOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX / 2 : -m_tInfo.fCX / 2;
 		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<Kamehameha>::Create(m_tInfo.fX + fOffset, m_tInfo.fY + 4, m_eDir, m_eObjId, this));
+	}
+	else if (m_tStats.iEnergy > 50 && m_tStats.iCharge > 50)
+	{
+		m_eCurState = ATTACK_SPECIAL;
+		m_bIsAttacking = true;
+		m_bSpecialNoLoop = true;
+		m_tStats.iEnergy = m_tStats.iEnergy - m_tStats.iCharge;
+
+		// Spawn Energy Sphere
+		float fOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX / 2 : -m_tInfo.fCX / 2;
+		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<EnergySphere>::Create(m_tInfo.fX + fOffset, m_tInfo.fY + 4, m_eDir, m_eObjId, this));
 	}
 	else
 		m_eCurState = IDLE;
@@ -304,9 +332,9 @@ void Player::Reload_Energy()
 {
 	if (m_tStats.iEnergy < 100)
 	{
-		if (GetTickCount() > m_dwEnergyReloadTime + 50)
+		if (GetTickCount() > m_dwEnergyReloadTime + 100)
 		{
-			m_tStats.iEnergy += 2;
+			m_tStats.iEnergy += 1;
 			m_dwEnergyReloadTime = GetTickCount();
 		}
 	}
@@ -357,6 +385,11 @@ void Player::Check_Combo()
 			m_bIsComboActive = false;
 			m_bMotionAlreadyDamaged = false;
 		}
+	}
+	else if (m_bIsAttacking && m_eCurState == ATTACK_SPECIAL && m_bSpecialNoLoop&& m_tFrame.iFrameStart == m_tFrame.iFrameEnd && GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)
+	{
+		m_bIsAttacking = false;
+		m_bSpecialNoLoop = false;
 	}
 }
 
@@ -507,6 +540,7 @@ void Player::Change_Frame()
 	// JUMP, FALL, ATTACK_1, ATTACK_2, ATTACK_3, ATTACK_4, ATTACK_5, ATTACK_JUMP, HIT, DEAD
 	if (m_eCurState == JUMP || m_eCurState == FALL || m_eCurState == ATTACK_JUMP ||
 		m_eCurState == ATTACK_1 || m_eCurState == ATTACK_2 || m_eCurState == ATTACK_3 || m_eCurState == ATTACK_4 || m_eCurState == ATTACK_5 ||
+		(m_eCurState == ATTACK_SPECIAL && m_bSpecialNoLoop) ||
 		m_eCurState == HIT || m_eCurState == DEAD)
 	{
 		if (GetTickCount() > m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed)

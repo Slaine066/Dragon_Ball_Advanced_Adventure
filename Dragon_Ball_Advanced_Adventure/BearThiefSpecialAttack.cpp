@@ -35,6 +35,8 @@ void BearThiefSpecialAttack::Initialize()
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
+
+	m_iDamage = 20;
 }
 
 void BearThiefSpecialAttack::Release()

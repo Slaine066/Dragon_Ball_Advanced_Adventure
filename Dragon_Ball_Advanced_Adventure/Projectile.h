@@ -6,20 +6,15 @@ class Projectile :
 	public Obj
 {
 public:
-	Projectile();
-	virtual ~Projectile();
+	Projectile() : m_iDamage(0), m_bCanDamage(true) {};
+	virtual ~Projectile() {};
 
-	void Initialize() override;
-	void Release() override;
-
-	// Functions which run every frame
-	int Update() override;
-	void Late_Update() override;
-	void Render(HDC hDC) override;
+	int Get_Damage() { return m_iDamage; }
 
 	virtual bool Get_CanDamage() PURE;
 	void Set_CanDamage(bool bCanDamage) { m_bCanDamage = bCanDamage; };
 
 protected:
+	int m_iDamage;
 	bool m_bCanDamage;
 };
