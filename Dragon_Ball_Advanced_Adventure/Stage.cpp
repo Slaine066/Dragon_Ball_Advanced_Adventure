@@ -3,19 +3,14 @@
 #include "ObjManager.h"
 #include "AbstractFactory.h"
 #include "Player.h"
+#include "Roshi.h"
+#include "EnergyDrink.h"
 #include "BmpManager.h"
 #include "ScrollManager.h"
 #include "TileManager.h"
 #include "SoundManager.h"
 #include "UIManager.h"
 #include "SceneManager.h"
-#include "PigWarrior.h"
-#include "PigGunner.h"
-#include "BearThief.h"
-#include "HealthBar.h"
-#include "EnergyBar.h"
-#include "ComboCounter.h"
-#include "Milk.h"
 
 extern float g_fSound;
 
@@ -38,12 +33,12 @@ void Stage::Initialize()
 	// Player
 	ObjManager::Get_Instance()->Add_Object(OBJ_PLAYER, AbstractFactory<Player>::Create(100, 0));
 
-	// UI
-	UIManager::Get_Instance()->Add_Object(UI_HEALTH_BAR, AbstractFactory<HealthBar>::Create(150, 43));
-	UIManager::Get_Instance()->Add_Object(UI_ENERGY_BAR, AbstractFactory<EnergyBar>::Create(130, 560));
-	UIManager::Get_Instance()->Add_Object(UI_COMBO_COUNTER, AbstractFactory<ComboCounter>::Create(700, 200));
-	UIManager::Get_Instance()->Initialize();
+	// Roshi
+	ObjManager::Get_Instance()->Add_Object(OBJ_NPC, AbstractFactory<Roshi>::Create(4600, 0));
+	// Energy Drink
+	ObjManager::Get_Instance()->Add_Object(OBJ_ITEM, AbstractFactory<EnergyDrink>::Create(4500, 0));
 
+	// Sound
 	SoundManager::Get_Instance()->PlayBGM(L"Stage.mp3", g_fSound / 2);
 }
 
@@ -76,7 +71,7 @@ void Stage::Late_Update()
 	// If End Stage reached: Go To Boss Stage
 	if (!ObjManager::Get_Instance()->Get_Player().empty())
 	{
-		if (ObjManager::Get_Instance()->Get_Player().front()->Get_Info().fX >= 4600)
+		if (ObjManager::Get_Instance()->Get_Player().front()->Get_Info().fX >= 5500)
 		{
 			Player* pPlayer = static_cast<Player*>(ObjManager::Get_Instance()->Get_Player().front());
 			SceneManager::Get_Instance()->Set_Player(pPlayer);

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Scene.h"
+#include "Item.h"
 
-class BossStage :
-	public Scene
+class EnergyDrink :
+	public Item
 {
 public:
-	BossStage();
-	~BossStage();
+	EnergyDrink();
+	~EnergyDrink();
 
 	void Initialize() override;
 	void Release() override;
@@ -17,7 +17,10 @@ public:
 	void Late_Update() override;
 	void Render(HDC hDC) override;
 
+	// Item Overrides
+	void Item_Effect(Character * pPlayer) override;
+
 private:
-	bool m_bBossSpawned;
-	bool m_bStageClear;
+	int m_iIncreaseAmount;
 };
+

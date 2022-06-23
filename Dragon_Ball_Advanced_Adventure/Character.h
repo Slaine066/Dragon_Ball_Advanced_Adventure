@@ -28,6 +28,11 @@ public:
 		else
 			m_tStats.iHealth += iAmount;
 	}
+
+	void Set_EnergyMax(int iEnergy) { m_tStats.iEnergyMax = iEnergy; }
+	void Refull_Energy() { m_tStats.iEnergy = m_tStats.iEnergyMax; }
+	void Increase_Energy(int iAmount) { m_tStats.iEnergyMax += iAmount; }
+
 	void Set_IsAttacking(bool bIsAttacking) { m_bIsAttacking = bIsAttacking; }
 	void Set_MotionAlreadyDamaged(bool bAlreadyDamaged) { m_bMotionAlreadyDamaged = bAlreadyDamaged; }
 	void Set_IsHit(bool bIsHit = true) { m_bIsHit = bIsHit; }

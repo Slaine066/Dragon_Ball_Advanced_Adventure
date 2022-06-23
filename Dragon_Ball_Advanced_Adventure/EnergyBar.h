@@ -21,9 +21,13 @@ private:
 	RECT m_tBackgroundBar;
 	RECT m_tEnergyBar;
 	RECT m_tChargingBar;
+	
 	float m_fBarLength;
+
+	int m_iMaxEnergy;
 	int m_iCurrentEnergy;
 	int m_iCurrentCharge;
 
+	void Update_Bar_Type();
 	void Update_Bars();
 };

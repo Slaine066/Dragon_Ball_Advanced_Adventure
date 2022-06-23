@@ -43,8 +43,6 @@ void BossHealthBar::Initialize()
 
 	m_eObjId = OBJ_ENEMY;
 
-	m_iCurrentHealth = static_cast<Character*>(ObjManager::Get_Instance()->Get_Enemies().front())->Get_Stats().iHealth;
-
 	m_pFrameKey = L"Health_Bar_Boss";
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Enemy/Health_Bar_Boss.bmp", m_pFrameKey);
 }

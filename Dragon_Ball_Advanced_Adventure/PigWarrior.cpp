@@ -266,8 +266,6 @@ void PigWarrior::Sound_On_Animation()
 			SoundManager::Get_Instance()->PlaySound(L"Pig_Warrior_Attack.wav", CHANNEL_EFFECT, g_fSound);
 			m_bCanPlaySound = false;
 		}
-	case DEAD:
-		break;
 	}
 }
 

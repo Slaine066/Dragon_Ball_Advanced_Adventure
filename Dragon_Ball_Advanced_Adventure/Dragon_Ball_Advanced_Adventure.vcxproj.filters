@@ -148,6 +148,18 @@
     <Filter Include="01. Obj\012. Projectile\0123. Energy Sphere">
       <UniqueIdentifier>{50bddb4f-1c14-45b6-b8c7-4e5703228fd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Obj\010. Character\0102. NPC">
+      <UniqueIdentifier>{af4b7dd7-5854-431a-9908-87a3744bb102}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\010. Character\0102. NPC\01020. Turtle">
+      <UniqueIdentifier>{cb1bca67-907c-403e-b56d-c2253e735ae7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\011. Item\0111. Energy Drink">
+      <UniqueIdentifier>{8af8340c-dce2-40b7-8ced-eaef26c127ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\010. Character\0102. NPC\01021. Roshi">
+      <UniqueIdentifier>{2084ce1d-28ca-43be-a74f-55787b765b91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -303,6 +315,15 @@
     <ClInclude Include="EnergySphere.h">
       <Filter>01. Obj\012. Projectile\0123. Energy Sphere</Filter>
     </ClInclude>
+    <ClInclude Include="Turtle.h">
+      <Filter>01. Obj\010. Character\0102. NPC\01020. Turtle</Filter>
+    </ClInclude>
+    <ClInclude Include="EnergyDrink.h">
+      <Filter>01. Obj\011. Item\0111. Energy Drink</Filter>
+    </ClInclude>
+    <ClInclude Include="Roshi.h">
+      <Filter>01. Obj\010. Character\0102. NPC\01021. Roshi</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -415,6 +436,15 @@
     </ClCompile>
     <ClCompile Include="EnergySphere.cpp">
       <Filter>01. Obj\012. Projectile\0123. Energy Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="Turtle.cpp">
+      <Filter>01. Obj\010. Character\0102. NPC\01020. Turtle</Filter>
+    </ClCompile>
+    <ClCompile Include="EnergyDrink.cpp">
+      <Filter>01. Obj\011. Item\0111. Energy Drink</Filter>
+    </ClCompile>
+    <ClCompile Include="Roshi.cpp">
+      <Filter>01. Obj\010. Character\0102. NPC\01021. Roshi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

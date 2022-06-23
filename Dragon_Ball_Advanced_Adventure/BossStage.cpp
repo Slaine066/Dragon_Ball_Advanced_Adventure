@@ -13,10 +13,11 @@
 #include "BearThief.h"
 #include "BossHealthBar.h"
 #include "SoundManager.h"
+#include "Turtle.h"
 
 extern float g_fSound;
 
-BossStage::BossStage(): m_bStageClear(false)
+BossStage::BossStage() : m_bBossSpawned(false), m_bStageClear(false)
 {
 }
 
@@ -27,33 +28,32 @@ BossStage::~BossStage()
 
 void BossStage::Initialize()
 {
+	ScrollManager::Get_Instance()->Reset_Scroll();
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Background.bmp", L"Background");
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Stage_Clear.bmp", L"Stage_Clear");
 
 	TileManager::Get_Instance()->Set_BossStage();
 	TileManager::Get_Instance()->Load_Tile();
 
-	// Player
+	// Bring Player over from previous Stage
 	Player* pPlayer = SceneManager::Get_Instance()->Get_Player();
 	ObjManager::Get_Instance()->Add_Object(OBJ_PLAYER, AbstractFactory<Player>::Create(0, 0));
 
+	// Set previous Health
 	Character* pCharacter = nullptr;
 	if (pPlayer)
 		pCharacter = dynamic_cast<Character*>(ObjManager::Get_Instance()->Get_Player().front());
-
 	if (pCharacter && pPlayer)
-		pCharacter->Set_Health(100 - pPlayer->Get_Stats().iHealth);
+	{
+		pCharacter->Set_Health(pPlayer->Get_Stats().iHealthMax - pPlayer->Get_Stats().iHealth);
+		pCharacter->Set_EnergyMax(pPlayer->Get_Stats().iEnergyMax);
+		pCharacter->Refull_Energy();
+	}
 
-	// Boss
-	ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<BearThief>::Create(500, 0));
+	// Turtle
+	ObjManager::Get_Instance()->Add_Object(OBJ_NPC, AbstractFactory<Turtle>::Create(600, 0));
 
-	// UI
-	UIManager::Get_Instance()->Add_Object(UI_HEALTH_BAR, AbstractFactory<HealthBar>::Create(150, 43));
-	UIManager::Get_Instance()->Add_Object(UI_ENERGY_BAR, AbstractFactory<EnergyBar>::Create(130, 560));
-	UIManager::Get_Instance()->Add_Object(UI_COMBO_COUNTER, AbstractFactory<ComboCounter>::Create(700, 200));
-	UIManager::Get_Instance()->Add_Object(UI_HEALTH_BAR, AbstractFactory<BossHealthBar>::Create(650, 55));
-	UIManager::Get_Instance()->Initialize();
-
+	// Sound
 	SoundManager::Get_Instance()->PlayBGM(L"Stage_Boss.mp3", g_fSound / 2);
 }
 
@@ -81,11 +81,22 @@ void BossStage::Late_Update()
 	UIManager::Get_Instance()->Late_Update();
 	ScrollManager::Get_Instance()->Reset_Scroll();
 
-	if (ObjManager::Get_Instance()->Get_Enemies().front()->Get_Dead() && !m_bStageClear)
+	// Spawn Boss after Turtle disappears
+	if (ObjManager::Get_Instance()->Get_NPCs().empty() && !m_bBossSpawned)
 	{
-		SoundManager::Get_Instance()->StopSound(CHANNEL_BGM);
-		SoundManager::Get_Instance()->PlaySound(L"Stage_Clear.mp3", CHANNEL_SYSTEM, g_fSound / 2);
-		m_bStageClear = true;
+		ObjManager::Get_Instance()->Add_Object(OBJ_ENEMY, AbstractFactory<BearThief>::Create(900, 0));
+		m_bBossSpawned = true;
+	}
+		
+	// Stage Clear when Boss dies
+	if (!ObjManager::Get_Instance()->Get_Enemies().empty())
+	{
+		if (ObjManager::Get_Instance()->Get_Enemies().front()->Get_Dead() && !m_bStageClear)
+		{
+			SoundManager::Get_Instance()->StopSound(CHANNEL_BGM);
+			SoundManager::Get_Instance()->PlaySound(L"Stage_Clear.mp3", CHANNEL_SYSTEM, g_fSound / 2);
+			m_bStageClear = true;
+		}
 	}
 }
 

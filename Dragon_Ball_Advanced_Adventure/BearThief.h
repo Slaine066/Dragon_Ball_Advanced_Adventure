@@ -22,6 +22,7 @@ public:
 	void Initialize() override;
 	void Release() override;
 
+	// Functions which run every frame
 	int Update() override;
 	void Late_Update() override;
 	void Render(HDC hDC) override;
@@ -50,4 +51,6 @@ private:
 
 	// Boss Overrides
 	virtual bool Can_Stagger() override;
+
+	bool m_bMoveToPosition;
 };

@@ -10,6 +10,10 @@
 #include "AbstractFactory.h"
 #include "Kamehameha.h"
 #include "EnergySphere.h"
+#include "UIManager.h"
+#include "HealthBar.h"
+#include "EnergyBar.h"
+#include "ComboCounter.h"
 
 extern float g_fSound;
 
@@ -42,7 +46,7 @@ void Player::Initialize()
 	// Stats
 	m_tStats.iHealthMax = 100.f;
 	m_tStats.iHealth = m_tStats.iHealthMax;
-	m_tStats.iEnergyMax = 100.f;
+	m_tStats.iEnergyMax = 50.f;
 	m_tStats.iEnergy = m_tStats.iEnergyMax;
 	m_tStats.iDamage = 10.f;
 	m_tStats.iDamageOffset = 3;
@@ -66,6 +70,12 @@ void Player::Initialize()
 	
 	// Start First Animation
 	Change_Motion(); 
+
+	// UI
+	UIManager::Get_Instance()->Add_Object(UI_HEALTH_BAR, AbstractFactory<HealthBar>::Create(150, 43));
+	UIManager::Get_Instance()->Add_Object(UI_ENERGY_BAR, AbstractFactory<EnergyBar>::Create(75, 560));
+	UIManager::Get_Instance()->Add_Object(UI_COMBO_COUNTER, AbstractFactory<ComboCounter>::Create(700, 200));
+	UIManager::Get_Instance()->Initialize();
 }
 
 void Player::Release()
@@ -153,7 +163,9 @@ void Player::Key_Input()
 	if (KeyManager::Get_Instance()->Key_Up('S') && !m_bIsHit && !m_bIsJumping && !m_bIsAttacking)
 		Attack_Special();
 	
-	if (m_bIsHit && (m_eCurState != ATTACK_SPECIAL || (m_eCurState == ATTACK_SPECIAL && m_bDead)) && m_eCurState != DEAD)
+	if (m_bIsHit && 
+		(m_eCurState != ATTACK_SPECIAL || (m_eCurState == ATTACK_SPECIAL && m_bDead) || (m_eCurState == ATTACK_SPECIAL && m_bSpecialNoLoop))
+		&& m_eCurState != DEAD)
 	{
 		m_eCurState = HIT;
 		m_tStats.iCharge = 0;
@@ -300,8 +312,9 @@ void Player::Attack_Special()
 		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, pObj);
 		Kamehameha* pKamehameha = static_cast<Kamehameha*>(pObj);
 		pKamehameha->Set_IsBig();
+		SoundManager::Get_Instance()->PlaySound(L"Kamehameha.wav", CHANNEL_VOICE, g_fSound);
 	}
-	else if (m_tStats.iEnergy > 75 && m_tStats.iCharge > 75)
+	else if (m_tStats.iEnergy >= 75 && m_tStats.iCharge >= 75)
 	{
 		m_eCurState = ATTACK_SPECIAL;
 		m_bIsAttacking = true;
@@ -310,8 +323,9 @@ void Player::Attack_Special()
 		// Spawn Kamehameha Small
 		float fOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX / 2 : -m_tInfo.fCX / 2;
 		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<Kamehameha>::Create(m_tInfo.fX + fOffset, m_tInfo.fY + 4, m_eDir, m_eObjId, this));
+		SoundManager::Get_Instance()->PlaySound(L"Kamehameha.wav", CHANNEL_VOICE, g_fSound);
 	}
-	else if (m_tStats.iEnergy > 50 && m_tStats.iCharge > 50)
+	else if (m_tStats.iEnergy >= 50 && m_tStats.iCharge >= 50)
 	{
 		m_eCurState = ATTACK_SPECIAL;
 		m_bIsAttacking = true;
@@ -321,6 +335,7 @@ void Player::Attack_Special()
 		// Spawn Energy Sphere
 		float fOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX / 2 : -m_tInfo.fCX / 2;
 		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<EnergySphere>::Create(m_tInfo.fX + fOffset, m_tInfo.fY + 4, m_eDir, m_eObjId, this));
+		SoundManager::Get_Instance()->PlaySound(L"Energy_Sphere.wav", CHANNEL_VOICE, g_fSound);
 	}
 	else
 		m_eCurState = IDLE;
@@ -330,9 +345,9 @@ void Player::Attack_Special()
 
 void Player::Reload_Energy()
 {
-	if (m_tStats.iEnergy < 100)
+	if (m_tStats.iEnergy < m_tStats.iEnergyMax)
 	{
-		if (GetTickCount() > m_dwEnergyReloadTime + 100)
+		if (GetTickCount() > m_dwEnergyReloadTime + 70)
 		{
 			m_tStats.iEnergy += 1;
 			m_dwEnergyReloadTime = GetTickCount();
@@ -667,17 +682,6 @@ void Player::Sound_On_Animation()
 		}
 		break;
 	case CHARGING:
-		break;
-	case ATTACK_SPECIAL:
-		if (m_tFrame.iFrameStart == m_tFrame.iSoundNotifyStart && m_bCanPlaySound)
-		{
-			if (m_bSpecialNoLoop)
-				SoundManager::Get_Instance()->PlaySound(L"Energy_Sphere.wav", CHANNEL_VOICE, g_fSound);
-			else
-				SoundManager::Get_Instance()->PlaySound(L"Kamehameha.wav", CHANNEL_VOICE, g_fSound);
-			
-			m_bCanPlaySound = false;
-		}
 		break;
 	case HIT:
 		if (m_tFrame.iFrameStart == m_tFrame.iSoundNotifyStart && m_bCanPlaySound)

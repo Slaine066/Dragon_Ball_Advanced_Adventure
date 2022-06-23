@@ -23,6 +23,7 @@ public:
 	list<Obj*> Get_Enemies() { return m_ObjList[OBJ_ENEMY]; }
 	list<Obj*> Get_Projectiles() { return m_ObjList[OBJ_PROJECTILE]; }
 	list<Obj*> Get_Items() { return m_ObjList[OBJ_ITEM]; }
+	list<Obj*> Get_NPCs() { return m_ObjList[OBJ_NPC]; }
 	Obj* Get_Target(OBJID eID, Obj* pObj);
 
 	void Release();

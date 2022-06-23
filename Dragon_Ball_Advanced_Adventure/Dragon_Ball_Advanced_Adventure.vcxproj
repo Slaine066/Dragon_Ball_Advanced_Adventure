@@ -164,12 +164,14 @@
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnergyBar.h" />
+    <ClInclude Include="EnergyDrink.h" />
     <ClInclude Include="EnergySphere.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="HealthBar.h" />
     <ClInclude Include="Milk.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="Roshi.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Kamehameha.h" />
@@ -193,6 +195,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileManager.h" />
+    <ClInclude Include="Turtle.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="Wolf.h" />
   </ItemGroup>
@@ -211,9 +214,11 @@
     <ClCompile Include="Dragon_Ball_Advanced_Adventure.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="EnergyBar.cpp" />
+    <ClCompile Include="EnergyDrink.cpp" />
     <ClCompile Include="EnergySphere.cpp" />
     <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="Milk.cpp" />
+    <ClCompile Include="Roshi.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Kamehameha.cpp" />
     <ClCompile Include="KeyManager.cpp" />
@@ -237,6 +242,7 @@
     </ClCompile>
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileManager.cpp" />
+    <ClCompile Include="Turtle.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="Wolf.cpp" />
   </ItemGroup>

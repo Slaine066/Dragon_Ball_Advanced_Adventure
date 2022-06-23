@@ -18,8 +18,8 @@ void ScrollManager::Scroll_Lock()
 	if (m_fScrollX > 0.f)
 		m_fScrollX = 0.f;
 	// Lock X Right
-	if (m_fScrollX < -3800.f)
-		m_fScrollX = -3800.f;
+	if (m_fScrollX < -4700.f)
+		m_fScrollX = -4700.f;
 
 	// Lock Y Top
 	if (m_fScrollY > 0.f)
