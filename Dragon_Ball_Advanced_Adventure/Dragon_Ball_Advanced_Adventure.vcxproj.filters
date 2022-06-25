@@ -172,6 +172,9 @@
     <Filter Include="02. Scene\022. Stage\0221. Stage 1_2">
       <UniqueIdentifier>{84399f3e-ddf4-450d-8447-76e793480762}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Scene\024. Ending">
+      <UniqueIdentifier>{be69eed4-62b3-4ebe-acba-40e20d635c8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -348,6 +351,9 @@
     <ClInclude Include="Stage1_2.h">
       <Filter>02. Scene\022. Stage\0221. Stage 1_2</Filter>
     </ClInclude>
+    <ClInclude Include="Ending.h">
+      <Filter>02. Scene\024. Ending</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -478,6 +484,9 @@
     </ClCompile>
     <ClCompile Include="Stage1_2.cpp">
       <Filter>02. Scene\022. Stage\0221. Stage 1_2</Filter>
+    </ClCompile>
+    <ClCompile Include="Ending.cpp">
+      <Filter>02. Scene\024. Ending</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

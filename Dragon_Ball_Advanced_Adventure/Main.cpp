@@ -57,6 +57,9 @@ void Main::Late_Update()
 
 void Main::Render()
 {
+	if (SceneManager::Get_Instance()->Get_Current_Scene() == SCENE_ENDING)
+		return;
+
 	Render_FPS();
 
 	HDC	hBackDC = BmpManager::Get_Instance()->Find_Bmp(L"Back");

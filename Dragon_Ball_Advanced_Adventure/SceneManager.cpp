@@ -6,6 +6,7 @@
 #include "Stage1_2.h"
 #include "BossStage.h"
 #include "Editor.h"
+#include "Ending.h"
 #include "ObjManager.h"
 #include "ScrollManager.h"
 
@@ -61,6 +62,9 @@ void SceneManager::Change_Scene(SCENEID eScene)
 			break;
 		case SCENE_BOSS_STAGE:
 			m_pScene = new BossStage();
+			break;
+		case SCENE_ENDING:
+			m_pScene = new Ending();
 			break;
 		case SCENE_EDITOR:
 			m_pScene = new Editor();

@@ -164,6 +164,7 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="Dragon_Ball_Advanced_Adventure.h" />
     <ClInclude Include="Editor.h" />
+    <ClInclude Include="Ending.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnergyBar.h" />
     <ClInclude Include="EnergyDrink.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="DamageNumbers.cpp" />
     <ClCompile Include="Dragon_Ball_Advanced_Adventure.cpp" />
     <ClCompile Include="Editor.cpp" />
+    <ClCompile Include="Ending.cpp" />
     <ClCompile Include="EnergyBar.cpp" />
     <ClCompile Include="EnergyDrink.cpp" />
     <ClCompile Include="EnergySphere.cpp" />

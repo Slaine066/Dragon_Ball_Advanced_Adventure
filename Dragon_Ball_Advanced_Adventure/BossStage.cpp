@@ -14,6 +14,7 @@
 #include "BossHealthBar.h"
 #include "SoundManager.h"
 #include "Turtle.h"
+#include "KeyManager.h"
 
 extern float g_fSound;
 
@@ -71,6 +72,9 @@ int BossStage::Update()
 	ObjManager::Get_Instance()->Update();
 	UIManager::Get_Instance()->Update();
 
+	if (KeyManager::Get_Instance()->Key_Down(VK_RETURN) && m_bStageClear)
+		SceneManager::Get_Instance()->Change_Scene(SCENE_ENDING);
+		
 	return 0;
 }
 
