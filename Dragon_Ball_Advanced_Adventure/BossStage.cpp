@@ -32,7 +32,7 @@ void BossStage::Initialize()
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Background.bmp", L"Background");
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Stage_Clear.bmp", L"Stage_Clear");
 
-	TileManager::Get_Instance()->Set_BossStage();
+	TileManager::Get_Instance()->Set_EditorId(STAGE_BOSS);
 	TileManager::Get_Instance()->Load_Tile();
 
 	// Bring Player over from previous Stage

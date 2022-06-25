@@ -31,7 +31,7 @@ void Menu::Late_Update()
 {
 	// TODO: Should be on Button pressed (NOT on Key pressed)
 	if (KeyManager::Get_Instance()->Key_Down(VK_RETURN))
-		SceneManager::Get_Instance()->Change_Scene(SCENE_STAGE);
+		SceneManager::Get_Instance()->Change_Scene(SCENE_STAGE1_1);
 }
 
 void Menu::Render(HDC hDC)

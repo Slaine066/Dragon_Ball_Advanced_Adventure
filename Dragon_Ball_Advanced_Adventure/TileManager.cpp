@@ -11,7 +11,7 @@
 
 TileManager* TileManager::m_pInstance = nullptr;
 
-TileManager::TileManager() : m_bIsBossTile(false)
+TileManager::TileManager() : m_eEditorId(STAGE_END)
 {
 }
 
@@ -153,7 +153,7 @@ void TileManager::Pick_Tile(POINT & _pt)
 
 	Tile* pTile = static_cast<Tile*>(m_vecTile[iIndex]);
 	
-	if (m_bIsBossTile)
+	if (m_eEditorId == STAGE_BOSS)
 	{
 		if (pTile->Get_DrawID() < 17)	
 			pTile->Set_DrawID(pTile->Get_DrawID() + 1);
@@ -223,7 +223,20 @@ void TileManager::Pick_Enemy(POINT & _pt, int iType)
 void TileManager::Save_Tile()
 {
 	// TILES
-	HANDLE hFile = CreateFile(m_bIsBossTile ? L"../Data/Boss_Tile.dat" : L"../Data/Tile.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE hFile = nullptr;
+	switch (m_eEditorId) 
+	{
+	case STAGE1_1:
+		hFile = CreateFile(L"../Data/Tile_1_1.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		break;
+	case STAGE1_2:
+		hFile = CreateFile(L"../Data/Tile_1_2.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		break;
+	case STAGE_BOSS:
+		hFile = CreateFile(L"../Data/Boss_Tile.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		break;
+	}
+	
 	if (hFile == INVALID_HANDLE_VALUE)
 		return;
 
@@ -245,10 +258,20 @@ void TileManager::Save_Tile()
 
 	CloseHandle(hFile);
 
-	if (!m_bIsBossTile)
+	if (m_eEditorId != STAGE_BOSS)
 	{
 		// ENEMIES
-		HANDLE hFile2 = CreateFile(L"../Data/Enemies.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		HANDLE hFile2 = nullptr;
+		switch (m_eEditorId)
+		{
+		case STAGE1_1:
+			hFile2 = CreateFile(L"../Data/Enemies_1_1.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+			break;
+		case STAGE1_2:
+			hFile2 = CreateFile(L"../Data/Enemies_1_2.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+			break;
+		}
+
 		if (hFile2 == INVALID_HANDLE_VALUE)
 			return;
 
@@ -287,7 +310,20 @@ void TileManager::Save_Tile()
 void TileManager::Load_Tile()
 {
 	// TILES
-	HANDLE hFile = CreateFile(m_bIsBossTile ? L"../Data/Boss_Tile.dat" : L"../Data/Tile.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE hFile = nullptr;
+	switch (m_eEditorId)
+	{
+	case STAGE1_1:
+		hFile = CreateFile(L"../Data/Tile_1_1.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		break;
+	case STAGE1_2:
+		hFile = CreateFile(L"../Data/Tile_1_2.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		break;
+	case STAGE_BOSS:
+		hFile = CreateFile(L"../Data/Boss_Tile.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		break;
+	}
+
 	if (hFile == INVALID_HANDLE_VALUE)
 		return;
 
@@ -319,10 +355,20 @@ void TileManager::Load_Tile()
 	
 	CloseHandle(hFile);
 
-	if (!m_bIsBossTile)
+	if (m_eEditorId != STAGE_BOSS)
 	{
 		// ENEMIES
-		HANDLE hFile2 = CreateFile(L"../Data/Enemies.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		HANDLE hFile2 = nullptr;
+		switch (m_eEditorId)
+		{
+		case STAGE1_1:
+			hFile2 = CreateFile(L"../Data/Enemies_1_1.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+			break;
+		case STAGE1_2:
+			hFile2 = CreateFile(L"../Data/Enemies_1_2.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+			break;
+		}
+
 		if (hFile2 == INVALID_HANDLE_VALUE)
 			return;
 

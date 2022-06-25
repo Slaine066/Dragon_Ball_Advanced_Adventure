@@ -52,7 +52,7 @@ void Main::Update()
 void Main::Late_Update()
 {
 	SceneManager::Get_Instance()->Late_Update();
-	ScrollManager::Get_Instance()->Scroll_Lock();
+	ScrollManager::Get_Instance()->Scroll_Lock(SceneManager::Get_Instance()->Get_Current_Scene());
 }
 
 void Main::Render()

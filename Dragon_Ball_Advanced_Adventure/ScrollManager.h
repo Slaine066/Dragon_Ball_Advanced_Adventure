@@ -1,4 +1,7 @@
 #pragma once
+
+#include "Enum.h"
+
 class ScrollManager
 {
 private:
@@ -18,7 +21,7 @@ public:
 
 	void Reset_Scroll() { m_fScrollX = 0.f; m_fScrollY = 0.f; }
 
-	void Scroll_Lock();
+	void Scroll_Lock(SCENEID eId);
 
 	static ScrollManager* Get_Instance()
 	{

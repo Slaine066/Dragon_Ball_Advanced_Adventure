@@ -124,9 +124,6 @@
     <Filter Include="02. Scene\022. Stage">
       <UniqueIdentifier>{8f6fdc05-672a-4ff3-9766-2f162742ea73}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. Scene\022. Stage\0220. Boss Stage">
-      <UniqueIdentifier>{571f999c-c956-4b2e-ab1e-68d7c993f84b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Obj\012. Projectile\0122. Bear Thief Special Attack">
       <UniqueIdentifier>{0b2364aa-fe99-45c1-9064-284449aba7d1}</UniqueIdentifier>
     </Filter>
@@ -165,6 +162,15 @@
     </Filter>
     <Filter Include="01. Obj\014. UI\0145. Reward">
       <UniqueIdentifier>{fc53ec59-0129-4990-88cd-e0c461fdbfb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Scene\022. Stage\0222. Boss Stage">
+      <UniqueIdentifier>{571f999c-c956-4b2e-ab1e-68d7c993f84b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Scene\022. Stage\0220. Stage 1_1">
+      <UniqueIdentifier>{75082407-7209-4e35-8bcd-6a7c8d04a9b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Scene\022. Stage\0221. Stage 1_2">
+      <UniqueIdentifier>{84399f3e-ddf4-450d-8447-76e793480762}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -288,11 +294,8 @@
     <ClInclude Include="Bullet.h">
       <Filter>01. Obj\012. Projectile\0121. Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="Stage.h">
-      <Filter>02. Scene\022. Stage</Filter>
-    </ClInclude>
     <ClInclude Include="BossStage.h">
-      <Filter>02. Scene\022. Stage\0220. Boss Stage</Filter>
+      <Filter>02. Scene\022. Stage\0222. Boss Stage</Filter>
     </ClInclude>
     <ClInclude Include="BearThiefSpecialAttack.h">
       <Filter>01. Obj\012. Projectile\0122. Bear Thief Special Attack</Filter>
@@ -338,6 +341,12 @@
     </ClInclude>
     <ClInclude Include="Reward.h">
       <Filter>01. Obj\014. UI\0145. Reward</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1_1.h">
+      <Filter>02. Scene\022. Stage\0220. Stage 1_1</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1_2.h">
+      <Filter>02. Scene\022. Stage\0221. Stage 1_2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -422,11 +431,8 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>01. Obj\012. Projectile\0121. Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Stage.cpp">
-      <Filter>02. Scene\022. Stage</Filter>
-    </ClCompile>
     <ClCompile Include="BossStage.cpp">
-      <Filter>02. Scene\022. Stage\0220. Boss Stage</Filter>
+      <Filter>02. Scene\022. Stage\0222. Boss Stage</Filter>
     </ClCompile>
     <ClCompile Include="BearThiefSpecialAttack.cpp">
       <Filter>01. Obj\012. Projectile\0122. Bear Thief Special Attack</Filter>
@@ -466,6 +472,12 @@
     </ClCompile>
     <ClCompile Include="Reward.cpp">
       <Filter>01. Obj\014. UI\0145. Reward</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1_1.cpp">
+      <Filter>02. Scene\022. Stage\0220. Stage 1_1</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1_2.cpp">
+      <Filter>02. Scene\022. Stage\0221. Stage 1_2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

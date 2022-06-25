@@ -176,7 +176,7 @@
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Reward.h" />
     <ClInclude Include="Roshi.h" />
-    <ClInclude Include="Stage.h" />
+    <ClInclude Include="Stage1_1.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Kamehameha.h" />
     <ClInclude Include="KeyManager.h" />
@@ -193,6 +193,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ScrollManager.h" />
     <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="Stage1_2.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Struct.h" />
     <ClInclude Include="targetver.h" />
@@ -225,7 +226,7 @@
     <ClCompile Include="Milk.cpp" />
     <ClCompile Include="Reward.cpp" />
     <ClCompile Include="Roshi.cpp" />
-    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="Stage1_1.cpp" />
     <ClCompile Include="Kamehameha.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="Logo.cpp" />
@@ -239,6 +240,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScrollManager.cpp" />
     <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="Stage1_2.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

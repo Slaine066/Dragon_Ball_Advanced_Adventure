@@ -19,8 +19,8 @@ void Editor::Initialize()
 {
 	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Background.bmp", L"Background");
 
+	TileManager::Get_Instance()->Set_EditorId(STAGE1_1); // Change this parameter to Edit Stages
 	TileManager::Get_Instance()->Initialize();
-	//TileManager::Get_Instance()->Set_BossStage(); // Un-comment this code to open the Boss Stage Builder
 }
 
 void Editor::Release()

@@ -59,11 +59,11 @@ void Button::Late_Update()
 	{
 		m_dwSoundTime = GetTickCount();
 		m_bShouldChange = true;
-		SoundManager::Get_Instance()->PlaySound(L"Start.wav", CHANNEL_SYSTEM, g_fSound);
+		SoundManager::Get_Instance()->PlaySound(L"Start.wav", CHANNEL_SYSTEM, .5f);
 	}
 
 	if (m_bShouldChange && GetTickCount() > m_dwSoundTime + 1000)
-		SceneManager::Get_Instance()->Change_Scene(SCENE_STAGE);
+		SceneManager::Get_Instance()->Change_Scene(SCENE_STAGE1_1);
 }
 
 void Button::Render(HDC hDC)

@@ -2,7 +2,8 @@
 #include "SceneManager.h"
 #include "Logo.h"
 #include "Menu.h"
-#include "Stage.h"
+#include "Stage1_1.h"
+#include "Stage1_2.h"
 #include "BossStage.h"
 #include "Editor.h"
 #include "ObjManager.h"
@@ -29,10 +30,10 @@ void SceneManager::Reset_Scene()
 {
 	Safe_Delete(m_pScene);
 
-	m_pScene = new Stage();
+	m_pScene = new Stage1_1();
 	m_pScene->Initialize();
-	m_eCurScene = SCENE_STAGE;
-	m_ePreScene = SCENE_STAGE;
+	m_eCurScene = SCENE_STAGE1_1;
+	m_ePreScene = SCENE_STAGE1_1;
 	ScrollManager::Get_Instance()->Reset_Scroll();
 }
 
@@ -52,8 +53,11 @@ void SceneManager::Change_Scene(SCENEID eScene)
 		case SCENE_MENU:
 			m_pScene = new Menu();
 			break;
-		case SCENE_STAGE:
-			m_pScene = new Stage();
+		case SCENE_STAGE1_1:
+			m_pScene = new Stage1_1();
+			break;
+		case SCENE_STAGE1_2:
+			m_pScene = new Stage1_2();
 			break;
 		case SCENE_BOSS_STAGE:
 			m_pScene = new BossStage();
@@ -75,7 +79,7 @@ void SceneManager::Update()
 
 void SceneManager::Late_Update()
 {
-	if ((m_eCurScene == SCENE_STAGE || m_eCurScene == SCENE_BOSS_STAGE) && ObjManager::Get_Instance()->Get_Player().empty())
+	if ((m_eCurScene == SCENE_STAGE1_1 || m_eCurScene == SCENE_STAGE1_2 || m_eCurScene == SCENE_BOSS_STAGE) && ObjManager::Get_Instance()->Get_Player().empty())
 		Reset_Scene();
 
 	m_pScene->Late_Update();

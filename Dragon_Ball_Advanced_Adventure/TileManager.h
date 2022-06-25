@@ -12,7 +12,7 @@ private:
 
 	static TileManager* m_pInstance;
 	vector<Obj*> m_vecTile;
-	bool m_bIsBossTile;
+	EDITORID m_eEditorId;
 
 public:
 	void Initialize();
@@ -23,7 +23,7 @@ public:
 	void Late_Update();
 	void Render(HDC hDC);
 
-	void Set_BossStage() { m_bIsBossTile = true; }
+	void Set_EditorId(EDITORID eId) { m_eEditorId = eId; }
 
 	bool Tile_Collision(float fX, float fY, float fFrameOffset, float* pY);
 	bool Wall_Collision(Obj* pObj);

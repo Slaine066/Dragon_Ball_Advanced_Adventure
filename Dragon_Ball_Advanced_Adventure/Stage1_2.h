@@ -2,12 +2,12 @@
 
 #include "Scene.h"
 
-class Stage :
+class Stage1_2 :
 	public Scene
 {
 public:
-	Stage();
-	~Stage();
+	Stage1_2();
+	~Stage1_2();
 
 	void Initialize() override;
 	void Release() override;
@@ -16,8 +16,4 @@ public:
 	int Update() override;
 	void Late_Update() override;
 	void Render(HDC hDC) override;
-
-private:
-	DWORD m_dwGoTime;
-	bool m_bShowGo;
 };

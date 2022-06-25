@@ -9,6 +9,7 @@
 #include "AbstractFactory.h"
 #include "Bullet.h"
 #include "Function.h"
+#include "SoundManager.h"
 
 PigGunner::PigGunner()
 {
@@ -89,6 +90,8 @@ void PigGunner::Late_Update()
 
 	Change_Motion();
 	Change_Frame();
+
+	Sound_On_Animation();
 }
 
 void PigGunner::Render(HDC hDC)
@@ -151,9 +154,11 @@ void PigGunner::Change_Motion()
 			m_tFrame.iFrameEnd = 6;
 			m_tFrame.iDamageNotifyStart = 4;
 			m_tFrame.iDamageNotifyEnd = 4;
+			m_tFrame.iSoundNotifyStart = 2;
 			m_tFrame.iMotion = 2;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			m_bCanPlaySound = true;
 			break;
 		case HIT:
 			m_tFrame.iFrameStart = 0;
@@ -254,6 +259,15 @@ void PigGunner::Reset_Animation()
 
 void PigGunner::Sound_On_Animation()
 {
+	switch (m_eCurState)
+	{
+	case ATTACK:
+		if (m_tFrame.iFrameStart == m_tFrame.iSoundNotifyStart && m_bCanPlaySound)
+		{
+			SoundManager::Get_Instance()->PlaySound(L"Shoot.wav", CHANNEL_EFFECT, .5f);
+			m_bCanPlaySound = false;
+		}
+	}
 }
 
 void PigGunner::Find_Target()

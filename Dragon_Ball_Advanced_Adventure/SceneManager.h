@@ -34,6 +34,7 @@ public:
 
 	void Set_Player(Player* pPlayer) { m_pPlayer = new Player(*pPlayer); }
 	Player* Get_Player() { return m_pPlayer; }
+	SCENEID Get_Current_Scene() { return m_eCurScene; }
 
 	static SceneManager* Get_Instance()
 	{
