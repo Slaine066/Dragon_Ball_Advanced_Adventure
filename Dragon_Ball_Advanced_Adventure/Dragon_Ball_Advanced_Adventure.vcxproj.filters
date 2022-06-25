@@ -157,6 +157,15 @@
     <Filter Include="01. Obj\010. Character\0102. NPC\01021. Roshi">
       <UniqueIdentifier>{2084ce1d-28ca-43be-a74f-55787b765b91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98. Manager\989. ChatManger">
+      <UniqueIdentifier>{2d782cc8-24f3-4e77-8d07-20d369674096}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Chat">
+      <UniqueIdentifier>{66e2d853-33a2-4ccb-a283-e5dac570b3a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\014. UI\0145. Reward">
+      <UniqueIdentifier>{fc53ec59-0129-4990-88cd-e0c461fdbfb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -318,6 +327,18 @@
     <ClInclude Include="Roshi.h">
       <Filter>01. Obj\010. Character\0102. NPC\01021. Roshi</Filter>
     </ClInclude>
+    <ClInclude Include="ChatManager.h">
+      <Filter>98. Manager\989. ChatManger</Filter>
+    </ClInclude>
+    <ClInclude Include="Chat.h">
+      <Filter>04. Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>01. Obj\010. Character\0102. NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Reward.h">
+      <Filter>01. Obj\014. UI\0145. Reward</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -436,6 +457,15 @@
     </ClCompile>
     <ClCompile Include="Roshi.cpp">
       <Filter>01. Obj\010. Character\0102. NPC\01021. Roshi</Filter>
+    </ClCompile>
+    <ClCompile Include="ChatManager.cpp">
+      <Filter>98. Manager\989. ChatManger</Filter>
+    </ClCompile>
+    <ClCompile Include="Chat.cpp">
+      <Filter>04. Chat</Filter>
+    </ClCompile>
+    <ClCompile Include="Reward.cpp">
+      <Filter>01. Obj\014. UI\0145. Reward</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

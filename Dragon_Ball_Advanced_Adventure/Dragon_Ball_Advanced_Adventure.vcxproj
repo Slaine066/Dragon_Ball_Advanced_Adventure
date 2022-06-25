@@ -156,6 +156,8 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Chat.h" />
+    <ClInclude Include="ChatManager.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="ComboCounter.h" />
     <ClInclude Include="DamageNumbers.h" />
@@ -170,7 +172,9 @@
     <ClInclude Include="Function.h" />
     <ClInclude Include="HealthBar.h" />
     <ClInclude Include="Milk.h" />
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="Reward.h" />
     <ClInclude Include="Roshi.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Item.h" />
@@ -207,6 +211,8 @@
     <ClCompile Include="BossStage.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Chat.cpp" />
+    <ClCompile Include="ChatManager.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="ComboCounter.cpp" />
     <ClCompile Include="DamageNumbers.cpp" />
@@ -217,6 +223,7 @@
     <ClCompile Include="EnergySphere.cpp" />
     <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="Milk.cpp" />
+    <ClCompile Include="Reward.cpp" />
     <ClCompile Include="Roshi.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Kamehameha.cpp" />

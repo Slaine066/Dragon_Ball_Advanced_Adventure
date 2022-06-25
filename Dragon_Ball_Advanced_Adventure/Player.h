@@ -62,6 +62,7 @@ private:
 	void Attack();
 	void Charge();
 	void Attack_Special();
+	void Interact();
 	void Reload_Energy();
 	void Check_Combo();
 	void Reset_Combo_Counter();

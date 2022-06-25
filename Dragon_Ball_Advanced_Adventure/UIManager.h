@@ -24,6 +24,8 @@ public:
 	void Add_Object(UIID eID, Obj * pObj);
 	void Delete_Objects(UIID eID);
 
+	list<Obj*> Get_Rewards() { return m_pUIList[UI_REWARD]; }
+
 	static UIManager* Get_Instance()
 	{
 		if (!m_pInstance)

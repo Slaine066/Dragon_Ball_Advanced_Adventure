@@ -11,6 +11,8 @@
 #include "SoundManager.h"
 #include "UIManager.h"
 #include "SceneManager.h"
+#include "ChatManager.h"
+#include "Chat.h"
 
 extern float g_fSound;
 
@@ -35,8 +37,6 @@ void Stage::Initialize()
 
 	// Roshi
 	ObjManager::Get_Instance()->Add_Object(OBJ_NPC, AbstractFactory<Roshi>::Create(2800, 0));
-	// Energy Drink
-	ObjManager::Get_Instance()->Add_Object(OBJ_ITEM, AbstractFactory<EnergyDrink>::Create(2700, 0));
 
 	// Sound
 	SoundManager::Get_Instance()->PlayBGM(L"Stage.mp3", g_fSound / 2);
@@ -48,6 +48,7 @@ void Stage::Release()
 	TileManager::Get_Instance()->Destroy_Instance();
 	ObjManager::Get_Instance()->Destroy_Instance();
 	UIManager::Get_Instance()->Destroy_Instance();
+	ChatManager::Get_Instance()->Destroy_Instance();
 }
 
 int Stage::Update()
@@ -55,6 +56,7 @@ int Stage::Update()
 	TileManager::Get_Instance()->Update();
 	ObjManager::Get_Instance()->Update();
 	UIManager::Get_Instance()->Update();
+	ChatManager::Get_Instance()->Update();
 
 	return 0;
 }
@@ -64,6 +66,7 @@ void Stage::Late_Update()
 	TileManager::Get_Instance()->Late_Update();
 	ObjManager::Get_Instance()->Late_Update();
 	UIManager::Get_Instance()->Late_Update();
+	ChatManager::Get_Instance()->Late_Update();
 
 	if (GetTickCount() > m_dwGoTime + 1500)
 		m_bShowGo = false;
@@ -88,6 +91,7 @@ void Stage::Render(HDC hDC)
 	TileManager::Get_Instance()->Render(hDC);
 	ObjManager::Get_Instance()->Render(hDC);
 	UIManager::Get_Instance()->Render(hDC);
+	ChatManager::Get_Instance()->Render(hDC);
 
 	if (m_bShowGo)
 	{

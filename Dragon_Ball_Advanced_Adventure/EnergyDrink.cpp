@@ -5,6 +5,7 @@
 
 EnergyDrink::EnergyDrink() : m_iIncreaseAmount(50)
 {
+	Initialize();
 }
 
 EnergyDrink::~EnergyDrink()

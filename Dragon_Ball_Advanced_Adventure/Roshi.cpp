@@ -3,6 +3,9 @@
 #include "BmpManager.h"
 #include "ScrollManager.h"
 #include "TileManager.h"
+#include "Chat.h"
+#include "ChatManager.h"
+#include "EnergyDrink.h"
 
 Roshi::Roshi()
 {
@@ -34,6 +37,24 @@ void Roshi::Initialize()
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwFrameSpeed = 70;
 	m_tFrame.dwFrameTime = GetTickCount();
+
+	// Chat
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Chat_1.bmp", L"Chat_1");
+	Chat* pChat1 = new Chat(L"Chat_1", L"Roshi_Silhouette", DIR_RIGHT);
+	m_Chats.push_back(pChat1);
+
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Chat_2.bmp", L"Chat_2");
+	Chat* pChat2 = new Chat(L"Chat_2", L"Goku_Silhouette", DIR_LEFT);
+	m_Chats.push_back(pChat2);
+
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Chat_3.bmp", L"Chat_3");
+	Chat* pChat3 = new Chat(L"Chat_3", L"Roshi_Silhouette", DIR_RIGHT);
+	m_Chats.push_back(pChat3);
+
+	BmpManager::Get_Instance()->Insert_Bmp(L"../Image/Game/Chat_4.bmp", L"Chat_4");
+	EnergyDrink* pEnergyDrink = new EnergyDrink();
+	Chat* pChat4 = new Chat(L"Chat_4", L"Goku_Silhouette", DIR_LEFT, pEnergyDrink);
+	m_Chats.push_back(pChat4);
 }
 
 void Roshi::Release()
@@ -66,6 +87,9 @@ void Roshi::Render(HDC hDC)
 	// Test NPC Rectangle
 	//Rectangle(hDC, m_tRect.left + iScrollX, m_tRect.top + iScrollY, m_tRect.right + iScrollX, m_tRect.bottom + iScrollY);
 
+	// Test NPC Dialog Rectangle
+	//Rectangle(hDC, m_tDialogRect.left + iScrollX, m_tDialogRect.top + iScrollY, m_tDialogRect.right + iScrollX, m_tDialogRect.bottom + iScrollY);
+
 	float fRectFrameDiffX = (m_tFrameInfoRender.fCX - m_tInfo.fCX) / 2;
 	float fRectFrameDiffY = (m_tFrameInfoRender.fCY - m_tInfo.fCY) / 2;
 
@@ -84,6 +108,12 @@ void Roshi::Gravity()
 	bFloor = TileManager::Get_Instance()->Tile_Collision(m_tInfo.fX, m_tInfo.fY, (m_tFrameInfoRender.fCY / 2) - 6, &fTargetY);
 	if (bFloor)
 		m_tInfo.fY = fTargetY;
+
+	// NPC Dialog
+	m_tDialogRect.left = m_tInfo.fX - m_iDialogRadius;
+	m_tDialogRect.top = m_tInfo.fY - m_tInfo.fCY;
+	m_tDialogRect.right = m_tInfo.fX + m_iDialogRadius;
+	m_tDialogRect.bottom = m_tInfo.fY + m_tInfo.fCY;
 }
 
 bool Roshi::Die()

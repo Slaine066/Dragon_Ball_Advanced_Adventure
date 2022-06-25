@@ -27,6 +27,7 @@ public:
 	const DIRID Get_Direction() const { return m_eDir; }
 	const bool Get_Dead() const { return m_bDead; }
 	const Obj* Get_Target() const { return m_pTarget; }
+	const TCHAR* Get_FrameKey() const { return m_pFrameKey; }
 	const OBJID Get_ObjId() const { return m_eObjId; }
 	Obj* Get_Owner() const { return m_pOwner; }
 

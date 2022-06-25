@@ -3,6 +3,10 @@
 #include "Obj.h"
 #include "SoundManager.h"
 #include "TileManager.h"
+#include "Reward.h"
+#include "UIManager.h"
+#include "AbstractFactory.h"
+#include "Define.h"
 
 class Character;
 

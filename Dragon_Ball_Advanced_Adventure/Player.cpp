@@ -14,6 +14,8 @@
 #include "HealthBar.h"
 #include "EnergyBar.h"
 #include "ComboCounter.h"
+#include "ChatManager.h"
+#include "NPC.h"
 
 extern float g_fSound;
 
@@ -162,6 +164,9 @@ void Player::Key_Input()
 		// Keyboard 'S' Up - Special Attack
 	if (KeyManager::Get_Instance()->Key_Up('S') && !m_bIsHit && !m_bIsJumping && !m_bIsAttacking)
 		Attack_Special();
+
+	if (KeyManager::Get_Instance()->Key_Down('E'))
+		Interact();
 	
 	if (m_bIsHit && 
 		(m_eCurState != ATTACK_SPECIAL || (m_eCurState == ATTACK_SPECIAL && m_bDead) || (m_eCurState == ATTACK_SPECIAL && m_bSpecialNoLoop))
@@ -323,7 +328,7 @@ void Player::Attack_Special()
 		// Spawn Kamehameha Small
 		float fOffset = m_eDir == DIR_RIGHT ? m_tInfo.fCX / 2 : -m_tInfo.fCX / 2;
 		ObjManager::Get_Instance()->Add_Object(OBJ_PROJECTILE, AbstractFactory<Kamehameha>::Create(m_tInfo.fX + fOffset, m_tInfo.fY + 4, m_eDir, m_eObjId, this));
-		SoundManager::Get_Instance()->PlaySound(L"Kamehameha_Small.wav", CHANNEL_VOICE, g_fSound);
+		SoundManager::Get_Instance()->PlaySound(L"Kamehameha.wav", CHANNEL_VOICE, g_fSound);
 	}
 	else if (m_tStats.iEnergy >= 50 && m_tStats.iCharge >= 50)
 	{
@@ -341,6 +346,37 @@ void Player::Attack_Special()
 		m_eCurState = IDLE;
 
 	m_tStats.iCharge = 0;
+}
+
+void Player::Interact()
+{
+	if (!UIManager::Get_Instance()->Get_Rewards().empty())
+	{
+		Obj* pObj = UIManager::Get_Instance()->Get_Rewards().front();
+		Item* pItem = static_cast<Reward*>(pObj)->Get_RewardItem();
+		pItem->Item_Effect(this);
+		pObj->Set_Dead();
+	}
+	else
+	{
+		for (Obj* pObj : ObjManager::Get_Instance()->Get_NPCs())
+		{
+			RECT Rect{};
+			NPC* pNPC = static_cast<NPC*>(pObj);
+			if (IntersectRect(&Rect, &m_tRect, &pNPC->Get_DialogRect()))
+			{
+				if (ChatManager::Get_Instance()->Get_Chat())
+				{
+					ChatManager::Get_Instance()->Read_Chat();
+					pNPC->Read_Chat();
+					SoundManager::Get_Instance()->PlaySound(L"Chat.wav", CHANNEL_EFFECT, 1);
+				}
+				else
+					if (!pNPC->Get_Chats().empty())
+						ChatManager::Get_Instance()->Add_Chat(pNPC->Get_Chats());
+			}
+		}
+	}
 }
 
 void Player::Reload_Energy()

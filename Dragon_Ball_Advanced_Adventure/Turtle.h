@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Character.h"
+#include "NPC.h"
 
 class Turtle :
-	public Character
+	public NPC
 {
 public:
 	Turtle();
