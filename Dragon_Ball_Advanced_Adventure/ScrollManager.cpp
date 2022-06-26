@@ -19,8 +19,8 @@ void ScrollManager::Scroll_Lock(SCENEID eId)
 		m_fScrollX = 0.f;
 
 	// Lock X Right
-	/*if (m_fScrollX < -2200.f)
-		m_fScrollX = -2200.f;*/
+	/*if (m_fScrollX < -4700.f)
+		m_fScrollX = -4700.f;*/
 
 	switch (eId)
 	{
